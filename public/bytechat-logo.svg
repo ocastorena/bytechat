@@ -1,0 +1,12 @@
+<svg width="180" height="48" viewBox="0 0 180 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Chat bubble background -->
+  <rect x="0" y="8" width="40" height="28" rx="10" fill="#171717"/>
+  <!-- Pixel/byte accent -->
+  <rect x="33" y="29" width="7" height="7" rx="2" fill="#46D3F5"/>
+  <!-- Small "tail" for bubble -->
+  <polygon points="12,36 20,36 16,44" fill="#171717"/>
+  <!-- App Name -->
+  <text x="52" y="31" font-family="Segoe UI, Arial, sans-serif" font-weight="bold" font-size="28" fill="#171717">byte
+    <tspan fill="#46D3F5">chat</tspan>
+  </text>
+</svg>
