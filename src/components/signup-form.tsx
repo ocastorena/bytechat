@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -31,10 +32,12 @@ const formSchema = z
     path: ["confirmPassword"],
   })
 
-export function SignupForm({
+export default function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter()
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,10 +48,52 @@ export function SignupForm({
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        // Option 1: Redirect to login page
+        router.push("/login")
+        // Option 2: Show success message (set a local state or use a toast)
+        // setSuccess("Account created! Please log in.");
+        // form.reset();
+      }
+
+      if (!res.ok) {
+        // Handle field errors
+        if (data.errors) {
+          Object.entries(data.errors).forEach(([field, messages]) => {
+            if (messages && Array.isArray(messages)) {
+              form.setError(field as keyof typeof values, {
+                type: "server",
+                message:
+                  typeof messages[0] === "object" &&
+                  messages[0] !== null &&
+                  "message" in messages[0]
+                    ? (messages[0] as { message: string }).message
+                    : String(messages[0]),
+              })
+            }
+          })
+        } else if (data.error) {
+          // General error (e.g., duplicate email)
+          form.setError("email", { type: "server", message: data.error })
+        }
+        return
+      }
+    } catch (error) {
+      form.setError("root", {
+        type: "server",
+        message: "Something went wrong. Please try again.",
+      })
+    }
   }
   return (
     <main className={cn("flex flex-col gap-6", className)} {...props}>
@@ -116,6 +161,11 @@ export function SignupForm({
                   Sign up with Google
                 </Button>
               </div>
+              {form.formState.errors.root && (
+                <p className="text-destructive text-sm mt-2 text-center">
+                  {form.formState.errors.root.message}
+                </p>
+              )}
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
