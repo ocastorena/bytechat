@@ -67,7 +67,7 @@ describe("LoginForm", () => {
     await user.click(screen.getByRole("button", { name: /^login$/i }))
 
     // push('/') should have been called
-    expect(pushMock).toHaveBeenCalledWith("/")
+    expect(pushMock).toHaveBeenCalledWith("/home")
     // no generic error message
     expect(
       screen.queryByText(/invalid email or password/i)
