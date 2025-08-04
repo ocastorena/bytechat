@@ -16,33 +16,37 @@ import { BytechatLogo } from "@/components/bytechat-logo"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useState } from "react"
 import { z } from "zod"
-
-const formSchema = z.object({
-  email: z.email({ message: "Invalid email address." }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters." }),
-})
+import { logInSchema } from "@/lib/zod"
+import { signIn } from "next-auth/react"
+import { redirect } from "next/navigation"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [formError, setFormError] = useState<string | null>(null)
+  const form = useForm<z.infer<typeof logInSchema>>({
+    resolver: zodResolver(logInSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   })
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof logInSchema>) {
+    setFormError(null)
+    const res = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    })
+    if (res?.error) {
+      setFormError("Invalid email or password.")
+    } else {
+      redirect("/")
+    }
   }
   return (
     <main className={cn("flex flex-col gap-6", className)} {...props}>
@@ -56,6 +60,11 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)}>
+            {formError && (
+              <p className="text-destructive text-sm text-center mb-2">
+                {formError}
+              </p>
+            )}
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
@@ -96,9 +105,6 @@ export function LoginForm({
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full">
                   Login
-                </Button>
-                <Button variant="outline" className="w-full">
-                  Login with Google
                 </Button>
               </div>
             </div>
