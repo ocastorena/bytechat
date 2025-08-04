@@ -157,9 +157,6 @@ export default function SignupForm({
                 <Button type="submit" className="w-full">
                   Sign up
                 </Button>
-                <Button variant="outline" className="w-full">
-                  Sign up with Google
-                </Button>
               </div>
               {form.formState.errors.root && (
                 <p className="text-destructive text-sm mt-2 text-center">
