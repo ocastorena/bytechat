@@ -1,11 +1,8 @@
 import { auth } from "@/lib/auth"
+import { redirect } from "next/navigation"
 
-export default async function Home() {
+export default async function RootPage() {
   const session = await auth()
-  if (!session?.user) return null
-  return (
-    <main>
-      <h1>{session.user.email}</h1>
-    </main>
-  )
+  if (session) redirect("/feed")
+  redirect("/login")
 }
