@@ -20,7 +20,7 @@ import { useState } from "react"
 import { z } from "zod"
 import { logInSchema } from "@/lib/zod"
 import { signIn } from "next-auth/react"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 export function LoginForm({
   className,
@@ -35,6 +35,8 @@ export function LoginForm({
     },
   })
 
+  const router = useRouter()
+
   async function onSubmit(values: z.infer<typeof logInSchema>) {
     setFormError(null)
     const res = await signIn("credentials", {
@@ -43,9 +45,9 @@ export function LoginForm({
       redirect: false,
     })
     if (res?.error) {
-      setFormError("Invalid email or password.")
+      setFormError("Invalid email or password")
     } else {
-      redirect("/")
+      router.push("/")
     }
   }
   return (
@@ -103,8 +105,11 @@ export function LoginForm({
                 )}
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
-                  Login
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? "Logging in..." : "Login"}
                 </Button>
               </div>
             </div>

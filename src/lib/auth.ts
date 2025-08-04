@@ -27,19 +27,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const user = await prisma.user.findUnique({
             where: { email: email },
           })
-          if (!user) {
-            // No user found, so this is their first attempt to login
-            // Optionally, this is also the place you could do a user registration
-            throw new Error("Invalid credentials.")
-          }
+          if (!user) return null
 
           const passwordsMatch = await comparePasswords(password, user.password)
-          if (!passwordsMatch) {
-            throw new Error("Invalid credentials")
-          }
+          if (!passwordsMatch) return null
 
-          // return user object with their profile data
-          return user
+          return { id: user.id, email: user.email }
         } catch (error) {
           return null
         }
