@@ -55,12 +55,12 @@ export default function Feed({ className }: React.ComponentProps<"section">) {
   const hasMore = data && data[data.length - 1]?.nextCursor !== null
 
   return (
-    <section className={cn("mb-3", className)}>
+    <>
       {posts.map((post) => (
         <div key={post.id} className="flex flex-col gap-4 p-2">
           <Card>
             <CardHeader className="flex flex-row items-start gap-3">
-              <Avatar className="h-10 w-10" />
+              <Avatar className="h-10 w-10 bg-accent" />
               <div className="flex flex-col">
                 <h3 className="font-medium">{post.authorName}</h3>
                 <span className="text-sm text-muted-foreground">
@@ -98,6 +98,6 @@ export default function Feed({ className }: React.ComponentProps<"section">) {
           </Button>
         </div>
       )}
-    </section>
+    </>
   )
 }
