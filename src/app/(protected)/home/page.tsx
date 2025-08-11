@@ -1,4 +1,5 @@
 import Feed from "@/components/feed"
+import CreatePostForm from "@/components/create-post-form"
 import { Card } from "@/components/ui/card"
 
 export default function Page() {
@@ -7,9 +8,10 @@ export default function Page() {
       <aside className="col-span-3">
         <Card className="sticky top-27 h-[calc(100dvh-8rem)]  w-full"></Card>
       </aside>
-
-      <Feed className="col-span-6" />
-
+      <section className="col-span-6">
+        <CreatePostForm />
+        <Feed />
+      </section>
       <aside className="col-span-3">
         <Card className="sticky top-27 h-[calc(100dvh-8rem)] w-full"></Card>
       </aside>
