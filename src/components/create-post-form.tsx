@@ -44,8 +44,12 @@ export default function CreatePostForm() {
       setContent("")
       toast.success("Post created!")
       mutate((key) => typeof key === "string" && key.startsWith("/api/posts"))
-    } catch (err: any) {
-      toast.error(err.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("An unexpected error occurred")
+      }
     } finally {
       setLoading(false)
     }
