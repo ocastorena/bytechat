@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma" // your singleton
 import { auth } from "@/lib/auth" // protect if needed
-import { z, ZodError } from "zod"
+import { z } from "zod"
 
 export async function GET(request: NextRequest) {
   // check if request is authorized

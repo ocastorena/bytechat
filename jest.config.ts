@@ -6,15 +6,14 @@ const createJestConfig = nextJest({
 })
 
 const config: Config = {
-  testEnvironment: "jest-environment-jsdom",
+  coverageProvider: "v8",
+  testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   testMatch: ["**/*.test.tsx", "**/*.test.ts"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
-  transform: {
-    "^.+\\.(ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
-  },
+
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 }
 
