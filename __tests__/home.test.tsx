@@ -162,6 +162,40 @@ describe("UI / Feed", () => {
 })
 
 // ─────────────────────────────────────────────────────────────────────────────
+// UI TESTS (OverflowMenu delete functionality)
+// ─────────────────────────────────────────────────────────────────────────────
+
+import OverflowMenu from "@/components/overflow-menu"
+
+describe("UI / OverflowMenu (delete)", () => {
+  it("shows Delete when isOwnPost and calls onDelete after confirm", async () => {
+    const onDelete = jest.fn()
+
+    render(<OverflowMenu postId="p1" isOwnPost={true} onDelete={onDelete} />)
+
+    // open menu
+    await userEvent.click(screen.getByTestId("overflow-trigger"))
+
+    // click Delete in menu
+    await userEvent.click(screen.getByTestId("menu-delete"))
+
+    // confirm in dialog
+    const confirm = await screen.findByRole("button", { name: /^delete$/i })
+    await userEvent.click(confirm)
+
+    expect(onDelete).toHaveBeenCalledWith("p1")
+  })
+
+  it("hides Delete when not own post", async () => {
+    render(<OverflowMenu postId="p1" isOwnPost={false} />)
+
+    await userEvent.click(screen.getByTestId("overflow-trigger"))
+
+    expect(screen.queryByTestId("menu-delete")).not.toBeInTheDocument()
+  })
+})
+
+// ─────────────────────────────────────────────────────────────────────────────
 // API TESTS (Backend)
 //   - GET /api/posts and POST /api/posts with prisma + auth mocked globally
 //   - Minimal "request" helper to avoid bringing in Edge/Web APIs
@@ -293,5 +327,71 @@ describe("API /api/posts edge cases", () => {
     expect(res.status).toBe(200)
     const json = await res.json()
     expect(json.nextCursor).toBeNull()
+  })
+})
+
+// ─────────────────────────────────────────────────────────────────────────────
+// API TESTS (Backend DELETE /api/posts/[id])
+// ─────────────────────────────────────────────────────────────────────────────
+
+import { DELETE as DELETE_POST } from "@/app/api/posts/[id]/route"
+
+describe("API /api/posts/[id] DELETE", () => {
+  afterEach(() => jest.clearAllMocks())
+
+  const buildReq = (url = "http://localhost/api/posts/p1") =>
+    ({ url } as unknown as NextRequest)
+
+  it("401 when unauthenticated", async () => {
+    ;(auth as jest.Mock).mockResolvedValueOnce(null)
+    const res: NextResponse = await DELETE_POST(buildReq(), {
+      params: { id: "p1" },
+    } as { params: { id: string } })
+    expect(res.status).toBe(401)
+  })
+
+  it("400 on invalid id", async () => {
+    ;(auth as jest.Mock).mockResolvedValueOnce({ user: { id: "u1" } })
+    const res: NextResponse = await DELETE_POST(
+      buildReq("http://localhost/api/posts/bad"),
+      { params: { id: "bad" } } as { params: { id: string } }
+    )
+    expect(res.status).toBe(400)
+  })
+
+  it("404 when not owned or not found", async () => {
+    ;(auth as jest.Mock).mockResolvedValueOnce({ user: { id: "u1" } })
+    ;(prisma.post.deleteMany as jest.Mock).mockResolvedValueOnce({ count: 0 })
+
+    const res: NextResponse = await DELETE_POST(buildReq(), {
+      params: { id: "507f1f77bcf86cd799439011" },
+    } as { params: { id: string } })
+    expect(res.status).toBe(404)
+  })
+
+  it("204 on success", async () => {
+    ;(auth as jest.Mock).mockResolvedValueOnce({ user: { id: "u1" } })
+    ;(prisma.post.deleteMany as jest.Mock).mockResolvedValueOnce({ count: 1 })
+
+    const res: NextResponse = await DELETE_POST(buildReq(), {
+      params: { id: "507f1f77bcf86cd799439011" },
+    } as { params: { id: string } })
+    expect(res.status).toBe(204)
+  })
+
+  it("500 when prisma throws", async () => {
+    const spy = jest.spyOn(console, "error").mockImplementation(() => {})
+    ;(auth as jest.Mock).mockResolvedValueOnce({ user: { id: "u1" } })
+    ;(prisma.post.findMany as jest.Mock).mockRejectedValueOnce(
+      new Error("db fail")
+    )
+
+    const res: NextResponse = await DELETE_POST(buildReq(), {
+      params: { id: "507f1f77bcf86cd799439011" },
+    } as { params: { id: string } })
+
+    expect(res.status).toBe(500)
+    expect(spy).toHaveBeenCalled()
+    spy.mockRestore()
   })
 })
