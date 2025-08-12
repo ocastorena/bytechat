@@ -10,19 +10,27 @@ jest.mock("next/navigation", () => ({
 }))
 
 jest.mock("next-auth/react", () => ({
+  SessionProvider: ({ children }: never) => children,
   useSession: () => ({ data: null, status: "unauthenticated" }),
   signIn: jest.fn(),
   signOut: jest.fn(),
 }))
 
-jest.mock("next/server", () => ({
-  NextResponse: {
-    json: <T>(body: T, init?: { status?: number }) => ({
+jest.mock("next/server", () => {
+  function NextResponse(body?: unknown, init?: { status?: number }) {
+    return {
       status: init?.status ?? 200,
       json: async () => body,
-    }),
-  },
-}))
+    }
+  }
+  NextResponse.json = function <T>(body: T, init?: { status?: number }) {
+    return {
+      status: init?.status ?? 200,
+      json: async () => body,
+    }
+  }
+  return { NextResponse }
+})
 
 jest.mock("@/lib/prisma", () => ({
   __esModule: true,
@@ -30,6 +38,7 @@ jest.mock("@/lib/prisma", () => ({
     post: {
       findMany: jest.fn(),
       create: jest.fn(),
+      deleteMany: jest.fn(),
     },
   },
 }))
