@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
       id: p.id,
       content: p.content,
       createdAt: p.createdAt,
+      authorId: p.authorId,
       authorName: p.author?.username ?? "Unknown",
     }))
 

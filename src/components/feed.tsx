@@ -3,8 +3,11 @@
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import OverflowMenu from "./overflow-menu"
 import { cn, formatDate } from "@/lib/utils"
 import useSWRInfinite from "swr/infinite"
+import { toast } from "sonner"
+import { useSession } from "next-auth/react"
 
 const PAGE_SIZE = 10
 
@@ -17,12 +20,14 @@ type Post = {
   id: string
   authorName: string
   content: string
+  authorId: string
   createdAt: string
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function Feed({ className }: React.ComponentProps<"section">) {
+  const { data: session } = useSession()
   const getKey = (pageIndex: number, prevPageData: PostPage | null) => {
     if (prevPageData && prevPageData.nextCursor === null) return null
 
@@ -32,7 +37,7 @@ export default function Feed({ className }: React.ComponentProps<"section">) {
     return `/api/posts?limit=${PAGE_SIZE}${cursorParam}`
   }
 
-  const { data, error, size, setSize, isLoading, isValidating } =
+  const { data, error, size, setSize, isLoading, isValidating, mutate } =
     useSWRInfinite<PostPage>(getKey, fetcher, {
       refreshInterval: 10000,
       refreshWhenHidden: false,
@@ -48,7 +53,7 @@ export default function Feed({ className }: React.ComponentProps<"section">) {
 
   const posts: Post[] = data ? data.flatMap((p) => p.data) : []
 
-  if (posts.length == 0) {
+  if (posts.length === 0) {
     return <div className={cn("mb-3", className)}>No posts to show</div>
   }
 
@@ -56,34 +61,87 @@ export default function Feed({ className }: React.ComponentProps<"section">) {
 
   return (
     <>
-      {posts.map((post) => (
-        <div key={post.id} className="flex flex-col gap-4 p-2">
-          <Card>
-            <CardHeader className="flex flex-row items-start gap-3">
-              <Avatar className="h-10 w-10 bg-accent" />
-              <div className="flex flex-col">
-                <h3 className="font-medium">{post.authorName}</h3>
-                <span className="text-sm text-muted-foreground">
-                  {formatDate(post.createdAt)}
-                </span>
-              </div>
-            </CardHeader>
+      {posts.map((post) => {
+        const isOwnPost = session?.user?.id === post.authorId // compare IDs
 
-            <CardContent>
-              <p>{post.content}</p>
-            </CardContent>
+        return (
+          <div key={post.id} className="flex flex-col gap-4 p-2">
+            <Card>
+              <CardHeader className="flex items-start justify-between gap-3">
+                <div className="flex gap-3">
+                  <Avatar className="h-10 w-10 bg-accent" />
+                  <div className="flex flex-col">
+                    <h3 className="font-medium">{post.authorName}</h3>
+                    <span className="text-sm text-muted-foreground">
+                      {formatDate(post.createdAt)}
+                    </span>
+                  </div>
+                </div>
 
-            <CardFooter className="gap-4">
-              <Button variant="ghost" size="sm">
-                Like
-              </Button>
-              <Button variant="ghost" size="sm">
-                Comment
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
-      ))}
+                {isOwnPost && (
+                  <OverflowMenu
+                    postId={post.id}
+                    isOwnPost={isOwnPost}
+                    onDelete={async (postId) => {
+                      // 1) Snapshot current pages
+                      const prev = data
+
+                      // 2) Optimistically remove the post from all pages
+                      const optimistic = prev?.map((page) => ({
+                        ...page,
+                        data: page.data.filter((p) => p.id !== postId),
+                      }))
+
+                      // apply optimistic cache without revalidation
+                      mutate(optimistic, { revalidate: false })
+
+                      try {
+                        const res = await fetch(`/api/posts/${postId}`, {
+                          method: "DELETE",
+                        })
+
+                        if (!res.ok) {
+                          let message = "Failed to delete post"
+                          try {
+                            const body = await res.json()
+                            if (body?.error) message = body.error
+                          } catch {}
+                          throw new Error(message)
+                        }
+
+                        // 3) Confirm success & revalidate from server
+                        toast.success("Post deleted")
+                        await mutate()
+                      } catch (err) {
+                        // 4) Rollback and notify
+                        mutate(prev, { revalidate: false })
+                        toast.error(
+                          err instanceof Error
+                            ? err.message
+                            : "Failed to delete post"
+                        )
+                      }
+                    }}
+                  />
+                )}
+              </CardHeader>
+
+              <CardContent>
+                <p>{post.content}</p>
+              </CardContent>
+
+              <CardFooter className="gap-4">
+                <Button variant="ghost" size="sm">
+                  Like
+                </Button>
+                <Button variant="ghost" size="sm">
+                  Comment
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        )
+      })}
 
       {hasMore && (
         <div className="flex justify-center">
