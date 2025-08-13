@@ -26,7 +26,11 @@ type Post = {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
-export default function Feed({ className }: React.ComponentProps<"section">) {
+interface FeedProps extends React.ComponentProps<"section"> {
+  userId?: string
+}
+
+export default function Feed({ className, userId }: FeedProps) {
   const { data: session } = useSession()
   const getKey = (pageIndex: number, prevPageData: PostPage | null) => {
     if (prevPageData && prevPageData.nextCursor === null) return null
@@ -34,7 +38,9 @@ export default function Feed({ className }: React.ComponentProps<"section">) {
     const cursorParam =
       pageIndex === 0 ? "" : `&cursor=${prevPageData?.nextCursor ?? ""}`
 
-    return `/api/posts?limit=${PAGE_SIZE}${cursorParam}`
+    const userParam = userId ? `&userId=${encodeURIComponent(userId)}` : ""
+
+    return `/api/posts?limit=${PAGE_SIZE}${cursorParam}${userParam}`
   }
 
   const { data, error, size, setSize, isLoading, isValidating, mutate } =

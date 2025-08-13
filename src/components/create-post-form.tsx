@@ -56,8 +56,8 @@ export default function CreatePostForm() {
   }
 
   return (
-    <div className="p-2">
-      <Card className="flex flex-row items-center gap-3 pl-6 pr-6">
+    <div>
+      <Card className="flex flex-row items-center gap-3 pl-6 pr-6 ml-2 mr-2 mb-2">
         <Avatar className="h-10 w-10 bg-accent" />
         <CardContent className="w-full p-0">
           <form
