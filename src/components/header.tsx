@@ -15,6 +15,7 @@ import {
   AlertDialogAction,
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog"
+import { BytechatLogo } from "./bytechat-logo"
 
 function SearchBar() {
   return (
@@ -32,7 +33,10 @@ export function Header() {
     <header
       data-testid="app-header"
       className="sticky top-0 z-50 grid grid-cols-[1fr_6fr_1fr] items-center justify-items-center p-6 bg-card border-b h-20">
-      <SearchBar />
+      <div className="flex flex-row">
+        <BytechatLogo className="px-2" />
+        <SearchBar />
+      </div>
       <div className="flex gap-4">
         <Link
           href="/home"

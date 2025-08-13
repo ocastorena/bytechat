@@ -40,7 +40,7 @@ export default async function Page() {
   }
 
   return (
-    <main className="grid grid-cols-12 gap-6 px-6">
+    <main className="grid grid-cols-12 gap-6 px-6 mt-6">
       <div className="col-start-4 col-end-6 sticky top-26 h-[calc(100dvh-8rem)]">
         <Card className="px-6">
           <CardHeader className="flex flex-row items-center">
@@ -61,7 +61,7 @@ export default async function Page() {
           </CardContent>
         </Card>
       </div>
-      <div className="col-start-6 col-end-10 mt-6">
+      <div className="col-start-6 col-end-10">
         <CreatePostForm />
         <Feed userId={userId} />
       </div>

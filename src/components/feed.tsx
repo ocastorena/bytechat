@@ -8,6 +8,7 @@ import { cn, formatDate } from "@/lib/utils"
 import useSWRInfinite from "swr/infinite"
 import { toast } from "sonner"
 import { useSession } from "next-auth/react"
+import { ThumbsUp, MessageSquare } from "lucide-react"
 
 const PAGE_SIZE = 10
 
@@ -137,10 +138,12 @@ export default function Feed({ className, userId }: FeedProps) {
               </CardContent>
 
               <CardFooter className="gap-4">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <ThumbsUp className="h-4 w-4" />
                   Like
                 </Button>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4" />
                   Comment
                 </Button>
               </CardFooter>
