@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const limit = parseInt(searchParams.get("limit") ?? "10", 10)
   const cursor = searchParams.get("cursor")
+  const userId = searchParams.get("userId") // optional filter
 
   try {
     // query database
@@ -21,6 +22,7 @@ export async function GET(request: NextRequest) {
       take: limit,
       orderBy: { createdAt: "desc" },
       ...(cursor && { skip: 1, cursor: { id: cursor } }),
+      ...(userId && { where: { authorId: userId } }),
       include: {
         author: { select: { username: true } },
       },

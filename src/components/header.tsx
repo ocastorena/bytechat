@@ -1,6 +1,9 @@
 "use client"
 import { signOut } from "next-auth/react"
 import { Button } from "./ui/button"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Home, User } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -13,13 +16,41 @@ import {
   AlertDialogDescription,
 } from "@/components/ui/alert-dialog"
 
+function SearchBar() {
+  return (
+    <input
+      type="text"
+      placeholder="Search..."
+      className="px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+    />
+  )
+}
+
 export function Header() {
+  const pathname = usePathname()
   return (
     <header
       data-testid="app-header"
-      className="sticky top-0 z-50 flex justify-between items-center mb-4 p-6 bg-card border-b-1">
-      <h1>Nav</h1>
-      <h1 className="font-bold">Your Feed</h1>
+      className="sticky top-0 z-50 grid grid-cols-[1fr_6fr_1fr] items-center justify-items-center p-6 bg-card border-b h-20">
+      <SearchBar />
+      <div className="flex gap-4">
+        <Link
+          href="/home"
+          className={
+            "p-2 rounded hover:bg-muted" +
+            (pathname === "/home" ? " text-accent" : "")
+          }>
+          <Home size={30} />
+        </Link>
+        <Link
+          href="/profile"
+          className={
+            "p-2 rounded hover:bg-muted " +
+            (pathname === "/profile" ? " text-accent" : "")
+          }>
+          <User size={30} />
+        </Link>
+      </div>
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button variant="destructive">Log out</Button>
