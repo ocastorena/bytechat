@@ -40,6 +40,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "/login",
+  },
   callbacks: {
     async session({ session }) {
       if (session?.user?.email) {
