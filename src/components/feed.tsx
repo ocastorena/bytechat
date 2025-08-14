@@ -2,15 +2,16 @@
 
 import Image from "next/image"
 
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
-import { Avatar } from "@/components/ui/avatar"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { Heart, MessageCircle, Share } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
 import OverflowMenu from "./overflow-menu"
 import { cn, formatDate } from "@/lib/utils"
 import useSWRInfinite from "swr/infinite"
 import { toast } from "sonner"
 import { useSession } from "next-auth/react"
-import { ThumbsUp, MessageSquare } from "lucide-react"
 
 const PAGE_SIZE = 10
 
@@ -25,6 +26,9 @@ type Post = {
   content: string
   authorId: string
   createdAt: string
+  isLiked: boolean
+  likes: number
+  comments: string
   images: { id: string; url: string; altText?: string }[]
 }
 
@@ -76,82 +80,100 @@ export default function Feed({ className, userId }: FeedProps) {
 
         return (
           <div key={post.id} className="flex flex-col gap-4 p-2">
-            <Card>
-              <CardHeader className="flex items-start justify-between gap-3">
-                <div className="flex gap-3">
-                  <Avatar className="h-10 w-10 bg-accent" />
-                  <div className="flex flex-col">
-                    <h3 className="font-medium">{post.authorName}</h3>
-                    <span className="text-sm text-muted-foreground">
-                      {formatDate(post.createdAt)}
-                    </span>
+            <Card className="hover:shadow-md transition-shadow duration-200">
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center space-x-3">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage
+                        src={post.authorName}
+                        alt={post.authorName}
+                      />
+                      <AvatarFallback>
+                        {post.authorName.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <h3 className="font-semibold text-sm">
+                          {post.authorName}
+                        </h3>
+                        <span className="text-gray-500 text-sm">
+                          {formatDate(post.createdAt)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                {isOwnPost && (
-                  <OverflowMenu
-                    postId={post.id}
-                    isOwnPost={isOwnPost}
-                    onDelete={async (postId) => {
-                      // 1) Snapshot current pages
-                      const prev = data
+                  {isOwnPost && (
+                    <OverflowMenu
+                      postId={post.id}
+                      isOwnPost={isOwnPost}
+                      onDelete={async (postId) => {
+                        // 1) Snapshot current pages
+                        const prev = data
 
-                      // 2) Optimistically remove the post from all pages
-                      const optimistic = prev?.map((page) => ({
-                        ...page,
-                        data: page.data.filter((p) => p.id !== postId),
-                      }))
+                        // 2) Optimistically remove the post from all pages
+                        const optimistic = prev?.map((page) => ({
+                          ...page,
+                          data: page.data.filter((p) => p.id !== postId),
+                        }))
 
-                      // apply optimistic cache without revalidation
-                      mutate(optimistic, { revalidate: false })
+                        // apply optimistic cache without revalidation
+                        mutate(optimistic, { revalidate: false })
 
-                      try {
-                        const res = await fetch(`/api/posts/${postId}`, {
-                          method: "DELETE",
-                        })
+                        try {
+                          const res = await fetch(`/api/posts/${postId}`, {
+                            method: "DELETE",
+                          })
 
-                        if (!res.ok) {
-                          let message = "Failed to delete post"
-                          try {
-                            const body = await res.json()
-                            if (body?.error) message = body.error
-                          } catch {}
-                          throw new Error(message)
+                          if (!res.ok) {
+                            let message = "Failed to delete post"
+                            try {
+                              const body = await res.json()
+                              if (body?.error) message = body.error
+                            } catch {}
+                            throw new Error(message)
+                          }
+
+                          // 3) Confirm success & revalidate from server
+                          toast.success("Post deleted")
+                          await mutate()
+                        } catch (err) {
+                          // 4) Rollback and notify
+                          mutate(prev, { revalidate: false })
+                          toast.error(
+                            err instanceof Error
+                              ? err.message
+                              : "Failed to delete post"
+                          )
                         }
-
-                        // 3) Confirm success & revalidate from server
-                        toast.success("Post deleted")
-                        await mutate()
-                      } catch (err) {
-                        // 4) Rollback and notify
-                        mutate(prev, { revalidate: false })
-                        toast.error(
-                          err instanceof Error
-                            ? err.message
-                            : "Failed to delete post"
-                        )
-                      }
-                    }}
-                  />
-                )}
+                      }}
+                    />
+                  )}
+                </div>
               </CardHeader>
 
-              <CardContent>
-                <p>{post.content}</p>
+              <CardContent className="pt-0">
+                <p className="text-gray-800 dark:text-gray-200 leading-relaxed mb-4">
+                  {post.content}
+                </p>
+
                 {post.images && post.images.length > 0 && (
                   <div
                     className={
                       post.images.length > 1
                         ? "mt-3 grid gap-2 sm:grid-cols-2"
                         : "mt-3 grid gap-2"
-                    }
-                  >
+                    }>
                     {post.images.map((img, idx) => (
                       <div
                         key={img.id}
                         className="relative w-full overflow-hidden rounded-lg"
-                        style={{ aspectRatio: post.images.length > 1 ? "4 / 3" : "16 / 9" }}
-                      >
+                        style={{
+                          aspectRatio:
+                            post.images.length > 1 ? "4 / 3" : "16 / 9",
+                        }}>
                         <Image
                           src={img.url}
                           alt={img.altText || ""}
@@ -165,24 +187,43 @@ export default function Feed({ className, userId }: FeedProps) {
                     ))}
                   </div>
                 )}
-              </CardContent>
 
-              <CardFooter className="gap-4">
-                <Button
-                  variant="ghost"
-                  size="lg"
-                  className="flex items-center gap-2">
-                  <ThumbsUp className="text-chart-1" />
-                  Like
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="lg"
-                  className="flex items-center gap-2">
-                  <MessageSquare className="text-chart-2" />
-                  Comment
-                </Button>
-              </CardFooter>
+                <Separator className="my-4" />
+
+                <div className="flex items-center justify-between text-gray-500">
+                  <div className="flex items-center space-x-6">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`flex items-center space-x-2 hover:text-red-500 ${
+                        post.isLiked ? "text-red-500" : ""
+                      }`}>
+                      <Heart
+                        className={`h-4 w-4 ${
+                          post.isLiked ? "fill-current" : ""
+                        }`}
+                      />
+                      <span className="text-sm">{post.likes}</span>
+                    </Button>
+
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center space-x-2 hover:text-blue-500">
+                      <MessageCircle className="h-4 w-4" />
+                      <span className="text-sm">{post.comments}</span>
+                    </Button>
+
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center space-x-2 hover:text-green-500">
+                      <Share className="h-4 w-4" />
+                      <span className="text-sm">Share</span>
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
             </Card>
           </div>
         )

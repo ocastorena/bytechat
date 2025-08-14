@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { Avatar } from "@/components/ui/avatar"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { toast } from "sonner"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
@@ -13,7 +13,7 @@ const postSchema = z.object({
   content: z.string().min(1, { message: "Post can’t be empty" }),
 })
 
-export default function CreatePostForm() {
+export function CreatePostForm() {
   const [content, setContent] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -58,7 +58,10 @@ export default function CreatePostForm() {
   return (
     <div>
       <Card className="flex flex-row items-center gap-3 pl-6 pr-6 ml-2 mr-2 mb-2">
-        <Avatar className="h-10 w-10 bg-accent" />
+        <Avatar className="h-10 w-10 bg-accent">
+          <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" />
+          <AvatarFallback>YU</AvatarFallback>
+        </Avatar>
         <CardContent className="w-full p-0">
           <form
             onSubmit={handleSubmit}
