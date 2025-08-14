@@ -1,5 +1,7 @@
 "use client"
 
+import Image from "next/image"
+
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -23,6 +25,7 @@ type Post = {
   content: string
   authorId: string
   createdAt: string
+  images: { id: string; url: string; altText?: string }[]
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -135,15 +138,48 @@ export default function Feed({ className, userId }: FeedProps) {
 
               <CardContent>
                 <p>{post.content}</p>
+                {post.images && post.images.length > 0 && (
+                  <div
+                    className={
+                      post.images.length > 1
+                        ? "mt-3 grid gap-2 sm:grid-cols-2"
+                        : "mt-3 grid gap-2"
+                    }
+                  >
+                    {post.images.map((img, idx) => (
+                      <div
+                        key={img.id}
+                        className="relative w-full overflow-hidden rounded-lg"
+                        style={{ aspectRatio: post.images.length > 1 ? "4 / 3" : "16 / 9" }}
+                      >
+                        <Image
+                          src={img.url}
+                          alt={img.altText || ""}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 600px"
+                          className="object-cover"
+                          loading={idx === 0 ? "eager" : "lazy"}
+                          unoptimized
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
 
               <CardFooter className="gap-4">
-                <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                  <ThumbsUp className="h-4 w-4" />
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  className="flex items-center gap-2">
+                  <ThumbsUp className="text-chart-1" />
                   Like
                 </Button>
-                <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4" />
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  className="flex items-center gap-2">
+                  <MessageSquare className="text-chart-2" />
                   Comment
                 </Button>
               </CardFooter>
@@ -153,7 +189,7 @@ export default function Feed({ className, userId }: FeedProps) {
       })}
 
       {hasMore && (
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-6">
           <Button
             variant="outline"
             disabled={isValidating}

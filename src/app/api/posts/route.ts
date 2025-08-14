@@ -17,29 +17,45 @@ export async function GET(request: NextRequest) {
   const userId = searchParams.get("userId") // optional filter
 
   try {
-    // query database
+    const baseWhere = userId ? { authorId: userId } : {}
+
     const posts = await prisma.post.findMany({
-      take: limit,
+      take: limit + 1,
       orderBy: { createdAt: "desc" },
-      ...(cursor && { skip: 1, cursor: { id: cursor } }),
-      ...(userId && { where: { authorId: userId } }),
+      ...(cursor ? { skip: 1, cursor: { id: cursor } } : {}),
+      where: baseWhere,
       include: {
         author: { select: { username: true } },
+        images: {
+          select: { id: true, url: true, altText: true, order: true },
+          orderBy: { order: "asc" },
+        },
       },
     })
+
+    let nextCursor: string | null = null
+    if (posts.length > limit) {
+      const nextItem = posts.pop()
+      nextCursor = nextItem?.id ?? null
+    }
 
     const safePosts = posts.map((p) => ({
       id: p.id,
       content: p.content,
-      createdAt: p.createdAt,
+      createdAt: p.createdAt.toISOString(),
       authorId: p.authorId,
       authorName: p.author?.username ?? "Unknown",
+      images: (p.images ?? []).map((img) => ({
+        id: img.id,
+        url: img.url,
+        altText: img.altText ?? undefined,
+        order: img.order,
+      })),
     }))
 
     return NextResponse.json({
       data: safePosts,
-      nextCursor:
-        safePosts.length === limit ? safePosts[safePosts.length - 1].id : null,
+      nextCursor,
     })
   } catch (error) {
     console.error("[POST_GET]", error)
@@ -102,8 +118,10 @@ export async function POST(request: NextRequest) {
       {
         id: newPost.id,
         content: newPost.content,
-        createdAt: newPost.createdAt,
+        createdAt: newPost.createdAt.toISOString(),
+        authorId: session.user.id,
         authorName: newPost.author.username,
+        images: [],
       },
       { status: 201 }
     )

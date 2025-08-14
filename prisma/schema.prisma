@@ -32,4 +32,20 @@ model Post {
   content       String
   createdAt     DateTime @default(now())
   // add fields later: images, likes, comments[]
+  images        Image[]
+}
+
+
+model Image {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  postId    String   @db.ObjectId
+  post      Post     @relation(fields: [postId], references: [id])
+  url       String
+  width     Int?
+  height    Int?
+  altText   String?
+  createdAt DateTime @default(now())
+  order     Int      @default(0)
+
+  @@index([postId])
 }
