@@ -35,8 +35,8 @@ export async function POST(req: NextRequest) {
     await prisma.user.create({
       data: {
         email: parseResult.data.email,
+        username: parseResult.data.username,
         password: hashedPassword,
-        username: "",
       },
     })
     // f) Return success response (201 status)

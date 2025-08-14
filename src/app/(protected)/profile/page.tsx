@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { CalendarDays, Mail, MessageSquare, Users } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
+import { formatDate, getInitials } from "@/lib/utils"
 
 export default async function Page() {
   const session = await auth()
@@ -39,22 +40,6 @@ export default async function Page() {
     })
   } catch (error) {
     console.error("[USERS_GET]", error)
-  }
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((word) => word[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2)
-  }
-
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("en-US", {
-      month: "long",
-      year: "numeric",
-    }).format(date)
   }
 
   return (
@@ -105,7 +90,9 @@ export default async function Page() {
 
                 <div className="flex items-center space-x-3 text-muted-foreground">
                   <CalendarDays className="h-4 w-4 flex-shrink-0" />
-                  <span>Joined {formatDate(userProfile.createdAt)}</span>
+                  <span>
+                    Joined {formatDate(userProfile.createdAt.toDateString())}
+                  </span>
                 </div>
 
                 <Separator />

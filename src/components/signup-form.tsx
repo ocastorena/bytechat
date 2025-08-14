@@ -21,6 +21,14 @@ import { z } from "zod"
 
 const formSchema = z
   .object({
+    username: z
+      .string()
+      .min(3, "Username must be at least 3 characters long")
+      .max(20, "Username must be at most 20 characters long")
+      .regex(
+        /^[a-zA-Z0-9_]+$/,
+        "Username can only contain letters, numbers, and underscores"
+      ),
     email: z.email({ message: "Invalid email address." }),
     password: z
       .string()
@@ -42,6 +50,7 @@ export default function SignupForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
     },
@@ -89,6 +98,7 @@ export default function SignupForm({
         return
       }
     } catch (error) {
+      console.log(error)
       form.setError("root", {
         type: "server",
         message: "Something went wrong. Please try again.",
@@ -111,7 +121,7 @@ export default function SignupForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="you@example.com"
                   required
                   {...form.register("email")}
                 />
@@ -122,12 +132,28 @@ export default function SignupForm({
                 )}
               </div>
               <div className="grid gap-3">
+                <Label htmlFor="email">Username</Label>
+                <Input
+                  id="username"
+                  type="username"
+                  placeholder="johndoe"
+                  required
+                  {...form.register("username")}
+                />
+                {form.formState.errors.username && (
+                  <p className="text-destructive text-sm">
+                    {form.formState.errors.username.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
                 <Input
                   id="password"
                   type="password"
+                  placeholder="••••••••"
                   required
                   {...form.register("password")}
                 />
@@ -144,6 +170,7 @@ export default function SignupForm({
                 <Input
                   id="confirmPassword"
                   type="password"
+                  placeholder="••••••••"
                   required
                   {...form.register("confirmPassword")}
                 />

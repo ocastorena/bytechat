@@ -8,12 +8,15 @@ import { Button } from "./ui/button"
 import { useState } from "react"
 import { z } from "zod"
 import { mutate } from "swr"
+import { getInitials } from "@/lib/utils"
+import { useSession } from "next-auth/react"
 
 const postSchema = z.object({
   content: z.string().min(1, { message: "Post can’t be empty" }),
 })
 
 export function CreatePostForm() {
+  const { data: session } = useSession()
   const [content, setContent] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -58,9 +61,14 @@ export function CreatePostForm() {
   return (
     <div>
       <Card className="flex flex-row items-center gap-3 pl-6 pr-6 ml-2 mr-2 mb-2">
-        <Avatar className="h-10 w-10 bg-accent">
-          <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" />
-          <AvatarFallback>YU</AvatarFallback>
+        <Avatar className="h-10 w-10 border-2 border-background shadow-lg">
+          <AvatarImage
+            src={session?.user?.image || undefined}
+            alt={session?.user?.name || "User"}
+          />
+          <AvatarFallback className="text-xl font-bold bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+            {session?.user?.name ? getInitials(session.user.name) : "U"}
+          </AvatarFallback>
         </Avatar>
         <CardContent className="w-full p-0">
           <form
