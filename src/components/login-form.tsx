@@ -20,13 +20,16 @@ import { useState } from "react"
 import { z } from "zod"
 import { logInSchema } from "@/lib/zod"
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const [formError, setFormError] = useState<string | null>(null)
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl") || "/home"
+
   const form = useForm<z.infer<typeof logInSchema>>({
     resolver: zodResolver(logInSchema),
     defaultValues: {
@@ -35,21 +38,18 @@ export function LoginForm({
     },
   })
 
-  const router = useRouter()
-
   async function onSubmit(values: z.infer<typeof logInSchema>) {
     setFormError(null)
-    const res = await signIn("credentials", {
+
+    // Let NextAuth handle the redirect automatically
+    await signIn("credentials", {
       email: values.email,
       password: values.password,
-      redirect: false,
+      callbackUrl: callbackUrl,
+      redirect: true, // Ensure signIn returns a response
     })
-    if (res?.error) {
-      setFormError("Invalid email or password")
-    } else {
-      router.push("/home")
-    }
   }
+
   return (
     <main className={cn("flex flex-col gap-6", className)} {...props}>
       <BytechatLogo className="mx-auto mb-4" />
