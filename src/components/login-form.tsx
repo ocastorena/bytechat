@@ -16,13 +16,13 @@ import { BytechatLogo } from "@/components/bytechat-logo"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import { z } from "zod"
 import { logInSchema } from "@/lib/zod"
 import { signIn } from "next-auth/react"
 import { useSearchParams } from "next/navigation"
 
-export function LoginForm({
+function LoginFormContent({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -46,7 +46,7 @@ export function LoginForm({
       email: values.email,
       password: values.password,
       callbackUrl: callbackUrl,
-      redirect: true, // Ensure signIn returns a response
+      redirect: true,
     })
   }
 
@@ -123,5 +123,13 @@ export function LoginForm({
         </CardContent>
       </Card>
     </main>
+  )
+}
+
+export function LoginForm(props: React.ComponentProps<"div">) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginFormContent {...props} />
+    </Suspense>
   )
 }
