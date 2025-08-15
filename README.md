@@ -1,36 +1,151 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ByteChat 💬
 
-## Getting Started
+A minimalistic social media web app designed with a cyberpunk theme in mind. Share your thoughts, connect with fellow developers, and stay updated with the latest in tech.
 
-First, run the development server:
+## ✨ Features
+
+- **Authentication**: Secure user registration and login with NextAuth.js
+- **Post Creation**: Share your thoughts with rich text posts
+- **Image Sharing**: Upload and display images in your posts
+- **Real-time Feed**: Infinite scroll feed with automatic updates
+- **User Profiles**: Personalized profile pages with user statistics
+- **Dark/Light Mode**: Toggle between themes with system preference support
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Post Management**: Edit and delete your own posts
+- **Trending Topics**: Discover what's popular in the community
+- **User Discovery**: Find and connect with other developers
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+- **[Next.js 15](https://nextjs.org/)** - React framework with App Router
+- **[React 19](https://react.dev/)** - UI library
+- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[Shadcn/ui](https://ui.shadcn.com/)** - Component library
+- **[Lucide React](https://lucide.dev/)** - Beautiful icons
+- **[SWR](https://swr.vercel.app/)** - Data fetching with caching
+- **[React Hook Form](https://react-hook-form.com/)** - Form management
+- **[Sonner](https://sonner.emilkowal.ski/)** - Toast notifications
+
+### Backend
+
+- **[NextAuth.js v5](https://authjs.dev/)** - Authentication
+- **[Prisma](https://www.prisma.io/)** - Database ORM
+- **[MongoDB](https://www.mongodb.com/)** - NoSQL database
+- **[Zod](https://zod.dev/)** - Runtime type validation
+- **[bcryptjs](https://github.com/dcodeIO/bcrypt.js)** - Password hashing
+
+### Development & Testing
+
+- **[Jest](https://jestjs.io/)** - Testing framework
+- **[Testing Library](https://testing-library.com/)** - Testing utilities
+- **[ESLint](https://eslint.org/)** - Code linting
+- **[Prettier](https://prettier.io/)** - Code formatting
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm/yarn/pnpm
+- MongoDB database
+
+### Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/yourusername/bytechat.git
+   cd bytechat
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Fill in your environment variables:
+
+   ```env
+   DATABASE_URL="mongodb://localhost:27017/bytechat"
+   NEXTAUTH_SECRET="your-secret-key"
+   NEXTAUTH_URL="http://localhost:3000"
+   ```
+
+4. **Set up the database**
+
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   npm run seed  # Optional: populate with sample data
+   ```
+
+5. **Run the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser**
+
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 📱 Usage
+
+1. **Sign Up**: Create a new account with email and password
+2. **Login**: Access your account securely
+3. **Create Posts**: Share your thoughts and images
+4. **Explore Feed**: Browse posts from other users
+5. **Manage Profile**: View and edit your profile information
+6. **Interact**: Like, comment, and share posts (coming soon)
+
+## 🧪 Testing
+
+Run the test suite:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm test -- --watch
+
+# Run tests with coverage
+npm test -- --coverage
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📁 Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── (protected)/       # Protected routes (require auth)
+│   ├── api/               # API routes
+│   └── login/             # Authentication pages
+├── components/            # Reusable React components
+│   └── ui/               # UI component library
+├── lib/                  # Utility functions and configurations
+└── middleware.ts         # Next.js middleware for route protection
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔧 Available Scripts
 
-## Learn More
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm test` - Run tests
+- `npm run lint` - Run ESLint
+- `npm run seed` - Seed database with sample data
 
-To learn more about Next.js, take a look at the following resources:
+## 📄 License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
