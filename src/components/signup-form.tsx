@@ -18,27 +18,7 @@ import { BytechatLogo } from "@/components/bytechat-logo"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
-const formSchema = z
-  .object({
-    username: z
-      .string()
-      .min(3, "Username must be at least 3 characters long")
-      .max(20, "Username must be at most 20 characters long")
-      .regex(
-        /^[a-zA-Z0-9_]+$/,
-        "Username can only contain letters, numbers, and underscores"
-      ),
-    email: z.email({ message: "Invalid email address." }),
-    password: z
-      .string()
-      .min(6, { message: "Password must be at least 6 characters." }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
-    path: ["confirmPassword"],
-  })
+import { registerSchema } from "@/lib/validations"
 
 export default function SignupForm({
   className,
@@ -47,17 +27,18 @@ export default function SignupForm({
   const router = useRouter()
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       username: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   })
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof registerSchema>) {
     try {
       const res = await fetch("/api/signup", {
         method: "POST",

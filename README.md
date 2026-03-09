@@ -1,151 +1,112 @@
-# ByteChat 💬
+# ByteChat
 
-A minimalistic social media web app designed with a cyberpunk theme in mind. Share your thoughts, connect with fellow developers, and stay updated with the latest in tech.
+A minimalistic social feed app with a cyberpunk theme. Share posts, browse a real-time feed, and discover other users.
 
-## ✨ Features
+## Tech Stack
 
-- **Authentication**: Secure user registration and login with NextAuth.js
-- **Post Creation**: Share your thoughts with rich text posts
-- **Image Sharing**: Upload and display images in your posts
-- **Real-time Feed**: Infinite scroll feed with automatic updates
-- **User Profiles**: Personalized profile pages with user statistics
-- **Dark/Light Mode**: Toggle between themes with system preference support
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
-- **Post Management**: Edit and delete your own posts
-- **Trending Topics**: Discover what's popular in the community
-- **User Discovery**: Find and connect with other developers
+- **Next.js 15** (App Router, Turbopack) + **React 19** + **TypeScript**
+- **Prisma** + **PostgreSQL**
+- **NextAuth.js v5** (Credentials + JWT)
+- **Tailwind CSS** + **Shadcn/ui**
+- **SWR** (infinite scroll) + **React Hook Form** + **Zod**
+- **Jest** + **React Testing Library**
 
-## 🛠️ Tech Stack
-
-### Frontend
-
-- **[Next.js 15](https://nextjs.org/)** - React framework with App Router
-- **[React 19](https://react.dev/)** - UI library
-- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[Shadcn/ui](https://ui.shadcn.com/)** - Component library
-- **[Lucide React](https://lucide.dev/)** - Beautiful icons
-- **[SWR](https://swr.vercel.app/)** - Data fetching with caching
-- **[React Hook Form](https://react-hook-form.com/)** - Form management
-- **[Sonner](https://sonner.emilkowal.ski/)** - Toast notifications
-
-### Backend
-
-- **[NextAuth.js v5](https://authjs.dev/)** - Authentication
-- **[Prisma](https://www.prisma.io/)** - Database ORM
-- **[MongoDB](https://www.mongodb.com/)** - NoSQL database
-- **[Zod](https://zod.dev/)** - Runtime type validation
-- **[bcryptjs](https://github.com/dcodeIO/bcrypt.js)** - Password hashing
-
-### Development & Testing
-
-- **[Jest](https://jestjs.io/)** - Testing framework
-- **[Testing Library](https://testing-library.com/)** - Testing utilities
-- **[ESLint](https://eslint.org/)** - Code linting
-- **[Prettier](https://prettier.io/)** - Code formatting
-
-## 🚀 Getting Started
-
-### Prerequisites
+## Prerequisites
 
 - Node.js 18+
-- npm/yarn/pnpm
-- MongoDB database
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-### Installation
+## Getting Started
 
-1. **Clone the repository**
+1. **Clone and install**
 
    ```bash
    git clone https://github.com/yourusername/bytechat.git
    cd bytechat
-   ```
-
-2. **Install dependencies**
-
-   ```bash
    npm install
    ```
 
-3. **Set up environment variables**
+2. **Set up environment**
 
    ```bash
    cp .env.example .env
    ```
 
-   Fill in your environment variables:
-
-   ```env
-   DATABASE_URL="mongodb://localhost:27017/bytechat"
-   NEXTAUTH_SECRET="your-secret-key"
-   NEXTAUTH_URL="http://localhost:3000"
-   ```
-
-4. **Set up the database**
+   Add a `NEXTAUTH_SECRET` to `.env` (the rest works out of the box):
 
    ```bash
-   npx prisma generate
-   npx prisma db push
-   npm run seed  # Optional: populate with sample data
+   openssl rand -base64 32
    ```
 
-5. **Run the development server**
+3. **Start developing**
 
    ```bash
    npm run dev
    ```
 
-6. **Open your browser**
+   This single command starts the PostgreSQL Docker container, pushes the database schema, and launches the Next.js dev server on [http://localhost:3000](http://localhost:3000).
 
-   Navigate to [http://localhost:3000](http://localhost:3000)
+4. **Seed the database** (first time only)
 
-## 📱 Usage
+   ```bash
+   npm run db:seed
+   ```
 
-1. **Sign Up**: Create a new account with email and password
-2. **Login**: Access your account securely
-3. **Create Posts**: Share your thoughts and images
-4. **Explore Feed**: Browse posts from other users
-5. **Manage Profile**: View and edit your profile information
-6. **Interact**: Like, comment, and share posts (coming soon)
+   This creates a dev account and 70 sample posts with images.
 
-## 🧪 Testing
+   **Dev login:** `dev@bytechat.io` / `password`
 
-Run the test suite:
+## Scripts
 
-```bash
-# Run all tests
-npm test
+| Command | Description |
+|---|---|
+| `npm run dev` | Start Docker DB + push schema + launch dev server |
+| `npm run build` | Generate Prisma client + production build |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Run TypeScript type checking |
+| `npm test` | Run tests |
+| `npm run db:push` | Push schema changes to database |
+| `npm run db:migrate` | Deploy migrations (CI/production) |
+| `npm run db:seed` | Seed database with sample data |
 
-# Run tests in watch mode
-npm test -- --watch
-
-# Run tests with coverage
-npm test -- --coverage
-```
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
-├── app/                    # Next.js App Router pages
-│   ├── (protected)/       # Protected routes (require auth)
-│   ├── api/               # API routes
-│   └── login/             # Authentication pages
-├── components/            # Reusable React components
-│   └── ui/               # UI component library
-├── lib/                  # Utility functions and configurations
-└── middleware.ts         # Next.js middleware for route protection
+├── app/
+│   ├── (protected)/        # Auth-required routes (home, profile)
+│   ├── api/                # API routes (posts, signup, auth)
+│   ├── login/              # Login page
+│   └── signup/             # Signup page
+├── components/
+│   ├── ui/                 # Shadcn/ui primitives
+│   ├── feed.tsx            # Infinite scroll feed
+│   ├── post-card.tsx       # Single post card
+│   ├── trending-sidebar.tsx
+│   └── suggested-users-sidebar.tsx
+├── lib/
+│   ├── auth.ts             # NextAuth config
+│   ├── prisma.ts           # Prisma client
+│   ├── validations.ts      # Zod schemas
+│   ├── password.ts         # Hashing utilities
+│   └── utils.ts            # Helpers (cn, formatDate, getInitials)
+├── types/                  # Shared TypeScript types
+└── middleware.ts            # Route protection
+
+prisma/
+├── schema.prisma           # Database schema
+└── seed.ts                 # Seed script
 ```
 
-## 🔧 Available Scripts
+## Deployment
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm test` - Run tests
-- `npm run lint` - Run ESLint
-- `npm run seed` - Seed database with sample data
+The project includes a `Dockerfile` and `docker-compose.yml`. For production, deploy to [Railway](https://railway.app) with a PostgreSQL service. Required env vars:
 
-## 📄 License
+- `DATABASE_URL` — PostgreSQL connection string
+- `NEXTAUTH_SECRET` — random secret (`openssl rand -base64 32`)
+- `NEXTAUTH_URL` — your production URL
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## License
+
+MIT

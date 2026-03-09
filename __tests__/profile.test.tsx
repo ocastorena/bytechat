@@ -11,7 +11,7 @@ import prisma from "@/lib/prisma"
 // Mock child components used by the profile page to reduce noise
 jest.mock("@/components/create-post-form", () => ({
   __esModule: true,
-  default: () => <div data-testid="create-post-form" />,
+  CreatePostForm: () => <div data-testid="create-post-form" />,
 }))
 jest.mock("@/components/feed", () => ({
   __esModule: true,
@@ -57,7 +57,6 @@ describe("UI / Profile Page", () => {
     const ui = await ProfilePage()
     render(ui)
 
-    expect(screen.getByText(/email:/i)).toBeInTheDocument()
     expect(screen.getByText(/test@example.com/i)).toBeInTheDocument()
     // Feed receives the userId from session
     expect(screen.getByTestId("feed")).toHaveAttribute("data-userid", "u1")

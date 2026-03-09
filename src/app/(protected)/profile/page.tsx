@@ -22,7 +22,7 @@ export default async function Page() {
 
   try {
     userProfile = await prisma.user.findUnique({
-      where: { id: userId ?? session?.user?.id },
+      where: { id: userId },
       select: {
         id: true,
         email: true,
@@ -43,8 +43,8 @@ export default async function Page() {
   }
 
   return (
-    <main className="grid grid-cols-12 gap-6 px-6 mt-6">
-      <div className="col-start-4 col-end-6 sticky top-26 h-[calc(100dvh-8rem)]">
+    <main className="grid grid-cols-1 lg:grid-cols-12 gap-6 px-6 mt-6">
+      <aside className="lg:col-span-4 lg:sticky lg:top-26 lg:h-[calc(100dvh-8rem)]">
         <Card className="border-2 shadow-lg">
           <CardHeader className="pb-4">
             <div className="flex flex-col items-center space-y-4">
@@ -149,12 +149,12 @@ export default async function Page() {
             )}
           </CardContent>
         </Card>
-      </div>
+      </aside>
 
-      <div className="col-start-6 col-end-10">
+      <section className="lg:col-span-8">
         <CreatePostForm />
         <Feed userId={userId} />
-      </div>
+      </section>
     </main>
   )
 }

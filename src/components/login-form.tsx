@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useState, Suspense } from "react"
 import { z } from "zod"
-import { logInSchema } from "@/lib/zod"
+import { logInSchema } from "@/lib/validations"
 import { signIn } from "next-auth/react"
 import { useSearchParams } from "next/navigation"
 
@@ -105,11 +105,8 @@ function LoginFormContent({
                 )}
               </div>
               <div className="flex flex-col gap-3">
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? "Logging in..." : "Login"}
+                <Button type="submit" className="w-full">
+                  Login
                 </Button>
               </div>
             </div>

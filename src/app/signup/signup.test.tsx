@@ -8,6 +8,7 @@ describe("SignupForm", () => {
     const user = userEvent.setup()
     render(<SignupForm />)
     await user.type(screen.getByLabelText(/email/i), "me@test.com")
+    await user.type(screen.getByLabelText(/username/i), "testuser")
     await user.type(screen.getByLabelText(/^password$/i), "password1")
     await user.type(screen.getByLabelText(/confirm password/i), "password2")
     await user.click(screen.getByRole("button", { name: /^sign up$/i }))

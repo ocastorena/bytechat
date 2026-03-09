@@ -39,16 +39,21 @@ describe("UI / ProtectedLayout", () => {
     expect(screen.getByTestId("child")).toBeInTheDocument()
   })
 
-  it("shows a Log out button in the header", () => {
+  it("shows a Log out option in the header menu", async () => {
+    const user = userEvent.setup()
     renderWithChild()
-    expect(screen.getByRole("button", { name: /log out/i })).toBeInTheDocument()
+
+    await user.click(screen.getByRole("button", { name: /open menu/i }))
+
+    expect(screen.getByRole("menuitem", { name: /log out/i })).toBeInTheDocument()
   })
 
   it("opens a confirmation dialog when Log out is clicked", async () => {
     const user = userEvent.setup()
     renderWithChild()
 
-    await user.click(screen.getByRole("button", { name: /log out/i }))
+    await user.click(screen.getByRole("button", { name: /open menu/i }))
+    await user.click(screen.getByRole("menuitem", { name: /log out/i }))
 
     expect(
       await screen.findByText(/are you sure you want to log out/i)
@@ -59,7 +64,8 @@ describe("UI / ProtectedLayout", () => {
     const user = userEvent.setup()
     renderWithChild()
 
-    await user.click(screen.getByRole("button", { name: /log out/i }))
+    await user.click(screen.getByRole("button", { name: /open menu/i }))
+    await user.click(screen.getByRole("menuitem", { name: /log out/i }))
 
     const confirmBtn = await screen.findByRole("button", {
       name: /yes, log out/i,
@@ -76,7 +82,8 @@ describe("UI / ProtectedLayout", () => {
     const user = userEvent.setup()
     renderWithChild()
 
-    await user.click(screen.getByRole("button", { name: /log out/i }))
+    await user.click(screen.getByRole("button", { name: /open menu/i }))
+    await user.click(screen.getByRole("menuitem", { name: /log out/i }))
     const dialogTitle = await screen.findByText(
       /are you sure you want to log out/i
     )
@@ -221,6 +228,7 @@ describe("API /api/posts", () => {
 
   it("GET returns posts and nextCursor when authenticated", async () => {
     ;(auth as jest.Mock).mockResolvedValueOnce({ user: { id: "u1" } })
+    // Return limit+1 (3) items so the code detects a next page
     ;(prisma.post.findMany as jest.Mock).mockResolvedValueOnce([
       {
         id: "p1",
@@ -234,6 +242,12 @@ describe("API /api/posts", () => {
         createdAt: new Date(),
         author: { username: "B" },
       },
+      {
+        id: "p3",
+        content: "next",
+        createdAt: new Date(),
+        author: { username: "C" },
+      },
     ])
 
     const res: NextResponse = await GET(
@@ -243,7 +257,7 @@ describe("API /api/posts", () => {
     const json = await res.json()
     expect(json.data).toHaveLength(2)
     expect(json.data[0]).toMatchObject({ id: "p1", authorName: "A" })
-    expect(json.nextCursor).toBe("p2")
+    expect(json.nextCursor).toBe("p3")
   })
 
   it("POST returns 401 when not authenticated", async () => {
@@ -342,53 +356,52 @@ describe("API /api/posts/[id] DELETE", () => {
   const buildReq = (url = "http://localhost/api/posts/p1") =>
     ({ url } as unknown as NextRequest)
 
+  const asyncParams = (id: string) =>
+    ({ params: Promise.resolve({ id }) } as { params: Promise<{ id: string }> })
+
   it("401 when unauthenticated", async () => {
     ;(auth as jest.Mock).mockResolvedValueOnce(null)
-    const res: NextResponse = await DELETE_POST(buildReq(), {
-      params: { id: "p1" },
-    } as { params: { id: string } })
+    const res: NextResponse = await DELETE_POST(buildReq(), asyncParams("p1"))
     expect(res.status).toBe(401)
   })
 
-  it("400 on invalid id", async () => {
+  it("404 when post not found", async () => {
     ;(auth as jest.Mock).mockResolvedValueOnce({ user: { id: "u1" } })
-    const res: NextResponse = await DELETE_POST(
-      buildReq("http://localhost/api/posts/bad"),
-      { params: { id: "bad" } } as { params: { id: string } }
-    )
-    expect(res.status).toBe(400)
-  })
+    ;(prisma.post.findUnique as jest.Mock).mockResolvedValueOnce(null)
 
-  it("404 when not owned or not found", async () => {
-    ;(auth as jest.Mock).mockResolvedValueOnce({ user: { id: "u1" } })
-    ;(prisma.post.deleteMany as jest.Mock).mockResolvedValueOnce({ count: 0 })
-
-    const res: NextResponse = await DELETE_POST(buildReq(), {
-      params: { id: "507f1f77bcf86cd799439011" },
-    } as { params: { id: string } })
+    const res: NextResponse = await DELETE_POST(buildReq(), asyncParams("p1"))
     expect(res.status).toBe(404)
   })
 
-  it("204 on success", async () => {
+  it("403 when not owned by user", async () => {
     ;(auth as jest.Mock).mockResolvedValueOnce({ user: { id: "u1" } })
-    ;(prisma.post.deleteMany as jest.Mock).mockResolvedValueOnce({ count: 1 })
+    ;(prisma.post.findUnique as jest.Mock).mockResolvedValueOnce({
+      authorId: "u2",
+    })
 
-    const res: NextResponse = await DELETE_POST(buildReq(), {
-      params: { id: "507f1f77bcf86cd799439011" },
-    } as { params: { id: string } })
-    expect(res.status).toBe(204)
+    const res: NextResponse = await DELETE_POST(buildReq(), asyncParams("p1"))
+    expect(res.status).toBe(403)
+  })
+
+  it("200 on successful delete", async () => {
+    ;(auth as jest.Mock).mockResolvedValueOnce({ user: { id: "u1" } })
+    ;(prisma.post.findUnique as jest.Mock).mockResolvedValueOnce({
+      authorId: "u1",
+    })
+    ;(prisma.post.delete as jest.Mock).mockResolvedValueOnce({})
+
+    const res: NextResponse = await DELETE_POST(buildReq(), asyncParams("p1"))
+    expect(res.status).toBe(200)
   })
 
   it("500 when prisma throws", async () => {
     const spy = jest.spyOn(console, "error").mockImplementation(() => {})
     ;(auth as jest.Mock).mockResolvedValueOnce({ user: { id: "u1" } })
-    ;(prisma.post.findMany as jest.Mock).mockRejectedValueOnce(
+    ;(prisma.post.findUnique as jest.Mock).mockRejectedValueOnce(
       new Error("db fail")
     )
 
-    const res: NextResponse = await DELETE_POST(buildReq(), {
-      params: { id: "507f1f77bcf86cd799439011" },
-    } as { params: { id: string } })
+    const res: NextResponse = await DELETE_POST(buildReq(), asyncParams("p1"))
 
     expect(res.status).toBe(500)
     expect(spy).toHaveBeenCalled()

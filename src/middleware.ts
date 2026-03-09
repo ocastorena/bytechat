@@ -12,11 +12,7 @@ export async function middleware(req: NextRequest) {
         : "authjs.session-token",
   })
 
-  console.log("Environment:", process.env.NODE_ENV)
-  console.log("Token found:", !!token)
-
   if (!token) {
-    console.log("No Token!")
     return NextResponse.redirect(new URL("/login", req.url))
   }
   return NextResponse.next()

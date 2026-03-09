@@ -1,45 +1,34 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  email         String   @unique
-  password      String
-  createdAt     DateTime @default(now())
-  username      String
-  // back-relation
-  posts         Post[]
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  username  String
+  createdAt DateTime @default(now())
+  posts     Post[]
 }
-
 
 model Post {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  authorId      String   @db.ObjectId
-  author        User     @relation(fields: [authorId], references: [id])
-  content       String
-  createdAt     DateTime @default(now())
-  // add fields later: images, likes, comments[]
-  images        Image[]
+  id        String   @id @default(cuid())
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+  images    Image[]
 }
 
-
 model Image {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  postId    String   @db.ObjectId
-  post      Post     @relation(fields: [postId], references: [id])
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   url       String
   width     Int?
   height    Int?

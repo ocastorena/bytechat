@@ -2,7 +2,6 @@ import "@testing-library/jest-dom"
 
 // Optional: Mock Next.js router if you use useRouter in components
 jest.mock("next/navigation", () => ({
-  // Router methods used in client components
   useRouter: () => ({
     push: jest.fn(),
     replace: jest.fn(),
@@ -10,8 +9,8 @@ jest.mock("next/navigation", () => ({
     refresh: jest.fn(),
     prefetch: jest.fn(),
   }),
-  // Pathname helper used by Header for active link styling
   usePathname: jest.fn(() => "/"),
+  useSearchParams: () => new URLSearchParams(),
 }))
 
 jest.mock("next-auth/react", () => ({
@@ -42,7 +41,9 @@ jest.mock("@/lib/prisma", () => ({
   default: {
     post: {
       findMany: jest.fn(),
+      findUnique: jest.fn(),
       create: jest.fn(),
+      delete: jest.fn(),
       deleteMany: jest.fn(),
     },
     user: {

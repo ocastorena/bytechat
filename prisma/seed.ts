@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker"
+import bcrypt from "bcryptjs"
 import prisma from "@/lib/prisma"
 
 // Mock image provider: Lorem Picsum (no API key, deterministic via seed)
@@ -10,9 +11,24 @@ function picsum(seed: string, w = 1200, h = 900) {
 }
 
 async function main() {
-  // 1) Create multiple users
+  // 0) Dev account — dev@bytechat.io / password
+  const devPassword = await bcrypt.hash("password", 10)
+  const devUser = await prisma.user.upsert({
+    where: { email: "dev@bytechat.io" },
+    update: {},
+    create: {
+      email: "dev@bytechat.io",
+      password: devPassword,
+      username: "dev",
+    },
+  })
+
+  const users = [
+    { id: devUser.id, email: devUser.email, username: devUser.username },
+  ]
+
+  // 1) Create additional users
   const USERS_TO_CREATE = 6
-  const users = [] as { id: string; email: string; username: string }[]
 
   for (let i = 0; i < USERS_TO_CREATE; i++) {
     const username = faker.internet.userName().slice(0, 20)

@@ -1,8 +1,8 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { comparePasswords } from "./utils"
+import { comparePasswords } from "./password"
 import prisma from "./prisma"
-import { logInSchema } from "./zod"
+import { logInSchema } from "./validations"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -34,7 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           return { id: user.id, email: user.email }
         } catch (error) {
-          console.log("[AUTH]:", error)
+          console.error("[AUTH]:", error)
           return null
         }
       },
@@ -69,22 +69,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session
     },
     async redirect({ url, baseUrl }) {
-      console.log("🔄 Redirect callback:", { url, baseUrl })
-
       // Allow relative callback URLs
-      if (url.startsWith("/")) {
-        console.log("✅ Redirecting to relative:", `${baseUrl}${url}`)
-        return `${baseUrl}${url}`
-      }
+      if (url.startsWith("/")) return `${baseUrl}${url}`
 
       // Allow callback URLs on the same origin
-      if (new URL(url).origin === baseUrl) {
-        console.log("✅ Redirecting to same origin:", url)
-        return url
-      }
+      if (new URL(url).origin === baseUrl) return url
 
       // Default redirect to home page
-      console.log("✅ Default redirect to home")
       return `${baseUrl}/home`
     },
   },

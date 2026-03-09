@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import prisma from "@/lib/prisma" // your db connection utility
-// import User from "@/models/User";      // your User mongoose/prisma model
-import { z } from "zod" // for validation
-import bcrypt from "bcryptjs" // for password hashing
-import { registerSchema } from "./register-schema"
+import prisma from "@/lib/prisma"
+import { z } from "zod"
+import { saltAndHashPassword } from "@/lib/password"
+import { registerSchema } from "@/lib/validations"
 
 // POST handler
 export async function POST(req: NextRequest) {
@@ -30,7 +29,7 @@ export async function POST(req: NextRequest) {
       )
     }
     // d) Hash the password securely
-    const hashedPassword = await bcrypt.hash(parseResult.data.password, 10)
+    const hashedPassword = await saltAndHashPassword(parseResult.data.password)
     // e) Create/save new user in database
     await prisma.user.create({
       data: {
