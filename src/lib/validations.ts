@@ -1,5 +1,9 @@
 import { z } from "zod"
 
+export const postSchema = z.object({
+  content: z.string().min(1, { message: "Post can't be empty" }),
+})
+
 export const logInSchema = z.object({
   email: z.email({ message: "Invalid email address." }),
   password: z

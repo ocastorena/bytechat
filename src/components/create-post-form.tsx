@@ -9,10 +9,7 @@ import { z } from "zod"
 import { mutate } from "swr"
 import { getInitials } from "@/lib/utils"
 import { useSession } from "next-auth/react"
-
-const postSchema = z.object({
-  content: z.string().min(1, { message: "Post can't be empty" }),
-})
+import { postSchema } from "@/lib/validations"
 
 export function CreatePostForm() {
   const { data: session } = useSession()

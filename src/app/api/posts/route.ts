@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma" // your singleton
 import { auth } from "@/lib/auth" // protect if needed
 import { z } from "zod"
+import { postSchema } from "@/lib/validations"
 
 export async function GET(request: NextRequest) {
   // check if request is authorized
@@ -66,11 +67,6 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-
-// 1) Define a Zod schema for post data
-const postSchema = z.object({
-  content: z.string().min(1, { message: "Post can’t be empty" }),
-})
 
 export async function POST(request: NextRequest) {
   // check if request is authorized
