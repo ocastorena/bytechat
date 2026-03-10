@@ -33,7 +33,7 @@ const SUGGESTED_USERS = [
 
 export function SuggestedUsersSidebar() {
   return (
-    <Card className="sticky top-26 h-[calc(100dvh-8rem)] w-full">
+    <Card className="sticky top-20 w-full">
       <div className="p-4 space-y-4">
         <h2 className="text-lg font-semibold">Who to Follow</h2>
         <ul className="space-y-3 text-sm">

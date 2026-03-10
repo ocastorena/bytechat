@@ -3,26 +3,33 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { toast } from "sonner"
-import { Input } from "./ui/input"
 import { Button } from "./ui/button"
-import { useState } from "react"
+import { useState, useRef, useCallback } from "react"
 import { z } from "zod"
 import { mutate } from "swr"
 import { getInitials } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 
 const postSchema = z.object({
-  content: z.string().min(1, { message: "Post can’t be empty" }),
+  content: z.string().min(1, { message: "Post can't be empty" }),
 })
 
 export function CreatePostForm() {
   const { data: session } = useSession()
   const [content, setContent] = useState("")
   const [loading, setLoading] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const autoResize = useCallback(() => {
+    const el = textareaRef.current
+    if (el) {
+      el.style.height = "auto"
+      el.style.height = `${el.scrollHeight}px`
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // 1) Validate client-side
     const result = postSchema.safeParse({ content })
     if (!result.success) {
       toast.error(z.flattenError(result.error).fieldErrors.content)
@@ -31,7 +38,6 @@ export function CreatePostForm() {
 
     setLoading(true)
     try {
-      // 2) Call the POST API
       const res = await fetch("/api/posts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -43,8 +49,10 @@ export function CreatePostForm() {
         throw new Error(data.error || "Unknown error")
       }
 
-      // 3) Clear the input & revalidate the feed
       setContent("")
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "auto"
+      }
       toast.success("Post created!")
       mutate((key) => typeof key === "string" && key.startsWith("/api/posts"))
     } catch (error: unknown) {
@@ -59,9 +67,9 @@ export function CreatePostForm() {
   }
 
   return (
-    <div>
-      <Card className="flex flex-row items-center gap-3 pl-6 pr-6 ml-2 mr-2 mb-2">
-        <Avatar className="h-10 w-10 border-2 border-background shadow-lg">
+    <Card className="px-6 py-4 mb-4">
+      <div className="flex gap-3">
+        <Avatar className="h-10 w-10 shrink-0 border-2 border-background shadow-lg">
           <AvatarImage
             src={session?.user?.image || undefined}
             alt={session?.user?.name || "User"}
@@ -71,29 +79,31 @@ export function CreatePostForm() {
           </AvatarFallback>
         </Avatar>
         <CardContent className="w-full p-0">
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-row items-center gap-3">
-            <Input
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+            <textarea
+              ref={textareaRef}
               id="post"
-              type="text"
               placeholder="What's on your mind?"
               value={content}
               onChange={(e) => {
                 setContent(e.currentTarget.value)
+                autoResize()
               }}
-              className="h-10"
+              rows={2}
+              className="w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
-            <Button
-              type="submit"
-              disabled={loading}
-              variant="secondary"
-              size="lg">
-              {loading ? "Posting..." : "Post"}
-            </Button>
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                disabled={loading}
+                variant="secondary"
+                size="sm">
+                {loading ? "Posting..." : "Post"}
+              </Button>
+            </div>
           </form>
         </CardContent>
-      </Card>
-    </div>
+      </div>
+    </Card>
   )
 }

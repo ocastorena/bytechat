@@ -18,7 +18,7 @@ export function BytechatLogo(props: React.SVGProps<SVGSVGElement>) {
         className="fill-foreground"
       />
       <rect x="33" y="29" width="7" height="7" rx="2" className="fill-accent" />
-      <polygon points="12,36 20,36 16,44" className="fill-zinc-900" />
+      <polygon points="12,36 20,36 16,44" className="fill-foreground" />
       <text
         x="52"
         y="31"

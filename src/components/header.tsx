@@ -28,11 +28,20 @@ import { BytechatLogo } from "./bytechat-logo"
 
 function SearchBar() {
   return (
-    <input
-      type="text"
-      placeholder="Search..."
-      className="px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring w-40 sm:w-52 md:w-72 max-w-full"
-    />
+    <div className="relative hidden sm:block">
+      <input
+        id="search"
+        type="text"
+        placeholder="Search..."
+        onKeyDown={(e) => {
+          if (e.key === "Escape") e.currentTarget.blur()
+        }}
+        className="px-4 py-1.5 rounded-md border border-input bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring w-44 md:w-64 max-w-full"
+      />
+      <kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5 font-mono">
+        /
+      </kbd>
+    </div>
   )
 }
 
@@ -43,7 +52,7 @@ export function Header() {
   return (
     <header
       data-testid="app-header"
-      className="sticky top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center p-4 bg-card border-b h-20 w-full">
+      className="sticky top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center px-4 py-2 bg-card border-b h-14 w-full">
       <div className="flex items-center gap-2 justify-self-start shrink-0">
         <BytechatLogo className="px-2" />
         <SearchBar />
@@ -55,7 +64,7 @@ export function Header() {
             "p-2 rounded hover:bg-muted" +
             (pathname === "/home" ? " text-accent" : "")
           }>
-          <Home size={30} />
+          <Home size={22} />
         </Link>
         <Link
           href="/profile"
@@ -63,7 +72,7 @@ export function Header() {
             "p-2 rounded hover:bg-muted " +
             (pathname === "/profile" ? " text-accent" : "")
           }>
-          <User size={30} />
+          <User size={22} />
         </Link>
       </div>
       <div className="justify-self-end shrink-0">
@@ -72,7 +81,7 @@ export function Header() {
             <button
               className="p-2 rounded hover:bg-muted"
               aria-label="Open menu">
-              <Menu size={30} />
+              <Menu size={22} />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

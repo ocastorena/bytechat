@@ -1,12 +1,41 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { PostCard } from "./post-card"
+import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import useSWRInfinite from "swr/infinite"
 import { toast } from "sonner"
 import { useSession } from "next-auth/react"
+import { useEffect, useRef, useCallback } from "react"
 import type { Post, PostPage } from "@/types"
+
+function PostSkeleton() {
+  return (
+    <Card className="p-6 animate-pulse">
+      <div className="flex items-center space-x-3 mb-4">
+        <div className="h-10 w-10 rounded-full bg-muted" />
+        <div className="space-y-2 flex-1">
+          <div className="h-3 w-28 bg-muted rounded" />
+          <div className="h-2 w-20 bg-muted rounded" />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <div className="h-3 w-full bg-muted rounded" />
+        <div className="h-3 w-3/4 bg-muted rounded" />
+      </div>
+    </Card>
+  )
+}
+
+function FeedSkeleton() {
+  return (
+    <div className="flex flex-col gap-4">
+      <PostSkeleton />
+      <PostSkeleton />
+      <PostSkeleton />
+    </div>
+  )
+}
 
 const PAGE_SIZE = 10
 
@@ -18,6 +47,8 @@ interface FeedProps extends React.ComponentProps<"section"> {
 
 export default function Feed({ className, userId }: FeedProps) {
   const { data: session } = useSession()
+  const sentinelRef = useRef<HTMLDivElement>(null)
+
   const getKey = (pageIndex: number, prevPageData: PostPage | null) => {
     if (prevPageData && prevPageData.nextCursor === null) return null
 
@@ -35,21 +66,60 @@ export default function Feed({ className, userId }: FeedProps) {
       refreshWhenHidden: false,
     })
 
+  const hasMore = data && data[data.length - 1]?.nextCursor !== null
+
+  const loadMore = useCallback(() => {
+    if (!isValidating && hasMore) {
+      setSize(size + 1)
+    }
+  }, [isValidating, hasMore, setSize, size])
+
+  useEffect(() => {
+    const el = sentinelRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore()
+        }
+      },
+      { rootMargin: "200px" }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [loadMore])
+
   if (isLoading && !data) {
-    return <div className={cn("mb-3", className)}>Loading...</div>
+    return <FeedSkeleton />
   }
 
   if (error) {
-    return <div className={cn("mb-3", className)}>Error loading posts</div>
+    return (
+      <Card className={cn("p-8 text-center", className)}>
+        <p className="text-muted-foreground text-sm">Something went wrong loading the feed.</p>
+        <button
+          onClick={() => mutate()}
+          className="mt-2 text-sm text-accent hover:underline">
+          Try again
+        </button>
+      </Card>
+    )
   }
 
   const posts: Post[] = data ? data.flatMap((p) => p.data) : []
 
   if (posts.length === 0) {
-    return <div className={cn("mb-3", className)}>No posts to show</div>
+    return (
+      <Card className={cn("p-8 text-center", className)}>
+        <p className="text-foreground font-medium">No posts yet</p>
+        <p className="text-muted-foreground text-sm mt-1">
+          Be the first to share something or follow others to see their posts.
+        </p>
+      </Card>
+    )
   }
-
-  const hasMore = data && data[data.length - 1]?.nextCursor !== null
 
   const handleDelete = async (postId: string) => {
     const prev = data
@@ -86,7 +156,7 @@ export default function Feed({ className, userId }: FeedProps) {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {posts.map((post) => (
         <PostCard
           key={post.id}
@@ -96,19 +166,13 @@ export default function Feed({ className, userId }: FeedProps) {
         />
       ))}
 
-      {hasMore && (
-        <div className="flex justify-center mb-6">
-          <Button
-            variant="outline"
-            disabled={isValidating}
-            onClick={() => {
-              setSize(size + 1)
-            }}
-            className="mt-4">
-            {isValidating ? "Loading..." : "Load more"}
-          </Button>
+      <div ref={sentinelRef} className="h-1" />
+
+      {isValidating && (
+        <div className="flex justify-center py-4">
+          <span className="text-sm text-muted-foreground">Loading...</span>
         </div>
       )}
-    </>
+    </div>
   )
 }

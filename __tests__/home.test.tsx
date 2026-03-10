@@ -109,7 +109,7 @@ describe("UI / Feed", () => {
     jest.clearAllMocks()
   })
 
-  it("renders loading state", () => {
+  it("renders loading skeleton", () => {
     ;(useSWRInfinite as jest.Mock).mockReturnValue({
       data: undefined,
       error: undefined,
@@ -117,13 +117,14 @@ describe("UI / Feed", () => {
       isValidating: false,
       size: 0,
       setSize: jest.fn(),
+      mutate: jest.fn(),
     })
 
-    render(<Feed />)
-    expect(screen.getByText(/loading/i)).toBeInTheDocument()
+    const { container } = render(<Feed />)
+    expect(container.querySelector(".animate-pulse")).toBeInTheDocument()
   })
 
-  it("renders posts and a Load more button when there is a next page", () => {
+  it("renders posts when there is data", () => {
     ;(useSWRInfinite as jest.Mock).mockReturnValue({
       data: [
         {
@@ -131,6 +132,7 @@ describe("UI / Feed", () => {
             {
               id: "p1",
               authorName: "Alice",
+              authorUsername: "alice",
               content: "Hello world",
               createdAt: new Date().toISOString(),
             },
@@ -143,16 +145,14 @@ describe("UI / Feed", () => {
       isValidating: false,
       size: 1,
       setSize: jest.fn(),
+      mutate: jest.fn(),
     })
 
     render(<Feed />)
     expect(screen.getByText(/hello world/i)).toBeInTheDocument()
-    expect(
-      screen.getByRole("button", { name: /load more/i })
-    ).toBeInTheDocument()
   })
 
-  it("renders 'No posts yet' when list is empty", () => {
+  it("renders empty state when list is empty", () => {
     ;(useSWRInfinite as jest.Mock).mockReturnValue({
       data: [{ data: [], nextCursor: null }],
       error: undefined,
@@ -160,11 +160,11 @@ describe("UI / Feed", () => {
       isValidating: false,
       size: 1,
       setSize: jest.fn(),
+      mutate: jest.fn(),
     })
 
     render(<Feed />)
-    // Match the component's empty state text
-    expect(screen.getByText(/No posts to show/i)).toBeInTheDocument()
+    expect(screen.getByText(/No posts yet/i)).toBeInTheDocument()
   })
 })
 

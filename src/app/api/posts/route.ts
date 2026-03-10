@@ -45,6 +45,7 @@ export async function GET(request: NextRequest) {
       createdAt: p.createdAt.toISOString(),
       authorId: p.authorId,
       authorName: p.author?.username ?? "Unknown",
+      authorUsername: p.author?.username ?? "unknown",
       images: (p.images ?? []).map((img) => ({
         id: img.id,
         url: img.url,
@@ -121,6 +122,7 @@ export async function POST(request: NextRequest) {
         createdAt: newPost.createdAt.toISOString(),
         authorId: session.user.id,
         authorName: newPost.author.username,
+        authorUsername: newPost.author.username,
         images: [],
       },
       { status: 201 }

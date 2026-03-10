@@ -1,5 +1,13 @@
 import "@testing-library/jest-dom"
 
+// Mock IntersectionObserver for components that use it (e.g. infinite scroll)
+global.IntersectionObserver = class IntersectionObserver {
+  constructor(private callback: IntersectionObserverCallback) {}
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+} as unknown as typeof IntersectionObserver
+
 // Optional: Mock Next.js router if you use useRouter in components
 jest.mock("next/navigation", () => ({
   useRouter: () => ({
