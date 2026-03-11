@@ -2,8 +2,8 @@
 import { signOut } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Sun, Moon } from "lucide-react"
-import { Menu } from "lucide-react"
+import { Home, User, Sun, Moon, Menu } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { useTheme } from "next-themes"
 import {
@@ -61,18 +61,18 @@ export function Header() {
       <div className="flex gap-4 justify-self-center w-fit">
         <Link
           href={ROUTES.HOME}
-          className={
-            "p-2 rounded hover:bg-muted" +
-            (pathname === ROUTES.HOME ? " text-accent" : "")
-          }>
+          className={cn(
+            "p-2 rounded hover:bg-muted",
+            pathname === ROUTES.HOME && "text-accent"
+          )}>
           <Home size={22} />
         </Link>
         <Link
           href={ROUTES.PROFILE}
-          className={
-            "p-2 rounded hover:bg-muted " +
-            (pathname === ROUTES.PROFILE ? " text-accent" : "")
-          }>
+          className={cn(
+            "p-2 rounded hover:bg-muted",
+            pathname === ROUTES.PROFILE && "text-accent"
+          )}>
           <User size={22} />
         </Link>
       </div>
