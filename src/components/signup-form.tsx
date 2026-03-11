@@ -57,23 +57,16 @@ export default function SignupForm({
       }
 
       if (!res.ok) {
-        // Handle field errors
-        if (data.errors) {
-          Object.entries(data.errors).forEach(([field, messages]) => {
+        if (data.fieldErrors) {
+          Object.entries(data.fieldErrors).forEach(([field, messages]) => {
             if (messages && Array.isArray(messages)) {
               form.setError(field as keyof typeof values, {
                 type: "server",
-                message:
-                  typeof messages[0] === "object" &&
-                  messages[0] !== null &&
-                  "message" in messages[0]
-                    ? (messages[0] as { message: string }).message
-                    : String(messages[0]),
+                message: String(messages[0]),
               })
             }
           })
         } else if (data.error) {
-          // General error (e.g., duplicate email)
           form.setError("email", { type: "server", message: data.error })
         }
         return

@@ -1,21 +1,24 @@
-import { NextRequest, NextResponse } from "next/server"
-import prisma from "@/lib/prisma" // your singleton
-import { auth } from "@/lib/auth" // protect if needed
-import { z } from "zod"
+import { NextRequest } from "next/server"
+import prisma from "@/lib/prisma"
+import { auth } from "@/lib/auth"
 import { postSchema } from "@/lib/validations"
+import {
+  apiSuccess,
+  apiError,
+  apiValidationError,
+  logApiError,
+} from "@/lib/api-response"
 
 export async function GET(request: NextRequest) {
-  // check if request is authorized
   const session = await auth()
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return apiError("Unauthorized", 401)
   }
 
-  // pagination
   const { searchParams } = new URL(request.url)
   const limit = parseInt(searchParams.get("limit") ?? "10", 10)
   const cursor = searchParams.get("cursor")
-  const userId = searchParams.get("userId") // optional filter
+  const userId = searchParams.get("userId")
 
   try {
     const baseWhere = userId ? { authorId: userId } : {}
@@ -55,50 +58,33 @@ export async function GET(request: NextRequest) {
       })),
     }))
 
-    return NextResponse.json({
-      data: safePosts,
-      nextCursor,
-    })
+    return apiSuccess({ data: safePosts, nextCursor })
   } catch (error) {
-    console.error("[POST_GET]", error)
-    return NextResponse.json(
-      { error: "Unable to fetch posts" },
-      { status: 500 }
-    )
+    logApiError("POST_GET", error)
+    return apiError("Unable to fetch posts", 500)
   }
 }
 
 export async function POST(request: NextRequest) {
-  // check if request is authorized
   const session = await auth()
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return apiError("Unauthorized", 401)
   }
 
-  // 2) Validate incoming JSON (safeParse to collect messages)
   let content: string
   try {
     const body = await request.json()
     const parsed = postSchema.safeParse(body)
     if (!parsed.success) {
-      const flat = parsed.error.flatten()
-      const messages = [
-        ...flat.formErrors,
-        ...Object.values(flat.fieldErrors).flat(),
-      ].filter(Boolean) as string[]
-      return NextResponse.json(
-        { error: messages.join(", ") || "Invalid request" },
-        { status: 400 }
-      )
+      return apiValidationError(parsed.error)
     }
     content = parsed.data.content
   } catch {
-    return NextResponse.json({ error: "Invalid request" }, { status: 400 })
+    return apiError("Invalid request", 400)
   }
 
-  // Ensure we have a user id
   if (!session.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return apiError("Unauthorized", 401)
   }
 
   try {
@@ -110,8 +96,7 @@ export async function POST(request: NextRequest) {
       include: { author: { select: { username: true } } },
     })
 
-    // 4) Shape the response like GET
-    return NextResponse.json(
+    return apiSuccess(
       {
         id: newPost.id,
         content: newPost.content,
@@ -121,13 +106,10 @@ export async function POST(request: NextRequest) {
         authorUsername: newPost.author.username,
         images: [],
       },
-      { status: 201 }
+      201
     )
   } catch (error) {
-    console.error("[POST_CREATE]", error)
-    return NextResponse.json(
-      { error: "Could not create post" },
-      { status: 500 }
-    )
+    logApiError("POST_CREATE", error)
+    return apiError("Could not create post", 500)
   }
 }
