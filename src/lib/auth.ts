@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials"
 import { comparePasswords } from "./password"
 import prisma from "./prisma"
 import { logInSchema } from "./validations"
+import { ROUTES } from "@/config/constants"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -45,7 +46,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt",
   },
   pages: {
-    signIn: "/login",
+    signIn: ROUTES.LOGIN,
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -76,7 +77,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (new URL(url).origin === baseUrl) return url
 
       // Default redirect to home page
-      return `${baseUrl}/home`
+      return `${baseUrl}${ROUTES.HOME}`
     },
   },
 })

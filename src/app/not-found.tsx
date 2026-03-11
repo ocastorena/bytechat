@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { ROUTES } from "@/config/constants"
 
 export default function NotFound() {
   return (
@@ -8,7 +9,7 @@ export default function NotFound() {
         The page you are looking for does not exist.
       </p>
       <Link
-        href="/home"
+        href={ROUTES.HOME}
         className="rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground hover:bg-primary/90">
         Go home
       </Link>

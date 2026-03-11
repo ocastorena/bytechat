@@ -3,6 +3,7 @@ import { LoginForm } from "@/components/login-form"
 import userEvent from "@testing-library/user-event"
 import { render, screen } from "@testing-library/react"
 import { signIn } from "next-auth/react"
+import { ROUTES } from "@/config/constants"
 
 jest.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -49,7 +50,7 @@ describe("LoginForm", () => {
     expect(signIn).toHaveBeenCalledWith("credentials", {
       email: "me@test.com",
       password: "password1",
-      callbackUrl: "/home",
+      callbackUrl: ROUTES.HOME,
       redirect: true,
     })
   })

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { ROUTES } from "@/config/constants"
 
 export function useKeyboardShortcuts() {
   const router = useRouter()
@@ -30,11 +31,11 @@ export function useKeyboardShortcuts() {
           break
         case "h":
           e.preventDefault()
-          router.push("/home")
+          router.push(ROUTES.HOME)
           break
         case "p":
           e.preventDefault()
-          router.push("/profile")
+          router.push(ROUTES.PROFILE)
           break
       }
     }

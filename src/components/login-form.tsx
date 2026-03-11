@@ -21,13 +21,14 @@ import { z } from "zod"
 import { logInSchema } from "@/lib/validations"
 import { signIn } from "next-auth/react"
 import { useSearchParams } from "next/navigation"
+import { ROUTES } from "@/config/constants"
 
 function LoginFormContent({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get("callbackUrl") || "/home"
+  const callbackUrl = searchParams.get("callbackUrl") || ROUTES.HOME
 
   const form = useForm<z.infer<typeof logInSchema>>({
     resolver: zodResolver(logInSchema),
@@ -104,7 +105,7 @@ function LoginFormContent({
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <Link href="/signup" className="underline underline-offset-4">
+              <Link href={ROUTES.SIGNUP} className="underline underline-offset-4">
                 Sign up
               </Link>
             </div>

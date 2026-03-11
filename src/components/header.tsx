@@ -25,6 +25,7 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
 import { BytechatLogo } from "./bytechat-logo"
+import { ROUTES } from "@/config/constants"
 
 function SearchBar() {
   return (
@@ -59,18 +60,18 @@ export function Header() {
       </div>
       <div className="flex gap-4 justify-self-center w-fit">
         <Link
-          href="/home"
+          href={ROUTES.HOME}
           className={
             "p-2 rounded hover:bg-muted" +
-            (pathname === "/home" ? " text-accent" : "")
+            (pathname === ROUTES.HOME ? " text-accent" : "")
           }>
           <Home size={22} />
         </Link>
         <Link
-          href="/profile"
+          href={ROUTES.PROFILE}
           className={
             "p-2 rounded hover:bg-muted " +
-            (pathname === "/profile" ? " text-accent" : "")
+            (pathname === ROUTES.PROFILE ? " text-accent" : "")
           }>
           <User size={22} />
         </Link>
@@ -138,7 +139,7 @@ export function Header() {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => signOut({ callbackUrl: "/login" })}>
+              onClick={() => signOut({ callbackUrl: ROUTES.LOGIN })}>
               Yes, log out
             </AlertDialogAction>
           </AlertDialogFooter>

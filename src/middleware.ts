@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
+import { ROUTES } from "@/config/constants"
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({
@@ -13,7 +14,7 @@ export async function middleware(req: NextRequest) {
   })
 
   if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url))
+    return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url))
   }
   return NextResponse.next()
 }

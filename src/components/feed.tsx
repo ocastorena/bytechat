@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react"
 import { useEffect, useRef, useCallback } from "react"
 import type { Post, PostPage } from "@/types"
 import { apiClient } from "@/lib/api-client"
+import { PAGINATION } from "@/config/constants"
 
 function PostSkeleton() {
   return (
@@ -38,7 +39,7 @@ function FeedSkeleton() {
   )
 }
 
-const PAGE_SIZE = 10
+const { PAGE_SIZE, REFRESH_INTERVAL } = PAGINATION
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -67,7 +68,7 @@ export default function Feed({ className, userId }: FeedProps) {
 
   const { data, error, size, setSize, isLoading, isValidating, mutate } =
     useSWRInfinite<PostPage>(getKey, fetcher, {
-      refreshInterval: 10000,
+      refreshInterval: REFRESH_INTERVAL,
       refreshWhenHidden: false,
     })
 

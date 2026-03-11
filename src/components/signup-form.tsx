@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { registerSchema } from "@/lib/validations"
 import { apiClient, ApiError } from "@/lib/api-client"
+import { ROUTES } from "@/config/constants"
 
 export default function SignupForm({
   className,
@@ -41,7 +42,7 @@ export default function SignupForm({
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     try {
       await apiClient.auth.signup(values)
-      router.push("/login")
+      router.push(ROUTES.LOGIN)
     } catch (error) {
       if (error instanceof ApiError && error.fieldErrors) {
         Object.entries(error.fieldErrors).forEach(([field, messages]) => {
@@ -150,7 +151,7 @@ export default function SignupForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
-              <Link href="/login" className="underline underline-offset-4">
+              <Link href={ROUTES.LOGIN} className="underline underline-offset-4">
                 Log in
               </Link>
             </div>
