@@ -41,7 +41,14 @@ function FeedSkeleton() {
 
 const { PAGE_SIZE, REFRESH_INTERVAL } = PAGINATION
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+async function fetcher(url: string) {
+  const res = await fetch(url)
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    throw new Error(body.error || `Request failed (${res.status})`)
+  }
+  return res.json()
+}
 
 interface FeedProps extends React.ComponentProps<"section"> {
   userId?: string
