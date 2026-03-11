@@ -14,7 +14,8 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(url: string, options?: RequestInit): Promise<T> {
+/** Generic fetch wrapper with error handling. Also usable as an SWR fetcher. */
+export async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, options)
   const data = await res.json()
 

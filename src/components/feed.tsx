@@ -8,7 +8,7 @@ import { toast } from "sonner"
 import { useSession } from "next-auth/react"
 import { useEffect, useRef, useCallback } from "react"
 import type { Post, PostPage } from "@/types"
-import { apiClient } from "@/lib/api-client"
+import { apiClient, request } from "@/lib/api-client"
 import { PAGINATION } from "@/config/constants"
 
 function PostSkeleton() {
@@ -41,15 +41,6 @@ function FeedSkeleton() {
 
 const { PAGE_SIZE, REFRESH_INTERVAL } = PAGINATION
 
-async function fetcher(url: string) {
-  const res = await fetch(url)
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}))
-    throw new Error(body.error || `Request failed (${res.status})`)
-  }
-  return res.json()
-}
-
 interface FeedProps extends React.ComponentProps<"section"> {
   userId?: string
 }
@@ -74,7 +65,7 @@ export default function Feed({ className, userId }: FeedProps) {
   }
 
   const { data, error, size, setSize, isLoading, isValidating, mutate } =
-    useSWRInfinite<PostPage>(getKey, fetcher, {
+    useSWRInfinite<PostPage>(getKey, request, {
       refreshInterval: REFRESH_INTERVAL,
       refreshWhenHidden: false,
     })
