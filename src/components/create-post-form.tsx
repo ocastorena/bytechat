@@ -71,7 +71,7 @@ export function CreatePostForm() {
             src={session?.user?.image || undefined}
             alt={session?.user?.name || "User"}
           />
-          <AvatarFallback className="text-xl font-bold bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+          <AvatarFallback className="text-xl font-bold bg-linear-to-br from-blue-500 to-purple-600 text-white">
             {session?.user?.name ? getInitials(session.user.name) : "U"}
           </AvatarFallback>
         </Avatar>

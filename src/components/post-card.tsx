@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Heart, MessageCircle, Share2, Bookmark } from "lucide-react"
 import OverflowMenu from "./overflow-menu"
 import { formatDate } from "@/lib/utils"
-import { useState } from "react"
 import type { Post } from "@/types"
 
 interface PostCardProps {
@@ -16,9 +15,6 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
-  const [liked, setLiked] = useState(false)
-  const [bookmarked, setBookmarked] = useState(false)
-
   return (
     <Card className="hover:shadow-md transition-shadow duration-200">
       <CardHeader className="pb-3">
@@ -89,21 +85,17 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
         )}
 
         <div className="flex items-center justify-between mt-4 pt-3 border-t">
-          <button
-            onClick={() => setLiked(!liked)}
-            className={`flex items-center gap-1.5 text-sm transition-colors hover:text-red-500 ${liked ? "text-red-500" : "text-muted-foreground"}`}>
-            <Heart size={18} className={liked ? "fill-current" : ""} />
+          <button disabled className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-50">
+            <Heart size={18} />
           </button>
-          <button className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent">
+          <button disabled className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-50">
             <MessageCircle size={18} />
           </button>
-          <button className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent">
+          <button disabled className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-50">
             <Share2 size={18} />
           </button>
-          <button
-            onClick={() => setBookmarked(!bookmarked)}
-            className={`flex items-center gap-1.5 text-sm transition-colors hover:text-accent ${bookmarked ? "text-accent" : "text-muted-foreground"}`}>
-            <Bookmark size={18} className={bookmarked ? "fill-current" : ""} />
+          <button disabled className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-50">
+            <Bookmark size={18} />
           </button>
         </div>
       </CardContent>
