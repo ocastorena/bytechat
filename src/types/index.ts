@@ -5,7 +5,7 @@ export type Post = {
   content: string
   authorId: string
   createdAt: string
-  images: { id: string; url: string; altText?: string }[]
+  images: { id: string; url: string; altText?: string; order: number }[]
 }
 
 export type PostPage = {

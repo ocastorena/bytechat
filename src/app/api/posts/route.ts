@@ -8,6 +8,33 @@ import {
   apiValidationError,
   logApiError,
 } from "@/lib/api-response"
+import type { Post } from "@/types"
+
+interface PrismaPostWithAuthor {
+  id: string
+  content: string
+  createdAt: Date
+  authorId: string
+  author: { username: string } | null
+  images?: { id: string; url: string; altText: string | null; order: number }[]
+}
+
+function transformPost(p: PrismaPostWithAuthor): Post {
+  return {
+    id: p.id,
+    content: p.content,
+    createdAt: p.createdAt.toISOString(),
+    authorId: p.authorId,
+    authorName: p.author?.username ?? "Unknown",
+    authorUsername: p.author?.username ?? "unknown",
+    images: (p.images ?? []).map((img) => ({
+      id: img.id,
+      url: img.url,
+      altText: img.altText ?? undefined,
+      order: img.order,
+    })),
+  }
+}
 
 export async function GET(request: NextRequest) {
   const session = await auth()
@@ -43,20 +70,7 @@ export async function GET(request: NextRequest) {
       nextCursor = nextItem?.id ?? null
     }
 
-    const safePosts = posts.map((p) => ({
-      id: p.id,
-      content: p.content,
-      createdAt: p.createdAt.toISOString(),
-      authorId: p.authorId,
-      authorName: p.author?.username ?? "Unknown",
-      authorUsername: p.author?.username ?? "unknown",
-      images: (p.images ?? []).map((img) => ({
-        id: img.id,
-        url: img.url,
-        altText: img.altText ?? undefined,
-        order: img.order,
-      })),
-    }))
+    const safePosts = posts.map(transformPost)
 
     return apiSuccess({ data: safePosts, nextCursor })
   } catch (error) {
@@ -96,18 +110,7 @@ export async function POST(request: NextRequest) {
       include: { author: { select: { username: true } } },
     })
 
-    return apiSuccess(
-      {
-        id: newPost.id,
-        content: newPost.content,
-        createdAt: newPost.createdAt.toISOString(),
-        authorId: session.user.id,
-        authorName: newPost.author.username,
-        authorUsername: newPost.author.username,
-        images: [],
-      },
-      201
-    )
+    return apiSuccess(transformPost(newPost), 201)
   } catch (error) {
     logApiError("POST_CREATE", error)
     return apiError("Could not create post", 500)
