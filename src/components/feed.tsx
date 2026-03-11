@@ -52,12 +52,16 @@ export default function Feed({ className, userId }: FeedProps) {
   const getKey = (pageIndex: number, prevPageData: PostPage | null) => {
     if (prevPageData && prevPageData.nextCursor === null) return null
 
-    const cursorParam =
-      pageIndex === 0 ? "" : `&cursor=${prevPageData?.nextCursor ?? ""}`
+    const params = new URLSearchParams()
+    params.set("limit", String(PAGE_SIZE))
+    if (pageIndex > 0 && prevPageData?.nextCursor) {
+      params.set("cursor", prevPageData.nextCursor)
+    }
+    if (userId) {
+      params.set("userId", userId)
+    }
 
-    const userParam = userId ? `&userId=${encodeURIComponent(userId)}` : ""
-
-    return `/api/posts?limit=${PAGE_SIZE}${cursorParam}${userParam}`
+    return `/api/posts?${params.toString()}`
   }
 
   const { data, error, size, setSize, isLoading, isValidating, mutate } =
