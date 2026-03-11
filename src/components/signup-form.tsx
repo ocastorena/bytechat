@@ -28,7 +28,6 @@ export default function SignupForm({
 }: React.ComponentProps<"div">) {
   const router = useRouter()
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -139,8 +138,11 @@ export default function SignupForm({
                 )}
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
-                  Sign up
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? "Signing up..." : "Sign up"}
                 </Button>
               </div>
               {form.formState.errors.root && (

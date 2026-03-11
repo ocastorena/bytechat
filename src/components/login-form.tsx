@@ -98,8 +98,11 @@ function LoginFormContent({
                 )}
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
-                  Login
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? "Logging in..." : "Login"}
                 </Button>
               </div>
             </div>
