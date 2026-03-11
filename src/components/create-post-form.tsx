@@ -10,6 +10,7 @@ import { mutate } from "swr"
 import { getInitials } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { postSchema } from "@/lib/validations"
+import { apiClient } from "@/lib/api-client"
 
 export function CreatePostForm() {
   const { data: session } = useSession()
@@ -35,17 +36,7 @@ export function CreatePostForm() {
 
     setLoading(true)
     try {
-      const res = await fetch("/api/posts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content }),
-      })
-      const data = await res.json()
-
-      if (!res.ok) {
-        throw new Error(data.error || "Unknown error")
-      }
-
+      await apiClient.posts.create(content)
       setContent("")
       if (textareaRef.current) {
         textareaRef.current.style.height = "auto"

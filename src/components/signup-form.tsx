@@ -19,6 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { registerSchema } from "@/lib/validations"
+import { apiClient, ApiError } from "@/lib/api-client"
 
 export default function SignupForm({
   className,
@@ -37,46 +38,28 @@ export default function SignupForm({
     },
   })
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     try {
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      })
-
-      const data = await res.json()
-
-      if (res.ok) {
-        // Option 1: Redirect to login page
-        router.push("/login")
-        // Option 2: Show success message (set a local state or use a toast)
-        // setSuccess("Account created! Please log in.");
-        // form.reset();
-      }
-
-      if (!res.ok) {
-        if (data.fieldErrors) {
-          Object.entries(data.fieldErrors).forEach(([field, messages]) => {
-            if (messages && Array.isArray(messages)) {
-              form.setError(field as keyof typeof values, {
-                type: "server",
-                message: String(messages[0]),
-              })
-            }
-          })
-        } else if (data.error) {
-          form.setError("email", { type: "server", message: data.error })
-        }
-        return
-      }
+      await apiClient.auth.signup(values)
+      router.push("/login")
     } catch (error) {
-      console.log(error)
-      form.setError("root", {
-        type: "server",
-        message: "Something went wrong. Please try again.",
-      })
+      if (error instanceof ApiError && error.fieldErrors) {
+        Object.entries(error.fieldErrors).forEach(([field, messages]) => {
+          if (messages && Array.isArray(messages)) {
+            form.setError(field as keyof typeof values, {
+              type: "server",
+              message: String(messages[0]),
+            })
+          }
+        })
+      } else if (error instanceof Error) {
+        form.setError("email", { type: "server", message: error.message })
+      } else {
+        form.setError("root", {
+          type: "server",
+          message: "Something went wrong. Please try again.",
+        })
+      }
     }
   }
   return (

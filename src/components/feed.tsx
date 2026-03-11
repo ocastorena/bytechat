@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import { useSession } from "next-auth/react"
 import { useEffect, useRef, useCallback } from "react"
 import type { Post, PostPage } from "@/types"
+import { apiClient } from "@/lib/api-client"
 
 function PostSkeleton() {
   return (
@@ -136,19 +137,7 @@ export default function Feed({ className, userId }: FeedProps) {
     mutate(optimistic, { revalidate: false })
 
     try {
-      const res = await fetch(`/api/posts/${postId}`, {
-        method: "DELETE",
-      })
-
-      if (!res.ok) {
-        let message = "Failed to delete post"
-        try {
-          const body = await res.json()
-          if (body?.error) message = body.error
-        } catch {}
-        throw new Error(message)
-      }
-
+      await apiClient.posts.delete(postId)
       toast.success("Post deleted")
       await mutate()
     } catch (err) {
