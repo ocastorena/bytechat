@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { FieldError } from "@/components/ui/field-error"
 import { BytechatLogo } from "@/components/bytechat-logo"
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -70,11 +71,7 @@ function LoginFormContent({
                   required
                   {...form.register("email")}
                 />
-                {form.formState.errors.email && (
-                  <p className="text-destructive text-sm">
-                    {form.formState.errors.email.message}
-                  </p>
-                )}
+                <FieldError error={form.formState.errors.email} />
               </div>
               <div className="grid gap-3">
                 <div className="flex items-center">
@@ -91,11 +88,7 @@ function LoginFormContent({
                   required
                   {...form.register("password")}
                 />
-                {form.formState.errors.password && (
-                  <p className="text-destructive text-sm">
-                    {form.formState.errors.password.message}
-                  </p>
-                )}
+                <FieldError error={form.formState.errors.password} />
               </div>
               <div className="flex flex-col gap-3">
                 <Button
