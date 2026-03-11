@@ -16,7 +16,7 @@ import { BytechatLogo } from "@/components/bytechat-logo"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useState, Suspense } from "react"
+import { Suspense } from "react"
 import { z } from "zod"
 import { logInSchema } from "@/lib/validations"
 import { signIn } from "next-auth/react"
@@ -26,7 +26,6 @@ function LoginFormContent({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [formError, setFormError] = useState<string | null>(null)
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl") || "/home"
 
@@ -39,8 +38,6 @@ function LoginFormContent({
   })
 
   async function onSubmit(values: z.infer<typeof logInSchema>) {
-    setFormError(null)
-
     // Let NextAuth handle the redirect automatically
     await signIn("credentials", {
       email: values.email,
@@ -62,11 +59,6 @@ function LoginFormContent({
         </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            {formError && (
-              <p className="text-destructive text-sm text-center mb-2">
-                {formError}
-              </p>
-            )}
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
