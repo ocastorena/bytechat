@@ -90,10 +90,10 @@ export default function SignupForm({
                 )}
               </div>
               <div className="grid gap-3">
-                <Label htmlFor="email">Username</Label>
+                <Label htmlFor="username">Username</Label>
                 <Input
                   id="username"
-                  type="username"
+                  type="text"
                   placeholder="johndoe"
                   required
                   {...form.register("username")}
