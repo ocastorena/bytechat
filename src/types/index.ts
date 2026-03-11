@@ -1,6 +1,5 @@
 export type Post = {
   id: string
-  authorName: string
   authorUsername: string
   content: string
   authorId: string

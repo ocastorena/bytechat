@@ -22,13 +22,13 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           <div className="flex items-center space-x-3">
             <Avatar className="h-10 w-10">
               <AvatarFallback>
-                {post.authorName.charAt(0)}
+                {post.authorUsername.charAt(0)}
               </AvatarFallback>
             </Avatar>
             <div>
               <div className="flex items-center space-x-2">
                 <h3 className="font-semibold text-sm">
-                  {post.authorName}
+                  {post.authorUsername}
                 </h3>
                 <span className="text-muted-foreground text-xs">
                   @{post.authorUsername}

@@ -131,7 +131,6 @@ describe("UI / Feed", () => {
           data: [
             {
               id: "p1",
-              authorName: "Alice",
               authorUsername: "alice",
               content: "Hello world",
               createdAt: new Date().toISOString(),
@@ -256,7 +255,7 @@ describe("API /api/posts", () => {
     expect(res.status).toBe(200)
     const json = await res.json()
     expect(json.data).toHaveLength(2)
-    expect(json.data[0]).toMatchObject({ id: "p1", authorName: "A" })
+    expect(json.data[0]).toMatchObject({ id: "p1", authorUsername: "A" })
     expect(json.nextCursor).toBe("p3")
   })
 
@@ -291,7 +290,7 @@ describe("API /api/posts", () => {
     expect(await res.json()).toMatchObject({
       id: "p1",
       content: "My first post",
-      authorName: "DemoUser",
+      authorUsername: "DemoUser",
     })
 
     expect(prisma.post.create).toHaveBeenCalledWith(

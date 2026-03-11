@@ -25,7 +25,6 @@ function transformPost(p: PrismaPostWithAuthor): Post {
     content: p.content,
     createdAt: p.createdAt.toISOString(),
     authorId: p.authorId,
-    authorName: p.author?.username ?? "Unknown",
     authorUsername: p.author?.username ?? "unknown",
     images: (p.images ?? []).map((img) => ({
       id: img.id,
