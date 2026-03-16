@@ -16,7 +16,7 @@ interface PostCardProps {
 
 export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
   return (
-    <Card className="hover:shadow-md transition-shadow duration-200">
+    <Card className="animate-fade-in-up hover:border-accent/30 hover:shadow-[0_0_15px_-3px] hover:shadow-accent/10 transition-all duration-300">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-3">
@@ -30,10 +30,10 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
                 <h3 className="font-semibold text-sm">
                   {post.authorUsername}
                 </h3>
-                <span className="text-muted-foreground text-xs">
+                <span className="text-muted-foreground text-xs font-mono">
                   @{post.authorUsername}
                 </span>
-                <span className="text-muted-foreground text-xs">
+                <span className="text-muted-foreground text-xs font-mono">
                   {formatDate(post.createdAt)}
                 </span>
               </div>
@@ -85,16 +85,16 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
         )}
 
         <div className="flex items-center justify-between mt-4 pt-3 border-t">
-          <button disabled className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-50">
+          <button className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-red-500">
             <Heart size={18} />
           </button>
-          <button disabled className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-50">
+          <button className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent">
             <MessageCircle size={18} />
           </button>
-          <button disabled className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-50">
+          <button className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent">
             <Share2 size={18} />
           </button>
-          <button disabled className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent disabled:cursor-not-allowed disabled:opacity-50">
+          <button className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-accent">
             <Bookmark size={18} />
           </button>
         </div>
