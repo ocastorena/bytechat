@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 
 const SUGGESTED_USERS = [
   {
@@ -61,15 +62,15 @@ export function SuggestedUsersSidebar() {
                       </svg>
                     )}
                   </div>
-                  <p className="text-muted-foreground text-xs truncate">
+                  <p className="text-muted-foreground text-xs font-mono truncate">
                     {username}
                   </p>
                   <p className="text-muted-foreground text-xs leading-tight mt-1">
                     {bio}
                   </p>
-                  <button className="mt-2 px-3 py-1 text-xs bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-colors">
+                  <Button size="sm" className="mt-2 rounded-full h-7 text-xs">
                     Follow
-                  </button>
+                  </Button>
                 </div>
               </div>
             </li>

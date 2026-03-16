@@ -19,9 +19,9 @@ export function TrendingSidebar() {
           {TRENDING_TOPICS.map(({ tag, posts }) => (
             <li
               key={tag}
-              className="rounded-md px-2 py-1 transition-colors duration-200 hover:bg-muted hover:text-foreground cursor-pointer">
+              className="rounded-md px-2 py-1 transition-colors duration-200 hover:bg-muted hover:text-accent cursor-pointer">
               <div className="flex flex-col">
-                <span className="font-medium text-foreground">{tag}</span>
+                <span className="font-medium font-mono text-foreground">{tag}</span>
                 <span className="text-xs text-muted-foreground">{posts}</span>
               </div>
             </li>
