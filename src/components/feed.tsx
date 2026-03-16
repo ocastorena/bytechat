@@ -13,17 +13,17 @@ import { PAGINATION } from "@/config/constants"
 
 function PostSkeleton() {
   return (
-    <Card className="p-6 animate-pulse">
+    <Card className="p-6">
       <div className="flex items-center space-x-3 mb-4">
-        <div className="h-10 w-10 rounded-full bg-muted" />
+        <div className="h-10 w-10 rounded-full bg-muted shimmer" />
         <div className="space-y-2 flex-1">
-          <div className="h-3 w-28 bg-muted rounded" />
-          <div className="h-2 w-20 bg-muted rounded" />
+          <div className="h-3 w-28 bg-muted rounded shimmer" />
+          <div className="h-2 w-20 bg-muted rounded shimmer" />
         </div>
       </div>
       <div className="space-y-2">
-        <div className="h-3 w-full bg-muted rounded" />
-        <div className="h-3 w-3/4 bg-muted rounded" />
+        <div className="h-3 w-full bg-muted rounded shimmer" />
+        <div className="h-3 w-3/4 bg-muted rounded shimmer" />
       </div>
     </Card>
   )
