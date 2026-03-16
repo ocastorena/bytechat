@@ -78,7 +78,7 @@ export function CreatePostForm() {
                 autoResize()
               }}
               rows={2}
-              className="w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full resize-none rounded-md border border-input bg-background px-3 py-2 font-mono text-sm placeholder:text-accent/40 focus:outline-none focus:ring-2 focus:ring-ring focus:border-accent/50 focus:shadow-[0_0_10px_-3px] focus:shadow-accent/15 transition-shadow"
             />
             <div className="flex justify-end">
               <Button
