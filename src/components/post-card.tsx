@@ -20,8 +20,8 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-3">
-            <Avatar className="h-10 w-10">
-              <AvatarFallback>
+            <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
+              <AvatarFallback className="font-semibold bg-gradient-to-br from-blue-500 to-purple-600 text-white">
                 {post.authorUsername.charAt(0)}
               </AvatarFallback>
             </Avatar>
