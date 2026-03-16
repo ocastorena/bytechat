@@ -27,9 +27,9 @@ export function HomeContent() {
             <button
               key={key}
               onClick={() => setMobileTab(key)}
-              className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-colors ${
+              className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all duration-200 ${
                 mobileTab === key
-                  ? "bg-background text-foreground shadow-sm"
+                  ? "bg-background text-accent shadow-sm border-b-2 border-accent"
                   : "text-muted-foreground hover:text-foreground"
               }`}>
               {label}
