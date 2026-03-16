@@ -66,7 +66,7 @@ export default function SignupForm({
   return (
     <main className={cn("flex flex-col gap-6", className)} {...props}>
       <BytechatLogo className="mx-auto mb-4" />
-      <Card>
+      <Card className="hover:border-accent/30 hover:shadow-[0_0_15px_-3px] hover:shadow-accent/10 transition-all duration-300">
         <CardHeader>
           <CardTitle>Create an account</CardTitle>
           <CardDescription>Enter your email below to sign up</CardDescription>
@@ -81,6 +81,7 @@ export default function SignupForm({
                   type="email"
                   placeholder="you@example.com"
                   required
+                  className="focus-visible:border-accent/50 focus-visible:ring-accent/20"
                   {...form.register("email")}
                 />
                 <FieldError error={form.formState.errors.email} />
@@ -92,6 +93,7 @@ export default function SignupForm({
                   type="text"
                   placeholder="johndoe"
                   required
+                  className="focus-visible:border-accent/50 focus-visible:ring-accent/20"
                   {...form.register("username")}
                 />
                 <FieldError error={form.formState.errors.username} />
@@ -105,6 +107,7 @@ export default function SignupForm({
                   type="password"
                   placeholder="••••••••"
                   required
+                  className="focus-visible:border-accent/50 focus-visible:ring-accent/20"
                   {...form.register("password")}
                 />
                 <FieldError error={form.formState.errors.password} />
@@ -118,6 +121,7 @@ export default function SignupForm({
                   type="password"
                   placeholder="••••••••"
                   required
+                  className="focus-visible:border-accent/50 focus-visible:ring-accent/20"
                   {...form.register("confirmPassword")}
                 />
                 <FieldError error={form.formState.errors.confirmPassword} />
@@ -138,7 +142,7 @@ export default function SignupForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
-              <Link href={ROUTES.LOGIN} className="underline underline-offset-4">
+              <Link href={ROUTES.LOGIN} className="text-accent underline underline-offset-4 hover:text-accent/80">
                 Log in
               </Link>
             </div>
