@@ -15,7 +15,7 @@ interface PostCardProps {
 
 export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
   return (
-    <article className="animate-fade-in-up px-1 py-4 border-b border-border/50 hover:bg-muted/30 transition-colors duration-150">
+    <article className="animate-fade-in-up px-1 py-4 border-b border-border hover:bg-muted/30 transition-colors duration-150">
       <div className="flex gap-3">
         {/* Avatar */}
         <Avatar className="h-9 w-9 shrink-0">
@@ -66,7 +66,7 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
               {post.images.map((img, idx) => (
                 <div
                   key={img.id}
-                  className="relative w-full overflow-hidden rounded-lg border border-border/30"
+                  className="relative w-full overflow-hidden rounded-lg border border-border"
                   style={{
                     aspectRatio:
                       post.images.length > 1 ? "4 / 3" : "16 / 9",

@@ -57,9 +57,10 @@ export default function OverflowMenu({
           <Button
             variant="ghost"
             size="icon"
+            className="h-7 w-7"
             aria-label="Open post actions"
             data-testid="overflow-trigger">
-            <MoreHorizontal className="h-5 w-5" aria-hidden="true" />
+            <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" sideOffset={6} className="w-40">

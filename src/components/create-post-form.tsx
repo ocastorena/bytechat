@@ -54,7 +54,7 @@ export function CreatePostForm() {
   }
 
   return (
-    <div className="pb-3 mb-1 border-b border-border/50">
+    <div className="pb-3 mb-1 border-b border-border">
       <div className="flex gap-3 px-1">
         <Avatar className="h-9 w-9 shrink-0">
           <AvatarImage
@@ -76,7 +76,7 @@ export function CreatePostForm() {
               autoResize()
             }}
             rows={2}
-            className="w-full resize-none bg-transparent px-0 py-1.5 text-sm placeholder:text-muted-foreground/50 focus:outline-none"
+            className="w-full resize-none bg-transparent px-0 py-1.5 text-sm placeholder:text-muted-foreground focus:outline-none"
           />
           <div className="flex justify-end">
             <Button

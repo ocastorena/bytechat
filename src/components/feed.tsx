@@ -13,7 +13,7 @@ import { PAGINATION } from "@/config/constants"
 /** Skeleton for a single post — matches borderless layout */
 function PostSkeleton() {
   return (
-    <div className="px-1 py-4 border-b border-border/50">
+    <div className="px-1 py-4 border-b border-border">
       <div className="flex gap-3">
         <div className="h-9 w-9 rounded-full bg-muted animate-pulse shrink-0" />
         <div className="flex-1 space-y-2.5">

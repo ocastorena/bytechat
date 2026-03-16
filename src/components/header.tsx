@@ -42,7 +42,7 @@ function SearchBar() {
         onKeyDown={(e) => {
           if (e.key === "Escape") e.currentTarget.blur()
         }}
-        className="w-full pl-8 pr-12 py-1.5 rounded-lg border border-border bg-muted/50 text-xs focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/30 focus:bg-background transition-all"
+        className="w-full pl-8 pr-12 py-1.5 rounded-lg border border-border bg-input text-xs focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/40 transition-all"
       />
       <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">
         /
