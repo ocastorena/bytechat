@@ -1,12 +1,10 @@
 import { auth } from "@/lib/auth"
 import prisma from "@/lib/prisma"
 import { CreatePostForm } from "@/components/create-post-form"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import Feed from "@/components/feed"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { CalendarDays, Mail, MessageSquare, Users } from "lucide-react"
-import { Separator } from "@/components/ui/separator"
+import { CalendarDays, Mail } from "lucide-react"
 import { formatDate, getInitials } from "@/lib/utils"
 
 export default async function Page() {
@@ -42,119 +40,86 @@ export default async function Page() {
     console.error("[USERS_GET]", error)
   }
 
+  const username =
+    userProfile?.username ||
+    session?.user?.email?.split("@")[0] ||
+    "user"
+
   return (
-    <main className="grid grid-cols-1 lg:grid-cols-12 gap-6 px-6 mt-6">
-      <aside className="lg:col-span-4 lg:sticky lg:top-26 lg:h-[calc(100dvh-8rem)]">
-        <Card className="border-2 shadow-lg">
-          <CardHeader className="pb-4">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="relative">
-                <Avatar className="h-20 w-20 border-4 border-background shadow-lg">
-                  <AvatarImage
-                    src={session?.user?.image || undefined}
-                    alt={session?.user?.name || "User"}
-                  />
-                  <AvatarFallback className="text-xl font-bold bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                    {session?.user?.name ? getInitials(session.user.name) : "U"}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="absolute -bottom-1 -right-1 h-6 w-6 bg-green-500 border-2 border-background rounded-full"></div>
-              </div>
+    <main className="flex justify-center px-4 mt-4 max-w-6xl mx-auto w-full">
+      <div className="w-full max-w-xl">
+        {/* Profile header */}
+        <div className="pb-6 mb-2 border-b border-border">
+          <div className="flex items-start gap-4">
+            <Avatar className="h-16 w-16 shrink-0 border-2 border-border">
+              <AvatarImage
+                src={session?.user?.image || undefined}
+                alt={session?.user?.name || "User"}
+              />
+              <AvatarFallback className="text-lg font-bold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
+                {session?.user?.name ? getInitials(session.user.name) : "U"}
+              </AvatarFallback>
+            </Avatar>
 
-              <div className="text-center space-y-1">
-                <h2 className="text-xl font-bold text-foreground">
-                  {session?.user?.name || "Anonymous User"}
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  @
-                  {userProfile?.username ||
-                    session?.user?.email?.split("@")[0] ||
-                    "user"}
-                </p>
-                <Badge variant="secondary" className="text-xs">
-                  Active Developer
-                </Badge>
-              </div>
-            </div>
-          </CardHeader>
+            <div className="flex-1 min-w-0">
+              <h2 className="text-lg font-bold">
+                {session?.user?.name || "Anonymous User"}
+              </h2>
+              <p className="text-sm text-muted-foreground">@{username}</p>
 
-          <CardContent className="space-y-4">
-            <Separator />
-
-            {userProfile ? (
-              <div className="space-y-3 text-sm">
-                <div className="flex items-center space-x-3 text-muted-foreground">
-                  <Mail className="h-4 w-4 flex-shrink-0" />
-                  <span className="truncate">{userProfile.email}</span>
-                </div>
-
-                <div className="flex items-center space-x-3 text-muted-foreground">
-                  <CalendarDays className="h-4 w-4 flex-shrink-0" />
-                  <span>
+              {userProfile && (
+                <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1.5">
+                    <Mail className="h-3 w-3" />
+                    {userProfile.email}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <CalendarDays className="h-3 w-3" />
                     Joined {formatDate(userProfile.createdAt.toDateString())}
                   </span>
                 </div>
+              )}
 
-                <Separator />
-
-                <div className="grid grid-cols-2 gap-4 text-center">
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-center space-x-1">
-                      <MessageSquare className="h-4 w-4" />
-                      <span className="font-bold">
-                        {userProfile.posts.length}
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">Posts</p>
+              {userProfile && (
+                <div className="flex items-center gap-4 mt-3">
+                  <div className="text-sm">
+                    <span className="font-bold text-foreground">
+                      {userProfile.posts.length}
+                    </span>{" "}
+                    <span className="text-muted-foreground">posts</span>
                   </div>
-
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-center space-x-1">
-                      <Users className="h-4 w-4" />
-                      <span className="font-bold">42</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">Followers</p>
+                  <div className="text-sm">
+                    <span className="font-bold text-foreground">42</span>{" "}
+                    <span className="text-muted-foreground">followers</span>
                   </div>
                 </div>
+              )}
 
-                <Separator />
+              <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+                Full-stack developer passionate about clean code and innovative
+                solutions. Always learning, always building.
+              </p>
 
-                <div className="space-y-2">
-                  <h4 className="font-semibold text-sm">Bio</h4>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    💻 Full-stack developer passionate about clean code and
-                    innovative solutions. Always learning, always building.
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-1 mt-3">
-                  {["React", "TypeScript", "Next.js", "Node.js"].map(
-                    (skill) => (
-                      <Badge key={skill} variant="outline" className="text-xs">
-                        {skill}
-                      </Badge>
-                    )
-                  )}
-                </div>
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {["React", "TypeScript", "Next.js", "Node.js"].map(
+                  (skill) => (
+                    <Badge
+                      key={skill}
+                      variant="outline"
+                      className="text-[11px] border-border/80">
+                      {skill}
+                    </Badge>
+                  )
+                )}
               </div>
-            ) : (
-              <div className="flex items-center justify-center py-8">
-                <div className="animate-pulse space-y-2 text-center">
-                  <div className="h-4 bg-muted rounded w-24 mx-auto"></div>
-                  <p className="text-sm text-muted-foreground">
-                    Loading profile...
-                  </p>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </aside>
+            </div>
+          </div>
+        </div>
 
-      <section className="lg:col-span-8">
+        {/* User posts */}
         <CreatePostForm />
         <Feed userId={userId} />
-      </section>
+      </div>
     </main>
   )
 }
