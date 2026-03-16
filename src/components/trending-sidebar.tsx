@@ -1,5 +1,3 @@
-import { Card } from "@/components/ui/card"
-
 const TRENDING_TOPICS = [
   { tag: "#BugBounty", posts: "18.3K posts" },
   { tag: "#CTF", posts: "14.1K posts" },
@@ -12,22 +10,22 @@ const TRENDING_TOPICS = [
 
 export function TrendingSidebar() {
   return (
-    <Card className="sticky top-20 w-full">
-      <div className="p-4 space-y-4">
-        <h2 className="text-lg font-semibold">Trending Topics</h2>
-        <ul className="space-y-1 text-sm text-muted-foreground">
-          {TRENDING_TOPICS.map(({ tag, posts }) => (
-            <li
-              key={tag}
-              className="rounded-md px-2 py-1 transition-colors duration-200 hover:bg-muted hover:text-accent cursor-pointer">
-              <div className="flex flex-col">
-                <span className="font-medium font-mono text-foreground">{tag}</span>
-                <span className="text-xs text-muted-foreground">{posts}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </Card>
+    <div className="sticky top-16">
+      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2 mb-2">
+        Trending
+      </h3>
+      <ul className="space-y-0.5">
+        {TRENDING_TOPICS.map(({ tag, posts }) => (
+          <li
+            key={tag}
+            className="rounded-lg px-2 py-1.5 transition-colors duration-150 hover:bg-muted/50 cursor-pointer group">
+            <span className="text-sm font-medium text-foreground group-hover:text-accent transition-colors">
+              {tag}
+            </span>
+            <p className="text-[11px] text-muted-foreground">{posts}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }

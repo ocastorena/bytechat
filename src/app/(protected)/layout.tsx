@@ -5,10 +5,10 @@ import AuthSessionProvider from "@/components/session-provider"
 
 export default function ProtectedLayout({ children }: { children: ReactNode }) {
   return (
-    <>
+    <AuthSessionProvider>
       <Header />
       <KeyboardShortcuts />
-      <AuthSessionProvider>{children}</AuthSessionProvider>
-    </>
+      {children}
+    </AuthSessionProvider>
   )
 }

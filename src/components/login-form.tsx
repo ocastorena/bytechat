@@ -40,7 +40,6 @@ function LoginFormContent({
   })
 
   async function onSubmit(values: z.infer<typeof logInSchema>) {
-    // Let NextAuth handle the redirect automatically
     await signIn("credentials", {
       email: values.email,
       password: values.password,
@@ -51,59 +50,60 @@ function LoginFormContent({
 
   return (
     <main className={cn("flex flex-col gap-6", className)} {...props}>
-      <BytechatLogo className="mx-auto mb-4" />
-      <Card className="hover:border-accent/30 hover:shadow-[0_0_15px_-3px] hover:shadow-accent/10 transition-all duration-300">
+      <BytechatLogo className="mx-auto mb-2" />
+      <Card className="overflow-hidden">
+        <div className="accent-line" />
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle className="text-lg">Login to your account</CardTitle>
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-3">
+            <div className="flex flex-col gap-5">
+              <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="m@example.com"
                   required
-                  className="focus-visible:border-accent/50 focus-visible:ring-accent/20"
+                  className="focus-visible:ring-accent/30"
                   {...form.register("email")}
                 />
                 <FieldError error={form.formState.errors.email} />
               </div>
-              <div className="grid gap-3">
+              <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                   <a
                     href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
-                    Forgot your password?
+                    className="ml-auto text-xs text-muted-foreground hover:text-foreground transition-colors">
+                    Forgot password?
                   </a>
                 </div>
                 <Input
                   id="password"
                   type="password"
                   required
-                  className="focus-visible:border-accent/50 focus-visible:ring-accent/20"
+                  className="focus-visible:ring-accent/30"
                   {...form.register("password")}
                 />
                 <FieldError error={form.formState.errors.password} />
               </div>
-              <div className="flex flex-col gap-3">
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? "Logging in..." : "Login"}
-                </Button>
-              </div>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? "Logging in..." : "Login"}
+              </Button>
             </div>
-            <div className="mt-4 text-center text-sm">
+            <div className="mt-4 text-center text-xs text-muted-foreground">
               Don&apos;t have an account?{" "}
-              <Link href={ROUTES.SIGNUP} className="text-accent underline underline-offset-4 hover:text-accent/80">
+              <Link
+                href={ROUTES.SIGNUP}
+                className="text-accent hover:text-accent/80 transition-colors">
                 Sign up
               </Link>
             </div>

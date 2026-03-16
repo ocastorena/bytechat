@@ -1,6 +1,5 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { toast } from "sonner"
 import { Button } from "./ui/button"
@@ -55,43 +54,41 @@ export function CreatePostForm() {
   }
 
   return (
-    <Card className="px-6 py-4 mb-4">
-      <div className="flex gap-3">
-        <Avatar className="h-10 w-10 shrink-0 border-2 border-background shadow-lg">
+    <div className="pb-3 mb-1 border-b border-border/50">
+      <div className="flex gap-3 px-1">
+        <Avatar className="h-9 w-9 shrink-0">
           <AvatarImage
             src={session?.user?.image || undefined}
             alt={session?.user?.name || "User"}
           />
-          <AvatarFallback className="text-xl font-bold bg-linear-to-br from-blue-500 to-purple-600 text-white">
+          <AvatarFallback className="text-xs font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
             {session?.user?.name ? getInitials(session.user.name) : "U"}
           </AvatarFallback>
         </Avatar>
-        <CardContent className="w-full p-0">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-            <textarea
-              ref={textareaRef}
-              id="post"
-              placeholder="What's on your mind?"
-              value={content}
-              onChange={(e) => {
-                setContent(e.currentTarget.value)
-                autoResize()
-              }}
-              rows={2}
-              className="w-full resize-none rounded-md border border-input bg-background px-3 py-2 font-mono text-sm placeholder:text-accent/40 focus:outline-none focus:ring-2 focus:ring-ring focus:border-accent/50 focus:shadow-[0_0_10px_-3px] focus:shadow-accent/15 transition-shadow"
-            />
-            <div className="flex justify-end">
-              <Button
-                type="submit"
-                disabled={loading}
-                variant="secondary"
-                size="sm">
-                {loading ? "Posting..." : "Post"}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-2">
+          <textarea
+            ref={textareaRef}
+            id="post"
+            placeholder="What's on your mind?"
+            value={content}
+            onChange={(e) => {
+              setContent(e.currentTarget.value)
+              autoResize()
+            }}
+            rows={2}
+            className="w-full resize-none bg-transparent px-0 py-1.5 text-sm placeholder:text-muted-foreground/50 focus:outline-none"
+          />
+          <div className="flex justify-end">
+            <Button
+              type="submit"
+              disabled={loading || !content.trim()}
+              size="sm"
+              className="rounded-full px-4 h-7 text-xs">
+              {loading ? "Posting..." : "Post"}
+            </Button>
+          </div>
+        </form>
       </div>
-    </Card>
+    </div>
   )
 }

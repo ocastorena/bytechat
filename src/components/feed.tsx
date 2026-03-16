@@ -1,7 +1,6 @@
 "use client"
 
 import { PostCard } from "./post-card"
-import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import useSWRInfinite from "swr/infinite"
 import { toast } from "sonner"
@@ -11,27 +10,29 @@ import type { Post, PostPage } from "@/types"
 import { apiClient, request } from "@/lib/api-client"
 import { PAGINATION } from "@/config/constants"
 
+/** Skeleton for a single post — matches borderless layout */
 function PostSkeleton() {
   return (
-    <Card className="p-6">
-      <div className="flex items-center space-x-3 mb-4">
-        <div className="h-10 w-10 rounded-full bg-muted shimmer" />
-        <div className="space-y-2 flex-1">
-          <div className="h-3 w-28 bg-muted rounded shimmer" />
-          <div className="h-2 w-20 bg-muted rounded shimmer" />
+    <div className="px-1 py-4 border-b border-border/50">
+      <div className="flex gap-3">
+        <div className="h-9 w-9 rounded-full bg-muted animate-pulse shrink-0" />
+        <div className="flex-1 space-y-2.5">
+          <div className="flex gap-2">
+            <div className="h-3 w-20 bg-muted rounded animate-pulse" />
+            <div className="h-3 w-16 bg-muted rounded animate-pulse" />
+          </div>
+          <div className="h-3 w-full bg-muted rounded animate-pulse" />
+          <div className="h-3 w-3/4 bg-muted rounded animate-pulse" />
         </div>
       </div>
-      <div className="space-y-2">
-        <div className="h-3 w-full bg-muted rounded shimmer" />
-        <div className="h-3 w-3/4 bg-muted rounded shimmer" />
-      </div>
-    </Card>
+    </div>
   )
 }
 
+/** Loading skeleton for the feed */
 function FeedSkeleton() {
   return (
-    <div className="flex flex-col gap-4">
+    <div>
       <PostSkeleton />
       <PostSkeleton />
       <PostSkeleton />
@@ -101,14 +102,16 @@ export default function Feed({ className, userId }: FeedProps) {
 
   if (error) {
     return (
-      <Card className={cn("p-8 text-center", className)}>
-        <p className="text-muted-foreground text-sm">Something went wrong loading the feed.</p>
+      <div className={cn("py-12 text-center", className)}>
+        <p className="text-muted-foreground text-sm">
+          Something went wrong loading the feed.
+        </p>
         <button
           onClick={() => mutate()}
           className="mt-2 text-sm text-accent hover:underline">
           Try again
         </button>
-      </Card>
+      </div>
     )
   }
 
@@ -116,12 +119,12 @@ export default function Feed({ className, userId }: FeedProps) {
 
   if (posts.length === 0) {
     return (
-      <Card className={cn("p-8 text-center", className)}>
-        <p className="text-foreground font-medium">No posts yet</p>
-        <p className="text-muted-foreground text-sm mt-1">
-          Be the first to share something or follow others to see their posts.
+      <div className={cn("py-12 text-center", className)}>
+        <p className="text-foreground font-medium text-sm">No posts yet</p>
+        <p className="text-muted-foreground text-xs mt-1">
+          Be the first to share something.
         </p>
-      </Card>
+      </div>
     )
   }
 
@@ -148,7 +151,7 @@ export default function Feed({ className, userId }: FeedProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div>
       {posts.map((post) => (
         <PostCard
           key={post.id}
@@ -161,8 +164,8 @@ export default function Feed({ className, userId }: FeedProps) {
       <div ref={sentinelRef} className="h-1" />
 
       {isValidating && (
-        <div className="flex justify-center py-4">
-          <span className="text-sm text-muted-foreground">Loading...</span>
+        <div className="flex justify-center py-6">
+          <span className="text-xs text-muted-foreground">Loading...</span>
         </div>
       )}
     </div>

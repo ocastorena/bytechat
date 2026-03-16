@@ -1,9 +1,9 @@
 "use client"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Sun, Moon, Menu } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Home, User, Sun, Moon, LogOut, Search } from "lucide-react"
+import { cn, getInitials } from "@/lib/utils"
 import { useState } from "react"
 import { useTheme } from "next-themes"
 import {
@@ -22,14 +22,19 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { BytechatLogo } from "./bytechat-logo"
 import { ROUTES } from "@/config/constants"
 
+/** Compact command-bar style search input */
 function SearchBar() {
   return (
-    <div className="relative hidden sm:block">
+    <div className="relative hidden sm:block flex-1 max-w-md">
+      <Search
+        size={14}
+        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+      />
       <input
         id="search"
         type="text"
@@ -37,97 +42,143 @@ function SearchBar() {
         onKeyDown={(e) => {
           if (e.key === "Escape") e.currentTarget.blur()
         }}
-        className="px-4 py-1.5 rounded-md border border-input bg-background font-mono text-xs focus:outline-none focus:ring-2 focus:ring-ring focus:border-accent/50 w-44 md:w-64 max-w-full"
+        className="w-full pl-8 pr-12 py-1.5 rounded-lg border border-border bg-muted/50 text-xs focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/30 focus:bg-background transition-all"
       />
-      <kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5 font-mono">
+      <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">
         /
       </kbd>
     </div>
   )
 }
 
+/** Navigation icon link with active state */
+function NavLink({
+  href,
+  icon: Icon,
+  isActive,
+}: {
+  href: string
+  icon: typeof Home
+  isActive: boolean
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "relative p-2 rounded-lg transition-colors",
+        isActive
+          ? "text-accent bg-accent/10"
+          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+      )}>
+      <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+      {isActive && (
+        <span className="absolute -bottom-[9px] left-1/2 -translate-x-1/2 w-4 h-0.5 bg-accent rounded-full" />
+      )}
+    </Link>
+  )
+}
+
 export function Header() {
   const pathname = usePathname()
+  const { data: session } = useSession()
   const [logoutOpen, setLogoutOpen] = useState(false)
   const { theme, setTheme, resolvedTheme } = useTheme()
+
   return (
-    <header
-      data-testid="app-header"
-      className="sticky top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center px-4 py-2 bg-card/80 backdrop-blur-md border-b border-accent/20 h-14 w-full">
-      <div className="flex items-center gap-2 justify-self-start shrink-0">
-        <BytechatLogo className="px-2" />
+    <>
+      {/* Gradient accent line */}
+      <div className="accent-line w-full" />
+
+      <header
+        data-testid="app-header"
+        className="sticky top-0 z-50 flex items-center gap-4 px-4 h-12 bg-background/60 backdrop-blur-xl border-b border-border/50">
+        {/* Left — Logo */}
+        <div className="shrink-0">
+          <BytechatLogo className="h-7 w-auto" />
+        </div>
+
+        {/* Center — Search */}
         <SearchBar />
-      </div>
-      <div className="flex gap-4 justify-self-center w-fit">
-        <Link
-          href={ROUTES.HOME}
-          className={cn(
-            "p-2 rounded hover:bg-muted transition-colors",
-            pathname === ROUTES.HOME && "text-accent glow-text"
-          )}>
-          <Home size={22} />
-        </Link>
-        <Link
-          href={ROUTES.PROFILE}
-          className={cn(
-            "p-2 rounded hover:bg-muted transition-colors",
-            pathname === ROUTES.PROFILE && "text-accent glow-text"
-          )}>
-          <User size={22} />
-        </Link>
-      </div>
-      <div className="justify-self-end shrink-0">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              className="p-2 rounded hover:bg-muted"
-              aria-label="Open menu">
-              <Menu size={22} />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault()
-                const currentTheme = resolvedTheme ?? theme
-                document.documentElement.classList.add(
-                  "transition-colors",
-                  "duration-500"
-                )
-                setTheme(currentTheme === "light" ? "dark" : "light")
-                setTimeout(() => {
-                  document.documentElement.classList.remove(
+
+        {/* Right — Nav + Avatar */}
+        <div className="flex items-center gap-1 ml-auto">
+          <NavLink
+            href={ROUTES.HOME}
+            icon={Home}
+            isActive={pathname === ROUTES.HOME}
+          />
+          <NavLink
+            href={ROUTES.PROFILE}
+            icon={User}
+            isActive={pathname === ROUTES.PROFILE}
+          />
+
+          <div className="w-px h-5 bg-border mx-1.5" />
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="rounded-full focus:outline-none focus:ring-1 focus:ring-accent/50"
+                aria-label="User menu">
+                <Avatar className="h-7 w-7 border border-border hover:border-accent/50 transition-colors">
+                  <AvatarImage
+                    src={session?.user?.image || undefined}
+                    alt={session?.user?.name || "User"}
+                  />
+                  <AvatarFallback className="text-[10px] font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
+                    {session?.user?.name
+                      ? getInitials(session.user.name)
+                      : "U"}
+                  </AvatarFallback>
+                </Avatar>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault()
+                  const currentTheme = resolvedTheme ?? theme
+                  document.documentElement.classList.add(
                     "transition-colors",
                     "duration-500"
                   )
-                }, 600)
-              }}
-              className="gap-2">
-              {(resolvedTheme ?? theme) === "light" ? (
-                <>
-                  <Moon className="h-4 w-4" /> Dark Mode
-                </>
-              ) : (
-                <>
-                  <Sun className="h-4 w-4" /> Light Mode
-                </>
-              )}
-            </DropdownMenuItem>
+                  setTheme(currentTheme === "light" ? "dark" : "light")
+                  setTimeout(() => {
+                    document.documentElement.classList.remove(
+                      "transition-colors",
+                      "duration-500"
+                    )
+                  }, 600)
+                }}
+                className="gap-2">
+                {(resolvedTheme ?? theme) === "light" ? (
+                  <>
+                    <Moon className="h-3.5 w-3.5" /> Dark mode
+                  </>
+                ) : (
+                  <>
+                    <Sun className="h-3.5 w-3.5" /> Light mode
+                  </>
+                )}
+              </DropdownMenuItem>
 
-            <DropdownMenuSeparator />
+              <DropdownMenuSeparator />
 
-            <DropdownMenuItem
-              variant="destructive"
-              onSelect={(e) => {
-                e.preventDefault() // keep the dropdown open so the dialog can open
-                setLogoutOpen(true)
-              }}>
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+              <DropdownMenuItem
+                variant="destructive"
+                onSelect={(e) => {
+                  e.preventDefault()
+                  setLogoutOpen(true)
+                }}
+                className="gap-2">
+                <LogOut className="h-3.5 w-3.5" />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </header>
+
       <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}>
         <AlertDialogContent>
           <AlertDialogDescription />
@@ -145,6 +196,6 @@ export function Header() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </header>
+    </>
   )
 }

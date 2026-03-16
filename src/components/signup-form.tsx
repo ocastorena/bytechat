@@ -63,86 +63,84 @@ export default function SignupForm({
       }
     }
   }
+
   return (
     <main className={cn("flex flex-col gap-6", className)} {...props}>
-      <BytechatLogo className="mx-auto mb-4" />
-      <Card className="hover:border-accent/30 hover:shadow-[0_0_15px_-3px] hover:shadow-accent/10 transition-all duration-300">
+      <BytechatLogo className="mx-auto mb-2" />
+      <Card className="overflow-hidden">
+        <div className="accent-line" />
         <CardHeader>
-          <CardTitle>Create an account</CardTitle>
+          <CardTitle className="text-lg">Create an account</CardTitle>
           <CardDescription>Enter your email below to sign up</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-3">
+            <div className="flex flex-col gap-5">
+              <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="you@example.com"
                   required
-                  className="focus-visible:border-accent/50 focus-visible:ring-accent/20"
+                  className="focus-visible:ring-accent/30"
                   {...form.register("email")}
                 />
                 <FieldError error={form.formState.errors.email} />
               </div>
-              <div className="grid gap-3">
+              <div className="grid gap-2">
                 <Label htmlFor="username">Username</Label>
                 <Input
                   id="username"
                   type="text"
                   placeholder="johndoe"
                   required
-                  className="focus-visible:border-accent/50 focus-visible:ring-accent/20"
+                  className="focus-visible:ring-accent/30"
                   {...form.register("username")}
                 />
                 <FieldError error={form.formState.errors.username} />
               </div>
-              <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
+              <div className="grid gap-2">
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
                   required
-                  className="focus-visible:border-accent/50 focus-visible:ring-accent/20"
+                  className="focus-visible:ring-accent/30"
                   {...form.register("password")}
                 />
                 <FieldError error={form.formState.errors.password} />
               </div>
-              <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
-                </div>
+              <div className="grid gap-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
                   placeholder="••••••••"
                   required
-                  className="focus-visible:border-accent/50 focus-visible:ring-accent/20"
+                  className="focus-visible:ring-accent/30"
                   {...form.register("confirmPassword")}
                 />
                 <FieldError error={form.formState.errors.confirmPassword} />
               </div>
-              <div className="flex flex-col gap-3">
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? "Signing up..." : "Sign up"}
-                </Button>
-              </div>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? "Signing up..." : "Sign up"}
+              </Button>
               {form.formState.errors.root && (
-                <p className="text-destructive text-sm mt-2 text-center">
+                <p className="text-destructive text-sm text-center">
                   {form.formState.errors.root.message}
                 </p>
               )}
             </div>
-            <div className="mt-4 text-center text-sm">
+            <div className="mt-4 text-center text-xs text-muted-foreground">
               Already have an account?{" "}
-              <Link href={ROUTES.LOGIN} className="text-accent underline underline-offset-4 hover:text-accent/80">
+              <Link
+                href={ROUTES.LOGIN}
+                className="text-accent hover:text-accent/80 transition-colors">
                 Log in
               </Link>
             </div>
