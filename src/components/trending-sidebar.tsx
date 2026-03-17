@@ -1,4 +1,4 @@
-import { Settings } from "lucide-react"
+import { Settings, MoreHorizontal } from "lucide-react"
 
 /** Sidebar displaying trending topics */
 const TRENDING_TOPICS = [
@@ -27,17 +27,24 @@ export function TrendingSidebar() {
           <li
             key={tag}
             className="rounded-lg px-2 py-2 transition-colors duration-150 hover:bg-muted/50 cursor-pointer group">
-            <p className="text-[11px] text-muted-foreground">
-              {category} · Trending
-            </p>
-            <span className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors">
-              {tag}
-            </span>
-            <p className="text-[11px] text-muted-foreground">{posts}</p>
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">
+                  {category} · Trending
+                </p>
+                <span className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors">
+                  {tag}
+                </span>
+                <p className="text-[11px] text-muted-foreground">{posts}</p>
+              </div>
+              <button className="p-1 rounded-lg text-muted-foreground/50 opacity-0 group-hover:opacity-100 hover:text-foreground hover:bg-muted/50 transition-all shrink-0 mt-0.5">
+                <MoreHorizontal size={14} />
+              </button>
+            </div>
           </li>
         ))}
       </ul>
-      <button className="mt-3 px-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors">
+      <button className="mt-3 px-2 text-sm text-destructive hover:text-destructive/80 font-semibold hover:underline transition-colors">
         Show more
       </button>
     </div>

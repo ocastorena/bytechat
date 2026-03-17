@@ -14,10 +14,10 @@ import { ImagePlus, Video, ListTree, Calendar } from "lucide-react"
 
 /** Action pill buttons for the composer toolbar */
 const COMPOSER_ACTIONS = [
-  { icon: ImagePlus, label: "Photo" },
-  { icon: Video, label: "Video" },
-  { icon: ListTree, label: "Thread" },
-  { icon: Calendar, label: "Schedule" },
+  { icon: ImagePlus, label: "Photo", color: "text-emerald-500", hover: "hover:bg-emerald-500/10" },
+  { icon: Video, label: "Video", color: "text-blue-500", hover: "hover:bg-blue-500/10" },
+  { icon: ListTree, label: "Thread", color: "text-purple-500", hover: "hover:bg-purple-500/10" },
+  { icon: Calendar, label: "Schedule", color: "text-orange-500", hover: "hover:bg-orange-500/10" },
 ] as const
 
 /** Props for the CreatePostForm component */
@@ -71,8 +71,8 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
   }
 
   return (
-    <div className="pb-3 mb-1 border-b border-border">
-      <div className="flex gap-3 px-4">
+    <div className="p-4 rounded-xl border border-border bg-card">
+      <div className="flex gap-3">
         <Avatar className="h-10 w-10 shrink-0 mt-1">
           <AvatarImage
             src={session?.user?.image || undefined}
@@ -96,14 +96,14 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
             className="w-full resize-none bg-transparent border-none px-0 py-2.5 text-[15px] placeholder:text-muted-foreground/60 focus:outline-none transition-all leading-relaxed"
           />
           <div className="flex items-center justify-between border-t border-border/60 pt-2">
-            {/* Action pills */}
+            {/* Action pills with colored icons */}
             <div className="flex items-center gap-1.5">
-              {COMPOSER_ACTIONS.map(({ icon: Icon, label }) => (
+              {COMPOSER_ACTIONS.map(({ icon: Icon, label, color, hover }) => (
                 <button
                   key={label}
                   type="button"
-                  className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground border border-border/60 hover:bg-muted/50 hover:text-accent transition-colors">
-                  <Icon size={14} />
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground border border-border/60 ${hover} transition-colors`}>
+                  <Icon size={14} className={color} />
                   <span className="hidden sm:inline">{label}</span>
                 </button>
               ))}

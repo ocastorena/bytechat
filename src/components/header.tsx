@@ -2,7 +2,7 @@
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Sun, Moon, LogOut, Search } from "lucide-react"
+import { Home, User, Sun, Moon, LogOut, Search, Mail, Bell, Settings2, ChevronDown } from "lucide-react"
 import { cn, getInitials } from "@/lib/utils"
 import { useState } from "react"
 import { useTheme } from "next-themes"
@@ -53,10 +53,12 @@ function NavLink({
   href,
   icon: Icon,
   isActive,
+  className: extraClass,
 }: {
   href: string
   icon: typeof Home
   isActive: boolean
+  className?: string
 }) {
   return (
     <Link
@@ -65,13 +67,43 @@ function NavLink({
         "relative p-2 rounded-lg transition-colors",
         isActive
           ? "text-accent bg-accent/10"
-          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+          : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+        extraClass
       )}>
       <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
       {isActive && (
         <span className="absolute -bottom-[11px] left-1/2 -translate-x-1/2 w-5 h-0.5 bg-accent rounded-full" />
       )}
     </Link>
+  )
+}
+
+/** Icon button for nav items without routing */
+function NavIconButton({
+  icon: Icon,
+  className: extraClass,
+  badge,
+  ariaLabel,
+}: {
+  icon: typeof Home
+  className?: string
+  badge?: string
+  ariaLabel: string
+}) {
+  return (
+    <button
+      className={cn(
+        "relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors",
+        extraClass
+      )}
+      aria-label={ariaLabel}>
+      <Icon size={20} strokeWidth={2} />
+      {badge && (
+        <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 text-[10px] font-bold bg-destructive text-white rounded-full flex items-center justify-center">
+          {badge}
+        </span>
+      )}
+    </button>
   )
 }
 
@@ -108,6 +140,21 @@ export function Header() {
             icon={Home}
             isActive={pathname === ROUTES.HOME}
           />
+          <NavIconButton
+            icon={Settings2}
+            ariaLabel="Settings"
+            className="hidden lg:block"
+          />
+          <NavIconButton
+            icon={Mail}
+            ariaLabel="Messages"
+            className="hidden lg:block"
+          />
+          <NavIconButton
+            icon={Bell}
+            ariaLabel="Notifications"
+            badge="8"
+          />
           <NavLink
             href={ROUTES.PROFILE}
             icon={User}
@@ -119,7 +166,7 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="rounded-full focus:outline-none focus:ring-1 focus:ring-accent/50"
+                className="flex items-center gap-1.5 rounded-full focus:outline-none focus:ring-1 focus:ring-accent/50 pr-1"
                 aria-label="User menu">
                 <Avatar className="h-8 w-8 border border-border hover:border-accent/50 transition-colors">
                   <AvatarImage
@@ -132,6 +179,10 @@ export function Header() {
                       : "U"}
                   </AvatarFallback>
                 </Avatar>
+                <span className="hidden lg:inline text-sm font-medium max-w-24 truncate">
+                  {session?.user?.name || "User"}
+                </span>
+                <ChevronDown size={14} className="hidden lg:block text-muted-foreground" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-44">

@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Heart, MessageCircle, Repeat2, Bookmark } from "lucide-react"
+import { Heart, MessageCircle, Repeat2, Bookmark, ThumbsUp } from "lucide-react"
 import OverflowMenu from "./overflow-menu"
 import { cn, formatDate, formatDateFull } from "@/lib/utils"
 import type { Post } from "@/types"
@@ -14,10 +14,23 @@ interface PostCardProps {
   onDelete?: (postId: string) => void
 }
 
+/** Generates deterministic engagement numbers from post content */
+function getEngagement(content: string) {
+  const seed = content.length + content.charCodeAt(0)
+  const reactions = ((seed * 137) % 900) + 100
+  const comments = ((seed * 53) % 80) + 5
+  return {
+    reactions: reactions > 500 ? `${(reactions / 10).toFixed(1)}k` : String(reactions),
+    comments,
+  }
+}
+
 /** Renders a single post in the feed */
 export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
+  const engagement = getEngagement(post.content)
+
   return (
-    <article className="px-4 py-4 border-b border-border hover:bg-muted/20 transition-colors duration-150">
+    <article className="p-4 rounded-xl border border-border bg-card hover:bg-card/90 transition-colors duration-150">
       <div className="flex gap-3">
         {/* Avatar */}
         <Avatar className="h-10 w-10 shrink-0">
@@ -89,32 +102,51 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
             </div>
           )}
 
-          {/* Actions — Reply, Repost, Like, Bookmark */}
-          <div className="flex items-center gap-1 mt-3 -ml-2">
-            <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-accent hover:bg-accent/10">
-              <MessageCircle
-                size={16}
-                className="transition-transform group-hover:scale-110"
-              />
-              <span className="text-xs tabular-nums">0</span>
-            </button>
-            <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-emerald-500 hover:bg-emerald-500/10">
-              <Repeat2
-                size={16}
-                className="transition-transform group-hover:scale-110"
-              />
-              <span className="text-xs tabular-nums">0</span>
-            </button>
-            <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-rose-500 hover:bg-rose-500/10">
+          {/* Engagement row — reactions + comments */}
+          <div className="flex items-center justify-between text-xs text-muted-foreground py-2.5 border-b border-border/40 mt-3">
+            <div className="flex items-center gap-2">
+              <div className="flex -space-x-1">
+                <span className="h-4 w-4 rounded-full bg-rose-500 border-2 border-card flex items-center justify-center">
+                  <Heart size={8} className="text-white" />
+                </span>
+                <span className="h-4 w-4 rounded-full bg-accent border-2 border-card flex items-center justify-center">
+                  <ThumbsUp size={8} className="text-white" />
+                </span>
+                <span className="h-4 w-4 rounded-full bg-warm border-2 border-card flex items-center justify-center">
+                  <Heart size={8} className="text-white" />
+                </span>
+              </div>
+              <span>{engagement.reactions}</span>
+            </div>
+            <span>{engagement.comments} Comments</span>
+          </div>
+
+          {/* Actions — Like, Repost, Comment, Bookmark */}
+          <div className="flex items-center gap-2 mt-3">
+            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full px-3.5 py-1.5 text-xs text-muted-foreground/70 transition-all hover:text-rose-500 hover:bg-rose-500/10 hover:border-rose-500/30">
               <Heart
-                size={16}
+                size={14}
                 className="transition-transform group-hover:scale-110"
               />
-              <span className="text-xs tabular-nums">0</span>
+              <span>Like</span>
             </button>
-            <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-amber-500 hover:bg-amber-500/10 ml-auto">
+            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full px-3.5 py-1.5 text-xs text-muted-foreground/70 transition-all hover:text-emerald-500 hover:bg-emerald-500/10 hover:border-emerald-500/30">
+              <Repeat2
+                size={14}
+                className="transition-transform group-hover:scale-110"
+              />
+              <span>Repost</span>
+            </button>
+            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full px-3.5 py-1.5 text-xs text-muted-foreground/70 transition-all hover:text-accent hover:bg-accent/10 hover:border-accent/30">
+              <MessageCircle
+                size={14}
+                className="transition-transform group-hover:scale-110"
+              />
+              <span>Comment</span>
+            </button>
+            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full p-1.5 text-muted-foreground/70 transition-all hover:text-amber-500 hover:bg-amber-500/10 hover:border-amber-500/30 ml-auto">
               <Bookmark
-                size={16}
+                size={14}
                 className="transition-transform group-hover:scale-110"
               />
             </button>

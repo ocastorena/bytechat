@@ -14,13 +14,14 @@ export function ProfileCard() {
   return (
     <div className="glass-card rounded-xl overflow-hidden">
       {/* Banner */}
-      <div className="h-16 bg-gradient-to-br from-accent/25 via-accent/10 to-warm/15 relative">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.65_0.16_250/12%),transparent_70%)]" />
+      <div className="h-20 bg-gradient-to-br from-accent/40 via-emerald-600/25 to-warm/20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.55_0.18_160/20%),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,oklch(0.65_0.16_250/15%),transparent_60%)]" />
       </div>
 
       {/* Profile info */}
       <div className="px-4 pb-4">
-        <Avatar className="h-14 w-14 -mt-7 border-3 border-background shadow-md">
+        <Avatar className="h-14 w-14 -mt-8 border-3 border-background shadow-md">
           <AvatarImage
             src={session?.user?.image || undefined}
             alt={session?.user?.name || "User"}

@@ -11,13 +11,13 @@ import { apiClient, request } from "@/lib/api-client"
 import { PAGINATION } from "@/config/constants"
 import { MessageSquare } from "lucide-react"
 
-/** Skeleton for a single post — staggered animation delay */
+/** Skeleton for a single post — matches card style */
 function PostSkeleton({ delay = 0 }: { delay?: number }) {
   const style = delay ? { animationDelay: `${delay}ms` } : undefined
   return (
-    <div className="px-1 py-4 border-b border-border">
+    <div className="p-4 rounded-xl border border-border bg-card">
       <div className="flex gap-3">
-        <div className="h-9 w-9 rounded-full bg-muted animate-pulse shrink-0" style={style} />
+        <div className="h-10 w-10 rounded-full bg-muted animate-pulse shrink-0" style={style} />
         <div className="flex-1 space-y-2.5">
           <div className="flex gap-2">
             <div className="h-3 w-20 bg-muted rounded animate-pulse" style={style} />
@@ -34,7 +34,7 @@ function PostSkeleton({ delay = 0 }: { delay?: number }) {
 /** Loading skeleton for the feed — staggered wave effect */
 function FeedSkeleton() {
   return (
-    <div>
+    <div className="flex flex-col gap-3">
       <PostSkeleton delay={0} />
       <PostSkeleton delay={150} />
       <PostSkeleton delay={300} />
@@ -168,7 +168,7 @@ export default function Feed({ className, userId }: FeedProps) {
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-3">
       {posts.map((post) => (
         <PostCard
           key={post.id}

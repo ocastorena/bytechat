@@ -46,7 +46,7 @@ function FollowButton() {
         "rounded-full h-7 text-xs px-4 shrink-0 ml-2 font-bold transition-all",
         following
           ? "border border-border text-foreground hover:border-destructive/50 hover:text-destructive hover:bg-destructive/10"
-          : "bg-foreground text-background hover:bg-foreground/90"
+          : "bg-accent text-accent-foreground hover:bg-accent/90"
       )}>
       {following ? "Following" : "Follow"}
     </button>
@@ -103,7 +103,7 @@ export function SuggestedUsersSidebar() {
           )
         )}
       </ul>
-      <button className="mt-3 px-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors">
+      <button className="mt-3 px-2 text-sm text-accent hover:text-accent/80 font-semibold hover:underline transition-colors">
         Show more
       </button>
     </div>

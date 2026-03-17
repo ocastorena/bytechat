@@ -17,7 +17,7 @@ export function HomeContent() {
       </aside>
 
       {/* Center feed */}
-      <section className="w-full max-w-xl">
+      <section className="w-full max-w-xl flex flex-col gap-3">
         {/* Inline compose — hidden on mobile */}
         <div className="hidden sm:block">
           <CreatePostForm />
