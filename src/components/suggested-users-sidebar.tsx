@@ -35,7 +35,7 @@ const SUGGESTED_USERS = [
 /** Sidebar showing suggested users to follow */
 export function SuggestedUsersSidebar() {
   return (
-    <div className="sticky top-[22rem] rounded-xl border border-border bg-card p-3">
+    <div className="rounded-xl border border-border bg-card p-3">
       <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1 mb-2">
         Who to follow
       </h3>

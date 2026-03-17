@@ -15,7 +15,7 @@ export function HomeContent() {
       </section>
 
       {/* Right sidebar — only on xl screens */}
-      <aside className="hidden xl:flex flex-col gap-4 w-72 shrink-0">
+      <aside className="hidden xl:flex flex-col gap-4 w-72 shrink-0 sticky top-16 self-start">
         <TrendingSidebar />
         <SuggestedUsersSidebar />
       </aside>

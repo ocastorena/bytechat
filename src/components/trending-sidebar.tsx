@@ -11,7 +11,7 @@ const TRENDING_TOPICS = [
 
 export function TrendingSidebar() {
   return (
-    <div className="sticky top-16 rounded-xl border border-border bg-card p-3">
+    <div className="rounded-xl border border-border bg-card p-3">
       <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1 mb-2">
         Trending
       </h3>
