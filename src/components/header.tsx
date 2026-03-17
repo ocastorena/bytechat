@@ -97,8 +97,15 @@ export function Header() {
         {/* Center — Search */}
         <SearchBar />
 
+        {/* Mobile search icon */}
+        <button
+          className="sm:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors ml-auto"
+          aria-label="Search">
+          <Search size={18} />
+        </button>
+
         {/* Right — Nav + Avatar */}
-        <div className="flex items-center gap-1 ml-auto">
+        <div className="flex items-center gap-1 sm:ml-auto">
           <NavLink
             href={ROUTES.HOME}
             icon={Home}

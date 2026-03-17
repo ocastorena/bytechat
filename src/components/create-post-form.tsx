@@ -11,8 +11,14 @@ import { useSession } from "next-auth/react"
 import { postSchema } from "@/lib/validations"
 import { apiClient } from "@/lib/api-client"
 
+/** Props for the CreatePostForm component */
+interface CreatePostFormProps {
+  /** Callback fired after a successful post submission */
+  onSuccess?: () => void
+}
+
 /** Form for composing and submitting a new post */
-export function CreatePostForm() {
+export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
   const { data: session } = useSession()
   const [content, setContent] = useState("")
   const [loading, setLoading] = useState(false)
@@ -43,6 +49,7 @@ export function CreatePostForm() {
       }
       toast.success("Post created!")
       mutate((key) => typeof key === "string" && key.startsWith("/api/posts"))
+      onSuccess?.()
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message)

@@ -48,10 +48,15 @@ export default async function Page() {
   return (
     <main className="flex justify-center px-4 mt-4 max-w-6xl mx-auto w-full">
       <div className="w-full max-w-xl">
+        {/* Profile banner */}
+        <div className="relative h-28 rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-accent/30 via-accent/10 to-warm/20 border border-border/50">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.78_0.18_195/15%),transparent_70%)]" />
+        </div>
+
         {/* Profile header */}
-        <div className="pb-6 mb-2 border-b border-border">
-          <div className="flex items-start gap-4">
-            <Avatar className="h-[4.5rem] w-[4.5rem] shrink-0 border-2 border-border">
+        <div className="pb-6 mb-2 border-b border-border -mt-10 px-1">
+          <div className="flex items-end gap-4">
+            <Avatar className="h-[4.5rem] w-[4.5rem] shrink-0 border-3 border-background shadow-lg">
               <AvatarImage
                 src={session?.user?.image || undefined}
                 alt={session?.user?.name || "User"}

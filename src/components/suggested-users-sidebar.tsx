@@ -1,5 +1,9 @@
+"use client"
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { cn } from "@/lib/utils"
 
 const SUGGESTED_USERS = [
   {
@@ -31,6 +35,24 @@ const SUGGESTED_USERS = [
     verified: false,
   },
 ]
+
+/** Follow button with visual state toggle */
+function FollowButton() {
+  const [following, setFollowing] = useState(false)
+
+  return (
+    <Button
+      size="sm"
+      variant={following ? "secondary" : "outline"}
+      onClick={() => setFollowing(!following)}
+      className={cn(
+        "rounded-full h-6 text-[11px] px-3 shrink-0 ml-2 transition-all",
+        following && "hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
+      )}>
+      {following ? "Following" : "Follow"}
+    </Button>
+  )
+}
 
 /** Sidebar showing suggested users to follow */
 export function SuggestedUsersSidebar() {
@@ -69,12 +91,7 @@ export function SuggestedUsersSidebar() {
                       </svg>
                     )}
                   </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="rounded-full h-6 text-[11px] px-3 shrink-0 ml-2">
-                    Follow
-                  </Button>
+                  <FollowButton />
                 </div>
                 <p className="text-[11px] text-muted-foreground truncate">
                   {username}

@@ -4,7 +4,7 @@ import Image from "next/image"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Heart, MessageCircle, Share2, Bookmark } from "lucide-react"
 import OverflowMenu from "./overflow-menu"
-import { formatDate } from "@/lib/utils"
+import { cn, formatDate, formatDateFull } from "@/lib/utils"
 import type { Post } from "@/types"
 
 /** Props for the PostCard component */
@@ -38,7 +38,9 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
                 @{post.authorUsername}
               </span>
               <span className="text-muted-foreground/40 text-xs">·</span>
-              <span className="text-muted-foreground/50 text-xs shrink-0">
+              <span
+                className="text-muted-foreground/50 text-xs shrink-0 cursor-default"
+                title={formatDateFull(post.createdAt)}>
                 {formatDate(post.createdAt)}
               </span>
             </div>
@@ -55,22 +57,24 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           {/* Post body */}
           <p className="text-sm leading-relaxed mt-1">{post.content}</p>
 
-          {/* Images */}
+          {/* Images — adaptive grid: 1=full, 2=side-by-side, 3=1+2, 4=2×2 */}
           {post.images && post.images.length > 0 && (
             <div
-              className={
-                post.images.length > 1
-                  ? "mt-3 grid gap-1 grid-cols-2"
-                  : "mt-3"
-              }>
-              {post.images.map((img, idx) => (
+              className={cn(
+                "mt-3 grid gap-0.5 overflow-hidden rounded-xl border border-border",
+                post.images.length === 1 && "grid-cols-1",
+                post.images.length === 2 && "grid-cols-2",
+                post.images.length === 3 && "grid-cols-2 grid-rows-2",
+                post.images.length >= 4 && "grid-cols-2 grid-rows-2"
+              )}>
+              {post.images.slice(0, 4).map((img, idx) => (
                 <div
                   key={img.id}
-                  className="relative w-full overflow-hidden rounded-xl border border-border"
-                  style={{
-                    aspectRatio:
-                      post.images.length > 1 ? "4 / 3" : "16 / 9",
-                  }}>
+                  className={cn(
+                    "relative w-full overflow-hidden",
+                    post.images.length === 3 && idx === 0 && "row-span-2"
+                  )}
+                  style={{ aspectRatio: post.images.length === 1 ? "16 / 9" : "3 / 2" }}>
                   <Image
                     src={img.url}
                     alt={img.altText || ""}

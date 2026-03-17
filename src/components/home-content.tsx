@@ -4,13 +4,17 @@ import Feed from "@/components/feed"
 import { CreatePostForm } from "@/components/create-post-form"
 import { TrendingSidebar } from "@/components/trending-sidebar"
 import { SuggestedUsersSidebar } from "@/components/suggested-users-sidebar"
+import { ComposeButton } from "@/components/compose-button"
 
 export function HomeContent() {
   return (
     <main className="flex justify-center gap-8 px-4 mt-4 max-w-6xl mx-auto w-full">
       {/* Feed column — single, centered */}
       <section className="w-full max-w-xl">
-        <CreatePostForm />
+        {/* Inline compose — hidden on mobile */}
+        <div className="hidden sm:block">
+          <CreatePostForm />
+        </div>
         <Feed />
       </section>
 
@@ -19,6 +23,9 @@ export function HomeContent() {
         <TrendingSidebar />
         <SuggestedUsersSidebar />
       </aside>
+
+      {/* FAB — mobile only */}
+      <ComposeButton />
     </main>
   )
 }
