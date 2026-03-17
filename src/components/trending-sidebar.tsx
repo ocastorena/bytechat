@@ -1,3 +1,4 @@
+/** Sidebar displaying trending topics */
 const TRENDING_TOPICS = [
   { tag: "#BugBounty", posts: "18.3K posts" },
   { tag: "#CTF", posts: "14.1K posts" },
@@ -10,8 +11,8 @@ const TRENDING_TOPICS = [
 
 export function TrendingSidebar() {
   return (
-    <div className="sticky top-16">
-      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-2 mb-2">
+    <div className="sticky top-16 rounded-xl border border-border bg-card p-3">
+      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1 mb-2">
         Trending
       </h3>
       <ul className="space-y-0.5">

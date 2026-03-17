@@ -51,12 +51,12 @@ export default async function Page() {
         {/* Profile header */}
         <div className="pb-6 mb-2 border-b border-border">
           <div className="flex items-start gap-4">
-            <Avatar className="h-16 w-16 shrink-0 border-2 border-border">
+            <Avatar className="h-20 w-20 shrink-0 border-2 border-border">
               <AvatarImage
                 src={session?.user?.image || undefined}
                 alt={session?.user?.name || "User"}
               />
-              <AvatarFallback className="text-lg font-bold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
+              <AvatarFallback className="text-xl font-bold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
                 {session?.user?.name ? getInitials(session.user.name) : "U"}
               </AvatarFallback>
             </Avatar>

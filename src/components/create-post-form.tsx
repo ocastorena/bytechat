@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react"
 import { postSchema } from "@/lib/validations"
 import { apiClient } from "@/lib/api-client"
 
+/** Form for composing and submitting a new post */
 export function CreatePostForm() {
   const { data: session } = useSession()
   const [content, setContent] = useState("")
@@ -56,7 +57,7 @@ export function CreatePostForm() {
   return (
     <div className="pb-3 mb-1 border-b border-border">
       <div className="flex gap-3 px-1">
-        <Avatar className="h-9 w-9 shrink-0">
+        <Avatar className="h-9 w-9 shrink-0 mt-1">
           <AvatarImage
             src={session?.user?.image || undefined}
             alt={session?.user?.name || "User"}
@@ -76,14 +77,14 @@ export function CreatePostForm() {
               autoResize()
             }}
             rows={2}
-            className="w-full resize-none bg-transparent px-0 py-1.5 text-sm placeholder:text-muted-foreground focus:outline-none"
+            className="w-full resize-none bg-transparent px-0 py-2 text-sm placeholder:text-muted-foreground focus:outline-none"
           />
           <div className="flex justify-end">
             <Button
               type="submit"
               disabled={loading || !content.trim()}
               size="sm"
-              className="rounded-full px-4 h-7 text-xs">
+              className="rounded-full px-5 h-8 text-xs font-semibold bg-accent text-accent-foreground hover:bg-accent/90 disabled:opacity-40">
               {loading ? "Posting..." : "Post"}
             </Button>
           </div>

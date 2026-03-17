@@ -9,6 +9,7 @@ import { useEffect, useRef, useCallback } from "react"
 import type { Post, PostPage } from "@/types"
 import { apiClient, request } from "@/lib/api-client"
 import { PAGINATION } from "@/config/constants"
+import { MessageSquare } from "lucide-react"
 
 /** Skeleton for a single post — matches borderless layout */
 function PostSkeleton() {
@@ -40,12 +41,24 @@ function FeedSkeleton() {
   )
 }
 
+/** Pulsing dots spinner for infinite scroll loading */
+function LoadingDots() {
+  return (
+    <div className="flex justify-center py-6 gap-1">
+      <span className="h-1.5 w-1.5 rounded-full bg-accent/60 animate-pulse" />
+      <span className="h-1.5 w-1.5 rounded-full bg-accent/60 animate-pulse [animation-delay:150ms]" />
+      <span className="h-1.5 w-1.5 rounded-full bg-accent/60 animate-pulse [animation-delay:300ms]" />
+    </div>
+  )
+}
+
 const { PAGE_SIZE, REFRESH_INTERVAL } = PAGINATION
 
 interface FeedProps extends React.ComponentProps<"section"> {
   userId?: string
 }
 
+/** Paginated post feed with infinite scroll */
 export default function Feed({ className, userId }: FeedProps) {
   const { data: session } = useSession()
   const sentinelRef = useRef<HTMLDivElement>(null)
@@ -102,13 +115,13 @@ export default function Feed({ className, userId }: FeedProps) {
 
   if (error) {
     return (
-      <div className={cn("py-12 text-center", className)}>
+      <div className={cn("py-16 text-center", className)}>
         <p className="text-muted-foreground text-sm">
           Something went wrong loading the feed.
         </p>
         <button
           onClick={() => mutate()}
-          className="mt-2 text-sm text-accent hover:underline">
+          className="mt-3 text-sm text-accent hover:text-accent/80 transition-colors">
           Try again
         </button>
       </div>
@@ -119,7 +132,10 @@ export default function Feed({ className, userId }: FeedProps) {
 
   if (posts.length === 0) {
     return (
-      <div className={cn("py-12 text-center", className)}>
+      <div className={cn("py-16 text-center", className)}>
+        <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-muted mb-3">
+          <MessageSquare className="h-5 w-5 text-muted-foreground" />
+        </div>
         <p className="text-foreground font-medium text-sm">No posts yet</p>
         <p className="text-muted-foreground text-xs mt-1">
           Be the first to share something.
@@ -163,11 +179,7 @@ export default function Feed({ className, userId }: FeedProps) {
 
       <div ref={sentinelRef} className="h-1" />
 
-      {isValidating && (
-        <div className="flex justify-center py-6">
-          <span className="text-xs text-muted-foreground">Loading...</span>
-        </div>
-      )}
+      {isValidating && <LoadingDots />}
     </div>
   )
 }
