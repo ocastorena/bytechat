@@ -1,7 +1,6 @@
 "use client"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 
@@ -36,29 +35,29 @@ const SUGGESTED_USERS = [
   },
 ]
 
-/** Follow button with visual state toggle */
+/** Follow button with Twitter-style inverted colors */
 function FollowButton() {
   const [following, setFollowing] = useState(false)
 
   return (
-    <Button
-      size="sm"
-      variant={following ? "secondary" : "outline"}
+    <button
       onClick={() => setFollowing(!following)}
       className={cn(
-        "rounded-full h-6 text-[11px] px-3 shrink-0 ml-2 transition-all",
-        following && "hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
+        "rounded-full h-7 text-xs px-4 shrink-0 ml-2 font-bold transition-all",
+        following
+          ? "border border-border text-foreground hover:border-destructive/50 hover:text-destructive hover:bg-destructive/10"
+          : "bg-foreground text-background hover:bg-foreground/90"
       )}>
       {following ? "Following" : "Follow"}
-    </Button>
+    </button>
   )
 }
 
 /** Sidebar showing suggested users to follow */
 export function SuggestedUsersSidebar() {
   return (
-    <div className="rounded-xl border border-border bg-card p-3">
-      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1 mb-2">
+    <div className="glass-card rounded-xl p-4">
+      <h3 className="text-lg font-bold text-foreground mb-3">
         Who to follow
       </h3>
       <ul className="space-y-0.5">
@@ -67,7 +66,7 @@ export function SuggestedUsersSidebar() {
             <li
               key={username}
               className="flex items-start gap-2.5 rounded-lg px-2 py-2 hover:bg-muted/50 transition-colors duration-150 cursor-pointer">
-              <Avatar className="h-8 w-8 shrink-0 mt-0.5">
+              <Avatar className="h-9 w-9 shrink-0 mt-0.5">
                 <AvatarFallback className="text-[10px] font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
                   {initials}
                 </AvatarFallback>
@@ -75,12 +74,12 @@ export function SuggestedUsersSidebar() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1 min-w-0">
-                    <span className="text-sm font-medium truncate">
+                    <span className="text-sm font-semibold truncate">
                       {name}
                     </span>
                     {verified && (
                       <svg
-                        className="h-3 w-3 text-accent flex-shrink-0"
+                        className="h-3.5 w-3.5 text-accent flex-shrink-0"
                         fill="currentColor"
                         viewBox="0 0 20 20">
                         <path
@@ -93,10 +92,10 @@ export function SuggestedUsersSidebar() {
                   </div>
                   <FollowButton />
                 </div>
-                <p className="text-[11px] text-muted-foreground truncate">
+                <p className="text-xs text-muted-foreground font-mono truncate">
                   {username}
                 </p>
-                <p className="text-[11px] text-muted-foreground/80 truncate mt-0.5">
+                <p className="text-xs text-muted-foreground/80 truncate mt-0.5">
                   {bio}
                 </p>
               </div>
@@ -104,6 +103,9 @@ export function SuggestedUsersSidebar() {
           )
         )}
       </ul>
+      <button className="mt-3 px-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors">
+        Show more
+      </button>
     </div>
   )
 }

@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma"
 import { CreatePostForm } from "@/components/create-post-form"
 import Feed from "@/components/feed"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { CalendarDays, Mail } from "lucide-react"
 import { formatDate, getInitials } from "@/lib/utils"
 
@@ -49,76 +48,101 @@ export default async function Page() {
     <main className="flex justify-center px-4 mt-4 max-w-6xl mx-auto w-full">
       <div className="w-full max-w-xl">
         {/* Profile banner */}
-        <div className="relative h-28 rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-accent/30 via-accent/10 to-warm/20 border border-border/50">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.78_0.18_195/15%),transparent_70%)]" />
+        <div className="relative h-36 rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-accent/20 via-accent/8 to-warm/12 border border-border/50">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.65_0.16_250/10%),transparent_70%)]" />
         </div>
 
         {/* Profile header */}
-        <div className="pb-6 mb-2 border-b border-border -mt-10 px-1">
-          <div className="flex items-end gap-4">
-            <Avatar className="h-[4.5rem] w-[4.5rem] shrink-0 border-3 border-background shadow-lg">
+        <div className="pb-4 mb-2 border-b border-border -mt-12 px-1">
+          <div className="flex items-end justify-between">
+            <Avatar className="h-20 w-20 shrink-0 border-4 border-background shadow-lg">
               <AvatarImage
                 src={session?.user?.image || undefined}
                 alt={session?.user?.name || "User"}
               />
-              <AvatarFallback className="text-xl font-bold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
+              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
                 {session?.user?.name ? getInitials(session.user.name) : "U"}
               </AvatarFallback>
             </Avatar>
 
-            <div className="flex-1 min-w-0">
-              <h2 className="text-lg font-bold">
-                {session?.user?.name || "Anonymous User"}
-              </h2>
-              <p className="text-sm text-muted-foreground">@{username}</p>
+            <button className="rounded-full px-4 py-1.5 border border-border text-sm font-semibold hover:bg-muted/50 transition-colors mb-1">
+              Edit Profile
+            </button>
+          </div>
 
-              {userProfile && (
-                <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <Mail className="h-3 w-3" />
-                    {userProfile.email}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <CalendarDays className="h-3 w-3" />
-                    Joined {formatDate(userProfile.createdAt.toDateString())}
-                  </span>
-                </div>
-              )}
+          <div className="mt-3">
+            <h2 className="text-xl font-bold">
+              {session?.user?.name || "Anonymous User"}
+            </h2>
+            <p className="text-sm text-muted-foreground font-mono">@{username}</p>
 
-              {userProfile && (
-                <div className="flex items-center gap-4 mt-3">
-                  <div className="text-sm">
-                    <span className="font-bold text-foreground">
-                      {userProfile.posts.length}
-                    </span>{" "}
-                    <span className="text-muted-foreground">posts</span>
-                  </div>
-                  <div className="text-sm">
-                    <span className="font-bold text-foreground">42</span>{" "}
-                    <span className="text-muted-foreground">followers</span>
-                  </div>
-                </div>
-              )}
-
-              <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-                Full-stack developer passionate about clean code and innovative
-                solutions. Always learning, always building.
-              </p>
-
-              <div className="flex flex-wrap gap-1.5 mt-3">
-                {["React", "TypeScript", "Next.js", "Node.js"].map(
-                  (skill) => (
-                    <Badge
-                      key={skill}
-                      variant="outline"
-                      className="text-[11px] border-border/80">
-                      {skill}
-                    </Badge>
-                  )
-                )}
+            {userProfile && (
+              <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                <span className="flex items-center gap-1.5">
+                  <Mail className="h-3.5 w-3.5" />
+                  {userProfile.email}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CalendarDays className="h-3.5 w-3.5" />
+                  Joined {formatDate(userProfile.createdAt.toDateString())}
+                </span>
               </div>
+            )}
+
+            <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+              Full-stack developer passionate about clean code and innovative
+              solutions. Always learning, always building.
+            </p>
+
+            {userProfile && (
+              <div className="flex items-center gap-5 mt-3">
+                <div className="text-sm">
+                  <span className="font-bold text-foreground">128</span>{" "}
+                  <span className="text-muted-foreground">Following</span>
+                </div>
+                <div className="text-sm">
+                  <span className="font-bold text-foreground">42</span>{" "}
+                  <span className="text-muted-foreground">Followers</span>
+                </div>
+                <div className="text-sm">
+                  <span className="font-bold text-foreground">
+                    {userProfile.posts.length}
+                  </span>{" "}
+                  <span className="text-muted-foreground">Posts</span>
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {["React", "TypeScript", "Next.js", "Node.js"].map(
+                (skill) => (
+                  <span
+                    key={skill}
+                    className="text-xs bg-accent/10 text-accent rounded-full px-3 py-1 font-medium">
+                    {skill}
+                  </span>
+                )
+              )}
             </div>
           </div>
+        </div>
+
+        {/* Tab navigation */}
+        <div className="flex border-b border-border mb-2">
+          {["Posts", "Replies", "Likes"].map((tab) => (
+            <button
+              key={tab}
+              className={`flex-1 py-3 text-sm font-semibold transition-colors relative ${
+                tab === "Posts"
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/30"
+              }`}>
+              {tab}
+              {tab === "Posts" && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-accent rounded-full" />
+              )}
+            </button>
+          ))}
         </div>
 
         {/* User posts */}

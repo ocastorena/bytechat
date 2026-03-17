@@ -27,26 +27,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { BytechatLogo } from "./bytechat-logo"
 import { ROUTES } from "@/config/constants"
 
-/** Compact command-bar style search input */
+/** Clean search input */
 function SearchBar() {
   return (
-    <div className="relative hidden sm:block flex-1 max-w-md">
+    <div className="relative hidden sm:block flex-1 max-w-lg">
       <Search
-        size={14}
-        className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+        size={16}
+        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
       />
       <input
         id="search"
         type="text"
-        placeholder="Search..."
+        placeholder="Search ByteChat"
         onKeyDown={(e) => {
           if (e.key === "Escape") e.currentTarget.blur()
         }}
-        className="w-full pl-8 pr-12 py-1.5 rounded-lg border border-border bg-muted/50 text-xs focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/40 focus:bg-background transition-all placeholder:text-muted-foreground"
+        className="w-full pl-10 pr-4 py-2 rounded-xl border border-border bg-secondary text-sm focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/40 focus:bg-background transition-all placeholder:text-muted-foreground"
       />
-      <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">
-        /
-      </kbd>
     </div>
   )
 }
@@ -70,9 +67,9 @@ function NavLink({
           ? "text-accent bg-accent/10"
           : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
       )}>
-      <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+      <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
       {isActive && (
-        <span className="absolute -bottom-[9px] left-1/2 -translate-x-1/2 w-4 h-0.5 bg-accent rounded-full" />
+        <span className="absolute -bottom-[11px] left-1/2 -translate-x-1/2 w-5 h-0.5 bg-accent rounded-full" />
       )}
     </Link>
   )
@@ -88,7 +85,7 @@ export function Header() {
     <>
       <header
         data-testid="app-header"
-        className="sticky top-0 z-50 flex items-center gap-4 px-4 h-12 bg-background/80 backdrop-blur-xl border-b border-border/40">
+        className="sticky top-0 z-50 flex items-center gap-4 px-4 h-14 bg-background/80 backdrop-blur-xl border-b border-border/60">
         {/* Left — Logo */}
         <div className="shrink-0">
           <BytechatLogo className="h-7 w-auto" />
@@ -101,7 +98,7 @@ export function Header() {
         <button
           className="sm:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors ml-auto"
           aria-label="Search">
-          <Search size={18} />
+          <Search size={20} />
         </button>
 
         {/* Right — Nav + Avatar */}
@@ -117,19 +114,19 @@ export function Header() {
             isActive={pathname === ROUTES.PROFILE}
           />
 
-          <div className="w-px h-5 bg-border mx-1.5" />
+          <div className="w-px h-5 bg-border mx-2" />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
                 className="rounded-full focus:outline-none focus:ring-1 focus:ring-accent/50"
                 aria-label="User menu">
-                <Avatar className="h-7 w-7 border border-border hover:border-accent/50 transition-colors">
+                <Avatar className="h-8 w-8 border border-border hover:border-accent/50 transition-colors">
                   <AvatarImage
                     src={session?.user?.image || undefined}
                     alt={session?.user?.name || "User"}
                   />
-                  <AvatarFallback className="text-[10px] font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
+                  <AvatarFallback className="text-xs font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
                     {session?.user?.name
                       ? getInitials(session.user.name)
                       : "U"}
@@ -182,9 +179,6 @@ export function Header() {
           </DropdownMenu>
         </div>
       </header>
-
-      {/* Gradient accent line — below header */}
-      <div className="accent-line w-full sticky top-12 z-50" />
 
       <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}>
         <AlertDialogContent>

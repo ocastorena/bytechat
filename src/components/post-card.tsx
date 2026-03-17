@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Heart, MessageCircle, Share2, Bookmark } from "lucide-react"
+import { Heart, MessageCircle, Repeat2, Bookmark } from "lucide-react"
 import OverflowMenu from "./overflow-menu"
 import { cn, formatDate, formatDateFull } from "@/lib/utils"
 import type { Post } from "@/types"
@@ -17,11 +17,11 @@ interface PostCardProps {
 /** Renders a single post in the feed */
 export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
   return (
-    <article className="animate-fade-in-up px-1 py-4 border-b border-border hover:bg-muted/20 transition-colors duration-150">
+    <article className="px-4 py-4 border-b border-border hover:bg-muted/20 transition-colors duration-150">
       <div className="flex gap-3">
         {/* Avatar */}
-        <Avatar className="h-9 w-9 shrink-0">
-          <AvatarFallback className="text-xs font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
+        <Avatar className="h-10 w-10 shrink-0">
+          <AvatarFallback className="text-sm font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
             {post.authorUsername.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
@@ -31,15 +31,15 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           {/* Author line */}
           <div className="flex items-center justify-between">
             <div className="flex items-baseline gap-1.5 min-w-0">
-              <span className="font-bold text-sm text-foreground truncate">
+              <span className="font-semibold text-[15px] text-foreground truncate">
                 {post.authorUsername}
               </span>
-              <span className="text-muted-foreground/60 text-xs truncate">
+              <span className="text-muted-foreground/60 text-sm font-mono truncate">
                 @{post.authorUsername}
               </span>
-              <span className="text-muted-foreground/40 text-xs">·</span>
+              <span className="text-muted-foreground/40 text-sm">·</span>
               <span
-                className="text-muted-foreground/50 text-xs shrink-0 cursor-default"
+                className="text-muted-foreground/50 text-sm shrink-0 cursor-default"
                 title={formatDateFull(post.createdAt)}>
                 {formatDate(post.createdAt)}
               </span>
@@ -55,13 +55,13 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           </div>
 
           {/* Post body */}
-          <p className="text-sm leading-relaxed mt-1">{post.content}</p>
+          <p className="text-[15px] leading-relaxed mt-1">{post.content}</p>
 
-          {/* Images — adaptive grid: 1=full, 2=side-by-side, 3=1+2, 4=2×2 */}
+          {/* Images — adaptive grid: 1=full, 2=side-by-side, 3=1+2, 4=2x2 */}
           {post.images && post.images.length > 0 && (
             <div
               className={cn(
-                "mt-3 grid gap-0.5 overflow-hidden rounded-xl border border-border",
+                "mt-3 grid gap-0.5 overflow-hidden rounded-2xl border border-border",
                 post.images.length === 1 && "grid-cols-1",
                 post.images.length === 2 && "grid-cols-2",
                 post.images.length === 3 && "grid-cols-2 grid-rows-2",
@@ -89,31 +89,32 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
             </div>
           )}
 
-          {/* Actions with engagement counts */}
+          {/* Actions — Reply, Repost, Like, Bookmark */}
           <div className="flex items-center gap-1 mt-3 -ml-2">
-            <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-rose-500 hover:bg-rose-500/10">
-              <Heart
-                size={15}
-                className="transition-transform group-hover:scale-110"
-              />
-              <span className="text-[11px] tabular-nums">0</span>
-            </button>
             <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-accent hover:bg-accent/10">
               <MessageCircle
-                size={15}
+                size={16}
                 className="transition-transform group-hover:scale-110"
               />
-              <span className="text-[11px] tabular-nums">0</span>
+              <span className="text-xs tabular-nums">0</span>
             </button>
             <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-emerald-500 hover:bg-emerald-500/10">
-              <Share2
-                size={15}
+              <Repeat2
+                size={16}
                 className="transition-transform group-hover:scale-110"
               />
+              <span className="text-xs tabular-nums">0</span>
+            </button>
+            <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-rose-500 hover:bg-rose-500/10">
+              <Heart
+                size={16}
+                className="transition-transform group-hover:scale-110"
+              />
+              <span className="text-xs tabular-nums">0</span>
             </button>
             <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-amber-500 hover:bg-amber-500/10 ml-auto">
               <Bookmark
-                size={15}
+                size={16}
                 className="transition-transform group-hover:scale-110"
               />
             </button>
