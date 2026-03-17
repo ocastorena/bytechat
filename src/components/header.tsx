@@ -42,7 +42,7 @@ function SearchBar() {
         onKeyDown={(e) => {
           if (e.key === "Escape") e.currentTarget.blur()
         }}
-        className="w-full pl-8 pr-12 py-1.5 rounded-lg border border-border bg-input text-xs focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/40 transition-all"
+        className="w-full pl-8 pr-12 py-1.5 rounded-lg border border-border bg-muted/50 text-xs focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/40 focus:bg-background transition-all placeholder:text-muted-foreground"
       />
       <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">
         /
@@ -86,12 +86,9 @@ export function Header() {
 
   return (
     <>
-      {/* Gradient accent line */}
-      <div className="accent-line w-full" />
-
       <header
         data-testid="app-header"
-        className="sticky top-0 z-50 flex items-center gap-4 px-4 h-12 bg-background/60 backdrop-blur-xl border-b border-border/50">
+        className="sticky top-0 z-50 flex items-center gap-4 px-4 h-12 bg-background/80 backdrop-blur-xl border-b border-border/40">
         {/* Left — Logo */}
         <div className="shrink-0">
           <BytechatLogo className="h-7 w-auto" />
@@ -178,6 +175,9 @@ export function Header() {
           </DropdownMenu>
         </div>
       </header>
+
+      {/* Gradient accent line — below header */}
+      <div className="accent-line w-full sticky top-12 z-50" />
 
       <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}>
         <AlertDialogContent>

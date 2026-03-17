@@ -51,7 +51,7 @@ function LoginFormContent({
   return (
     <main className={cn("flex flex-col gap-6", className)} {...props}>
       <BytechatLogo className="mx-auto mb-2" />
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden border-border/60">
         <div className="accent-line" />
         <CardHeader>
           <CardTitle className="text-lg">Login to your account</CardTitle>
@@ -69,7 +69,7 @@ function LoginFormContent({
                   type="email"
                   placeholder="m@example.com"
                   required
-                  className="focus-visible:ring-accent/30"
+                  className="bg-muted/30 focus-visible:ring-accent/30 focus-visible:bg-background transition-colors"
                   {...form.register("email")}
                 />
                 <FieldError error={form.formState.errors.email} />
@@ -87,14 +87,14 @@ function LoginFormContent({
                   id="password"
                   type="password"
                   required
-                  className="focus-visible:ring-accent/30"
+                  className="bg-muted/30 focus-visible:ring-accent/30 focus-visible:bg-background transition-colors"
                   {...form.register("password")}
                 />
                 <FieldError error={form.formState.errors.password} />
               </div>
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
                 disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? "Logging in..." : "Login"}
               </Button>
@@ -103,7 +103,7 @@ function LoginFormContent({
               Don&apos;t have an account?{" "}
               <Link
                 href={ROUTES.SIGNUP}
-                className="text-accent hover:text-accent/80 transition-colors">
+                className="text-accent hover:text-accent/80 transition-colors font-medium">
                 Sign up
               </Link>
             </div>

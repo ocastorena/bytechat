@@ -17,7 +17,7 @@ interface PostCardProps {
 /** Renders a single post in the feed */
 export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
   return (
-    <article className="animate-fade-in-up px-1 py-4 border-b border-border hover:bg-muted/30 transition-colors duration-150">
+    <article className="animate-fade-in-up px-1 py-4 border-b border-border hover:bg-muted/20 transition-colors duration-150">
       <div className="flex gap-3">
         {/* Avatar */}
         <Avatar className="h-9 w-9 shrink-0">
@@ -28,17 +28,17 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          {/* Author line — clear hierarchy: bold name > dim handle > dimmer timestamp */}
+          {/* Author line */}
           <div className="flex items-center justify-between">
             <div className="flex items-baseline gap-1.5 min-w-0">
               <span className="font-bold text-sm text-foreground truncate">
                 {post.authorUsername}
               </span>
-              <span className="text-muted-foreground/70 text-xs truncate">
+              <span className="text-muted-foreground/60 text-xs truncate">
                 @{post.authorUsername}
               </span>
-              <span className="text-muted-foreground/50 text-xs">·</span>
-              <span className="text-muted-foreground/60 text-xs shrink-0">
+              <span className="text-muted-foreground/40 text-xs">·</span>
+              <span className="text-muted-foreground/50 text-xs shrink-0">
                 {formatDate(post.createdAt)}
               </span>
             </div>
@@ -86,30 +86,30 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           )}
 
           {/* Actions with engagement counts */}
-          <div className="flex items-center gap-4 mt-3 -ml-2">
-            <button className="group flex items-center gap-1 px-2 py-1.5 rounded-full text-muted-foreground transition-colors hover:text-red-400 hover:bg-red-500/10">
+          <div className="flex items-center gap-1 mt-3 -ml-2">
+            <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-rose-500 hover:bg-rose-500/10">
               <Heart
-                size={16}
+                size={15}
                 className="transition-transform group-hover:scale-110"
               />
-              <span className="text-xs">0</span>
+              <span className="text-[11px] tabular-nums">0</span>
             </button>
-            <button className="group flex items-center gap-1 px-2 py-1.5 rounded-full text-muted-foreground transition-colors hover:text-accent hover:bg-accent/10">
+            <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-accent hover:bg-accent/10">
               <MessageCircle
-                size={16}
+                size={15}
                 className="transition-transform group-hover:scale-110"
               />
-              <span className="text-xs">0</span>
+              <span className="text-[11px] tabular-nums">0</span>
             </button>
-            <button className="group flex items-center gap-1 px-2 py-1.5 rounded-full text-muted-foreground transition-colors hover:text-accent hover:bg-accent/10">
+            <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-emerald-500 hover:bg-emerald-500/10">
               <Share2
-                size={16}
+                size={15}
                 className="transition-transform group-hover:scale-110"
               />
             </button>
-            <button className="group flex items-center gap-1 px-2 py-1.5 rounded-full text-muted-foreground transition-colors hover:text-warm hover:bg-warm/10 ml-auto">
+            <button className="group flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-muted-foreground/70 transition-all hover:text-amber-500 hover:bg-amber-500/10 ml-auto">
               <Bookmark
-                size={16}
+                size={15}
                 className="transition-transform group-hover:scale-110"
               />
             </button>

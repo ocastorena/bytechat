@@ -51,7 +51,7 @@ export default async function Page() {
         {/* Profile header */}
         <div className="pb-6 mb-2 border-b border-border">
           <div className="flex items-start gap-4">
-            <Avatar className="h-20 w-20 shrink-0 border-2 border-border">
+            <Avatar className="h-[4.5rem] w-[4.5rem] shrink-0 border-2 border-border">
               <AvatarImage
                 src={session?.user?.image || undefined}
                 alt={session?.user?.name || "User"}
