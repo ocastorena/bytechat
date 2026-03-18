@@ -2,7 +2,7 @@
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Sun, Moon, LogOut, Search, Mail, Bell, Settings2, ChevronDown } from "lucide-react"
+import { Home, User, Sun, Moon, LogOut, Search, Mail, Bell, ChevronDown, LayoutGrid } from "lucide-react"
 import { cn, getInitials } from "@/lib/utils"
 import { useState } from "react"
 import { useTheme } from "next-themes"
@@ -30,7 +30,7 @@ import { ROUTES } from "@/config/constants"
 /** Clean search input */
 function SearchBar() {
   return (
-    <div className="relative hidden sm:block flex-1 max-w-lg">
+    <div className="relative hidden sm:block w-64 lg:w-80">
       <Search
         size={16}
         className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -48,7 +48,7 @@ function SearchBar() {
   )
 }
 
-/** Navigation icon link with active state */
+/** Navigation link — uniform icon button, active gets accent tint */
 function NavLink({
   href,
   icon: Icon,
@@ -64,16 +64,13 @@ function NavLink({
     <Link
       href={href}
       className={cn(
-        "relative p-2 rounded-lg transition-colors",
+        "relative p-2 rounded-full transition-colors",
         isActive
-          ? "text-accent bg-accent/10"
+          ? "text-accent bg-accent/15"
           : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
         extraClass
       )}>
-      <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
-      {isActive && (
-        <span className="absolute -bottom-[11px] left-1/2 -translate-x-1/2 w-5 h-0.5 bg-accent rounded-full" />
-      )}
+      <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
     </Link>
   )
 }
@@ -84,20 +81,23 @@ function NavIconButton({
   className: extraClass,
   badge,
   ariaLabel,
+  onClick,
 }: {
   icon: typeof Home
   className?: string
   badge?: string
   ariaLabel: string
+  onClick?: () => void
 }) {
   return (
     <button
+      onClick={onClick}
       className={cn(
-        "relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors",
+        "relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors",
         extraClass
       )}
       aria-label={ariaLabel}>
-      <Icon size={20} strokeWidth={2} />
+      <Icon size={18} strokeWidth={2} />
       {badge && (
         <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 text-[10px] font-bold bg-destructive text-white rounded-full flex items-center justify-center">
           {badge}
@@ -107,128 +107,128 @@ function NavIconButton({
   )
 }
 
+/** Theme toggle button — shows Sun/Moon based on current theme */
+function ThemeToggle() {
+  const { theme, setTheme, resolvedTheme } = useTheme()
+  const isDark = (resolvedTheme ?? theme) === "dark"
+
+  const toggle = () => {
+    document.documentElement.classList.add("transition-colors", "duration-500")
+    setTheme(isDark ? "light" : "dark")
+    setTimeout(() => {
+      document.documentElement.classList.remove("transition-colors", "duration-500")
+    }, 600)
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      className="relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}>
+      {isDark ? <Sun size={18} strokeWidth={2} /> : <Moon size={18} strokeWidth={2} />}
+    </button>
+  )
+}
+
 export function Header() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const [logoutOpen, setLogoutOpen] = useState(false)
-  const { theme, setTheme, resolvedTheme } = useTheme()
 
   return (
     <>
       <header
         data-testid="app-header"
-        className="sticky top-0 z-50 flex items-center gap-4 px-4 h-14 bg-background/80 backdrop-blur-xl border-b border-border/60">
-        {/* Left — Logo */}
-        <div className="shrink-0">
+        className="sticky top-0 z-50 flex items-center gap-3 px-4 h-14 bg-background/80 backdrop-blur-xl border-b border-border/60">
+        {/* Left — Logo + Search */}
+        <div className="flex items-center gap-3 shrink-0">
           <BytechatLogo className="h-7 w-auto" />
         </div>
 
-        {/* Center — Search */}
         <SearchBar />
 
         {/* Mobile search icon */}
         <button
-          className="sm:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors ml-auto"
+          className="sm:hidden p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
           aria-label="Search">
-          <Search size={20} />
+          <Search size={18} />
         </button>
 
-        {/* Right — Nav + Avatar */}
-        <div className="flex items-center gap-1 sm:ml-auto">
+        {/* Spacer */}
+        <div className="flex-1" />
+
+        {/* Right — Nav group in pill container */}
+        <nav className="flex items-center gap-0.5 rounded-full bg-card/60 border border-border/40 px-1.5 py-1">
           <NavLink
             href={ROUTES.HOME}
             icon={Home}
             isActive={pathname === ROUTES.HOME}
           />
-          <NavIconButton
-            icon={Settings2}
-            ariaLabel="Settings"
-            className="hidden lg:block"
-          />
+          <ThemeToggle />
           <NavIconButton
             icon={Mail}
             ariaLabel="Messages"
-            className="hidden lg:block"
+            className="hidden lg:flex"
           />
           <NavIconButton
             icon={Bell}
             ariaLabel="Notifications"
             badge="8"
           />
-          <NavLink
-            href={ROUTES.PROFILE}
-            icon={User}
-            isActive={pathname === ROUTES.PROFILE}
-          />
+        </nav>
 
-          <div className="w-px h-5 bg-border mx-2" />
+        {/* User pill — dropdown with profile link + logout */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              className="flex items-center gap-1.5 rounded-full bg-card/60 border border-border/40 pl-1 pr-2.5 py-1 focus:outline-none focus:ring-1 focus:ring-accent/50 hover:bg-card/80 transition-colors"
+              aria-label="User menu">
+              <Avatar className="h-7 w-7 border border-border/50">
+                <AvatarImage
+                  src={session?.user?.image || undefined}
+                  alt={session?.user?.name || "User"}
+                />
+                <AvatarFallback className="text-[10px] font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
+                  {session?.user?.name
+                    ? getInitials(session.user.name)
+                    : "U"}
+                </AvatarFallback>
+              </Avatar>
+              <span className="hidden lg:inline text-sm font-medium max-w-24 truncate">
+                {session?.user?.name || "User"}
+              </span>
+              <ChevronDown size={12} className="text-muted-foreground" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuItem asChild>
+              <Link href={ROUTES.PROFILE} className="gap-2">
+                <User className="h-3.5 w-3.5" />
+                My Profile
+              </Link>
+            </DropdownMenuItem>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                className="flex items-center gap-1.5 rounded-full focus:outline-none focus:ring-1 focus:ring-accent/50 pr-1"
-                aria-label="User menu">
-                <Avatar className="h-8 w-8 border border-border hover:border-accent/50 transition-colors">
-                  <AvatarImage
-                    src={session?.user?.image || undefined}
-                    alt={session?.user?.name || "User"}
-                  />
-                  <AvatarFallback className="text-xs font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
-                    {session?.user?.name
-                      ? getInitials(session.user.name)
-                      : "U"}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="hidden lg:inline text-sm font-medium max-w-24 truncate">
-                  {session?.user?.name || "User"}
-                </span>
-                <ChevronDown size={14} className="hidden lg:block text-muted-foreground" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-44">
-              <DropdownMenuItem
-                onSelect={(e) => {
-                  e.preventDefault()
-                  const currentTheme = resolvedTheme ?? theme
-                  document.documentElement.classList.add(
-                    "transition-colors",
-                    "duration-500"
-                  )
-                  setTheme(currentTheme === "light" ? "dark" : "light")
-                  setTimeout(() => {
-                    document.documentElement.classList.remove(
-                      "transition-colors",
-                      "duration-500"
-                    )
-                  }, 600)
-                }}
-                className="gap-2">
-                {(resolvedTheme ?? theme) === "light" ? (
-                  <>
-                    <Moon className="h-3.5 w-3.5" /> Dark mode
-                  </>
-                ) : (
-                  <>
-                    <Sun className="h-3.5 w-3.5" /> Light mode
-                  </>
-                )}
-              </DropdownMenuItem>
+            <DropdownMenuSeparator />
 
-              <DropdownMenuSeparator />
+            <DropdownMenuItem
+              variant="destructive"
+              onSelect={(e) => {
+                e.preventDefault()
+                setLogoutOpen(true)
+              }}
+              className="gap-2">
+              <LogOut className="h-3.5 w-3.5" />
+              Log out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-              <DropdownMenuItem
-                variant="destructive"
-                onSelect={(e) => {
-                  e.preventDefault()
-                  setLogoutOpen(true)
-                }}
-                className="gap-2">
-                <LogOut className="h-3.5 w-3.5" />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        {/* Grid dots */}
+        <button
+          className="hidden lg:flex p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+          aria-label="More options">
+          <LayoutGrid size={18} strokeWidth={2} />
+        </button>
       </header>
 
       <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}>
