@@ -14,10 +14,10 @@ import { ImagePlus, Video, ListTree, Calendar } from "lucide-react"
 
 /** Action pill buttons for the composer toolbar */
 const COMPOSER_ACTIONS = [
-  { icon: ImagePlus, label: "Photo", color: "text-emerald-500", hover: "hover:bg-emerald-500/10" },
-  { icon: Video, label: "Video", color: "text-blue-500", hover: "hover:bg-blue-500/10" },
-  { icon: ListTree, label: "Thread", color: "text-purple-500", hover: "hover:bg-purple-500/10" },
-  { icon: Calendar, label: "Schedule", color: "text-orange-500", hover: "hover:bg-orange-500/10" },
+  { icon: ImagePlus, label: "Photo", color: "text-[oklch(0.75_0.20_155)]", hover: "hover:bg-[oklch(0.75_0.20_155/10%)]" },
+  { icon: Video, label: "Video", color: "text-[oklch(0.72_0.19_195)]", hover: "hover:bg-[oklch(0.72_0.19_195/10%)]" },
+  { icon: ListTree, label: "Thread", color: "text-[oklch(0.70_0.25_310)]", hover: "hover:bg-[oklch(0.70_0.25_310/10%)]" },
+  { icon: Calendar, label: "Schedule", color: "text-[oklch(0.80_0.18_65)]", hover: "hover:bg-[oklch(0.80_0.18_65/10%)]" },
 ] as const
 
 /** Props for the CreatePostForm component */

@@ -14,9 +14,9 @@ export function ProfileCard() {
   return (
     <div className="glass-card rounded-xl overflow-hidden">
       {/* Banner */}
-      <div className="h-20 bg-gradient-to-br from-accent/40 via-emerald-600/25 to-warm/20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.55_0.18_160/20%),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,oklch(0.65_0.16_250/15%),transparent_60%)]" />
+      <div className="h-20 bg-gradient-to-br from-accent/40 via-[oklch(0.70_0.25_310/20%)] to-warm/25 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.72_0.19_195/25%),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,oklch(0.75_0.20_155/18%),transparent_60%)]" />
       </div>
 
       {/* Profile info */}

@@ -106,7 +106,7 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           <div className="flex items-center justify-between text-xs text-muted-foreground py-2.5 border-b border-border/40 mt-3">
             <div className="flex items-center gap-2">
               <div className="flex -space-x-1">
-                <span className="h-4 w-4 rounded-full bg-rose-500 border-2 border-card flex items-center justify-center">
+                <span className="h-4 w-4 rounded-full bg-[oklch(0.70_0.25_10)] border-2 border-card flex items-center justify-center">
                   <Heart size={8} className="text-white" />
                 </span>
                 <span className="h-4 w-4 rounded-full bg-accent border-2 border-card flex items-center justify-center">
@@ -123,28 +123,28 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
 
           {/* Actions — Like, Repost, Comment, Bookmark */}
           <div className="flex items-center gap-2 mt-3">
-            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full px-3.5 py-1.5 text-xs text-muted-foreground/70 transition-all hover:text-rose-500 hover:bg-rose-500/10 hover:border-rose-500/30">
+            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full px-3.5 py-1.5 text-xs text-muted-foreground/70 transition-all hover:text-[oklch(0.70_0.25_10)] hover:bg-[oklch(0.70_0.25_10/10%)] hover:border-[oklch(0.70_0.25_10/30%)] hover:shadow-[0_0_8px_-2px_oklch(0.70_0.25_10/20%)]">
               <Heart
                 size={14}
                 className="transition-transform group-hover:scale-110"
               />
               <span>Like</span>
             </button>
-            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full px-3.5 py-1.5 text-xs text-muted-foreground/70 transition-all hover:text-emerald-500 hover:bg-emerald-500/10 hover:border-emerald-500/30">
+            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full px-3.5 py-1.5 text-xs text-muted-foreground/70 transition-all hover:text-[oklch(0.75_0.20_155)] hover:bg-[oklch(0.75_0.20_155/10%)] hover:border-[oklch(0.75_0.20_155/30%)] hover:shadow-[0_0_8px_-2px_oklch(0.75_0.20_155/20%)]">
               <Repeat2
                 size={14}
                 className="transition-transform group-hover:scale-110"
               />
               <span>Repost</span>
             </button>
-            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full px-3.5 py-1.5 text-xs text-muted-foreground/70 transition-all hover:text-accent hover:bg-accent/10 hover:border-accent/30">
+            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full px-3.5 py-1.5 text-xs text-muted-foreground/70 transition-all hover:text-accent hover:bg-accent/10 hover:border-accent/30 hover:shadow-[0_0_8px_-2px_oklch(0.72_0.19_195/20%)]">
               <MessageCircle
                 size={14}
                 className="transition-transform group-hover:scale-110"
               />
               <span>Comment</span>
             </button>
-            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full p-1.5 text-muted-foreground/70 transition-all hover:text-amber-500 hover:bg-amber-500/10 hover:border-amber-500/30 ml-auto">
+            <button className="group flex items-center gap-1.5 border border-border/60 rounded-full p-1.5 text-muted-foreground/70 transition-all hover:text-warm hover:bg-[oklch(0.80_0.18_65/10%)] hover:border-[oklch(0.80_0.18_65/30%)] hover:shadow-[0_0_8px_-2px_oklch(0.80_0.18_65/20%)] ml-auto">
               <Bookmark
                 size={14}
                 className="transition-transform group-hover:scale-110"
