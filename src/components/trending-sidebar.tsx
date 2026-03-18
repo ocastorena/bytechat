@@ -26,7 +26,7 @@ export function TrendingSidebar() {
         {TRENDING_TOPICS.map(({ tag, category, posts }) => (
           <li
             key={tag}
-            className="rounded-lg px-2 py-2 transition-colors duration-150 hover:bg-muted/50 cursor-pointer group">
+            className="rounded-xl px-2 py-2 transition-colors duration-150 hover:bg-muted/50 cursor-pointer group">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-[11px] text-muted-foreground uppercase tracking-wider">

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Search } from "lucide-react"
+import { Home, User, Compass, List } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ROUTES } from "@/config/constants"
 
@@ -20,7 +20,7 @@ function TabItem({
     <Link
       href={href}
       className={cn(
-        "flex items-center justify-center py-3 px-5 transition-colors",
+        "flex items-center justify-center py-3 px-4 transition-colors duration-150",
         isActive
           ? "text-accent"
           : "text-muted-foreground"
@@ -43,9 +43,14 @@ export function MobileNav() {
           isActive={pathname === ROUTES.HOME}
         />
         <TabItem
-          href={ROUTES.HOME}
-          icon={Search}
-          isActive={false}
+          href={ROUTES.EXPLORE}
+          icon={Compass}
+          isActive={pathname === ROUTES.EXPLORE}
+        />
+        <TabItem
+          href={ROUTES.LISTS}
+          icon={List}
+          isActive={pathname === ROUTES.LISTS}
         />
         <TabItem
           href={ROUTES.PROFILE}

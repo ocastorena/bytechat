@@ -42,7 +42,7 @@ function SearchBar() {
         onKeyDown={(e) => {
           if (e.key === "Escape") e.currentTarget.blur()
         }}
-        className="w-full pl-10 pr-4 py-2 rounded-xl border border-border bg-secondary text-sm focus:outline-none focus:ring-1 focus:ring-accent/50 focus:border-accent/40 focus:bg-background transition-all placeholder:text-muted-foreground"
+        className="w-full pl-10 pr-4 py-2 rounded-xl border border-border bg-secondary text-sm focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 focus-visible:border-accent/40 focus-visible:bg-background transition-all placeholder:text-muted-foreground"
       />
     </div>
   )
@@ -205,7 +205,7 @@ export function Header() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
-              className="flex items-center gap-1.5 rounded-full bg-card/60 border border-border/40 pl-1 pr-2.5 py-1 focus:outline-none focus:ring-1 focus:ring-accent/50 hover:bg-card/80 transition-colors"
+              className="flex items-center gap-1.5 rounded-full bg-card/60 border border-border/40 pl-1 pr-2.5 py-1 focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 hover:bg-card/80 transition-colors"
               aria-label="User menu">
               <Avatar className="h-7 w-7 border border-border/50">
                 <AvatarImage

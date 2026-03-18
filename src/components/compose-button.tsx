@@ -36,7 +36,7 @@ export function ComposeButton() {
               <h3 className="text-sm font-semibold">New post</h3>
               <button
                 onClick={() => setOpen(false)}
-                className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors duration-150"
                 aria-label="Close">
                 <X size={16} />
               </button>

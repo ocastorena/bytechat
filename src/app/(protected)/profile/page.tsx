@@ -48,8 +48,9 @@ export default async function Page() {
     <main className="flex justify-center px-4 mt-4 max-w-6xl mx-auto w-full">
       <div className="w-full max-w-xl">
         {/* Profile banner */}
-        <div className="relative h-36 rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-accent/20 via-accent/8 to-warm/12 border border-border/50">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.65_0.16_250/10%),transparent_70%)]" />
+        <div className="relative h-36 rounded-xl overflow-hidden mb-4 bg-gradient-to-br from-accent/30 via-[oklch(0.70_0.25_310/15%)] to-warm/20 border border-border">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.72_0.19_195/20%),transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,oklch(0.75_0.20_155/12%),transparent_60%)]" />
         </div>
 
         {/* Profile header */}
@@ -146,8 +147,10 @@ export default async function Page() {
         </div>
 
         {/* User posts */}
-        <CreatePostForm />
-        <Feed userId={userId} />
+        <div className="flex flex-col gap-3">
+          <CreatePostForm />
+          <Feed userId={userId} />
+        </div>
       </div>
     </main>
   )

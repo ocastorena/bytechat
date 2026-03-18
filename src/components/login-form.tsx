@@ -51,7 +51,7 @@ function LoginFormContent({
   return (
     <main className={cn("flex flex-col gap-6", className)} {...props}>
       <BytechatLogo className="mx-auto mb-2" />
-      <Card className="overflow-hidden border-border/60 bg-card/80 backdrop-blur-xl">
+      <Card className="overflow-hidden border-border bg-card/80 backdrop-blur-xl">
         <CardHeader>
           <CardTitle className="text-xl">Login to your account</CardTitle>
           <CardDescription>
@@ -98,7 +98,7 @@ function LoginFormContent({
                   type="email"
                   placeholder="m@example.com"
                   required
-                  className="h-10 rounded-xl bg-muted/30 focus-visible:ring-accent/30 focus-visible:bg-background transition-colors"
+                  className="h-10 rounded-xl bg-muted/30 focus-visible:ring-accent/50 focus-visible:bg-background transition-colors"
                   {...form.register("email")}
                 />
                 <FieldError error={form.formState.errors.email} />
@@ -116,7 +116,7 @@ function LoginFormContent({
                   id="password"
                   type="password"
                   required
-                  className="h-10 rounded-xl bg-muted/30 focus-visible:ring-accent/30 focus-visible:bg-background transition-colors"
+                  className="h-10 rounded-xl bg-muted/30 focus-visible:ring-accent/50 focus-visible:bg-background transition-colors"
                   {...form.register("password")}
                 />
                 <FieldError error={form.formState.errors.password} />

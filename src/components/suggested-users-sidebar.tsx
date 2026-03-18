@@ -65,7 +65,7 @@ export function SuggestedUsersSidebar() {
           ({ name, username, initials, bio, verified }) => (
             <li
               key={username}
-              className="flex items-start gap-2.5 rounded-lg px-2 py-2 hover:bg-muted/50 transition-colors duration-150 cursor-pointer">
+              className="flex items-start gap-2.5 rounded-xl px-2 py-2 hover:bg-muted/50 transition-colors duration-150 cursor-pointer">
               <Avatar className="h-9 w-9 shrink-0 mt-0.5">
                 <AvatarFallback className="text-[10px] font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
                   {initials}
