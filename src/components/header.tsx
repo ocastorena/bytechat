@@ -2,9 +2,9 @@
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Sun, Moon, LogOut, Search, Mail, Bell, ChevronDown, LayoutGrid } from "lucide-react"
+import { Home, User, Sun, Moon, LogOut, Search, Mail, Bell, ChevronDown, LayoutGrid, Compass, List } from "lucide-react"
 import { cn, getInitials } from "@/lib/utils"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import {
   AlertDialog,
@@ -107,9 +107,13 @@ function NavIconButton({
   )
 }
 
-/** Theme toggle button — shows Sun/Moon based on current theme */
+/** Theme toggle button — defers render until mounted to avoid hydration mismatch */
 function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+
   const isDark = (resolvedTheme ?? theme) === "dark"
 
   const toggle = () => {
@@ -124,8 +128,12 @@ function ThemeToggle() {
     <button
       onClick={toggle}
       className="relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}>
-      {isDark ? <Sun size={18} strokeWidth={2} /> : <Moon size={18} strokeWidth={2} />}
+      aria-label={mounted ? (isDark ? "Switch to light mode" : "Switch to dark mode") : "Toggle theme"}>
+      {mounted ? (
+        isDark ? <Sun size={18} strokeWidth={2} /> : <Moon size={18} strokeWidth={2} />
+      ) : (
+        <Sun size={18} strokeWidth={2} className="opacity-0" />
+      )}
     </button>
   )
 }
@@ -157,13 +165,29 @@ export function Header() {
         {/* Spacer */}
         <div className="flex-1" />
 
-        {/* Right — Nav group in pill container */}
+        {/* Page navigation pill — routable links with active state */}
         <nav className="flex items-center gap-0.5 rounded-full bg-card/60 border border-border/40 px-1.5 py-1">
           <NavLink
             href={ROUTES.HOME}
             icon={Home}
             isActive={pathname === ROUTES.HOME}
           />
+          <NavLink
+            href={ROUTES.EXPLORE}
+            icon={Compass}
+            isActive={pathname === ROUTES.EXPLORE}
+            className="hidden md:flex"
+          />
+          <NavLink
+            href={ROUTES.LISTS}
+            icon={List}
+            isActive={pathname === ROUTES.LISTS}
+            className="hidden md:flex"
+          />
+        </nav>
+
+        {/* Utility pill — action buttons, no active state */}
+        <div className="flex items-center gap-0.5 rounded-full bg-card/60 border border-border/40 px-1.5 py-1">
           <ThemeToggle />
           <NavIconButton
             icon={Mail}
@@ -175,7 +199,7 @@ export function Header() {
             ariaLabel="Notifications"
             badge="8"
           />
-        </nav>
+        </div>
 
         {/* User pill — dropdown with profile link + logout */}
         <DropdownMenu>
