@@ -4,7 +4,7 @@ import { List } from "lucide-react"
 export default function ListsPage() {
   return (
     <div className="max-w-xl mx-auto py-16">
-      <div className="rounded-xl border border-border bg-card p-8 text-center">
+      <div className="rounded-xl bg-card p-8 text-center">
         <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-accent/15 mb-4 shadow-[0_0_12px_-2px_oklch(0.72_0.19_195/25%)]">
           <List className="h-7 w-7 text-accent" />
         </div>

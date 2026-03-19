@@ -8,8 +8,11 @@ import {
   apiValidationError,
   logApiError,
 } from "@/lib/api-response"
+import { isDemoMode, DEMO_DISABLED_MESSAGE } from "@/lib/demo"
 
 export async function POST(req: NextRequest) {
+  if (isDemoMode) return apiError(DEMO_DISABLED_MESSAGE, 403)
+
   try {
     const body = await req.json()
     const parseResult = registerSchema.safeParse(body)

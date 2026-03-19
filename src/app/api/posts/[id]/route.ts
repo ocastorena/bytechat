@@ -2,11 +2,14 @@ import { NextRequest } from "next/server"
 import prisma from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { apiSuccess, apiError, logApiError } from "@/lib/api-response"
+import { isDemoMode, DEMO_DISABLED_MESSAGE } from "@/lib/demo"
 
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (isDemoMode) return apiError(DEMO_DISABLED_MESSAGE, 403)
+
   const session = await auth()
   if (!session?.user?.id) {
     return apiError("Unauthorized", 401)

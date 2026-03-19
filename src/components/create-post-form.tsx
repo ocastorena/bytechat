@@ -71,7 +71,7 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
   }
 
   return (
-    <div className="p-4 rounded-xl border border-border bg-card">
+    <div className="p-4 rounded-xl bg-card">
       <div className="flex gap-3">
         <Avatar className="h-10 w-10 shrink-0 mt-1">
           <AvatarImage
@@ -93,7 +93,7 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
               autoResize()
             }}
             rows={2}
-            className="w-full resize-none bg-transparent border-none px-0 py-2.5 text-[15px] placeholder:text-muted-foreground/60 focus:outline-none transition-all leading-relaxed"
+            className="w-full resize-none bg-input rounded-lg px-3 py-2.5 text-[15px] placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-accent/30 transition-all leading-relaxed"
           />
           <div className="flex items-center justify-between border-t border-border/60 pt-2">
             {/* Action pills with colored icons */}
@@ -120,7 +120,7 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
                 type="submit"
                 disabled={loading || !content.trim()}
                 size="sm"
-                className="rounded-full px-5 h-8 text-xs font-semibold bg-accent text-accent-foreground hover:bg-accent/90 disabled:opacity-40">
+                className="rounded-full px-5 h-8 text-xs font-semibold bg-accent text-accent-foreground hover:bg-accent/90 disabled:opacity-40 shadow-[0_0_10px_-2px_oklch(0.72_0.19_195/30%)] hover:shadow-[0_0_14px_-2px_oklch(0.72_0.19_195/40%)]">
                 {loading ? "Posting..." : "Post"}
               </Button>
             </div>

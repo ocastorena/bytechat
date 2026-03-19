@@ -15,7 +15,7 @@ import { MessageSquare } from "lucide-react"
 function PostSkeleton({ delay = 0 }: { delay?: number }) {
   const style = delay ? { animationDelay: `${delay}ms` } : undefined
   return (
-    <div className="p-4 rounded-xl border border-border bg-card">
+    <div className="p-4 rounded-xl bg-card">
       <div className="flex gap-3">
         <div className="h-10 w-10 rounded-full bg-muted animate-pulse shrink-0" style={style} />
         <div className="flex-1 space-y-2.5">

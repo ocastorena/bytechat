@@ -87,7 +87,7 @@
 .dark {
   --background: oklch(0.13 0.015 250);
   --foreground: oklch(0.93 0.005 270);
-  --card: oklch(0.17 0.015 250);
+  --card: oklch(0.19 0.015 250);
   --card-foreground: oklch(0.93 0.005 270);
   --popover: oklch(0.18 0.015 250);
   --popover-foreground: oklch(0.93 0.005 270);
@@ -102,7 +102,7 @@
   --warm: oklch(0.80 0.18 65);
   --destructive: oklch(0.68 0.26 25);
   --border: oklch(0.24 0.015 250);
-  --input: oklch(0.20 0.015 250);
+  --input: oklch(0.23 0.015 250);
   --ring: oklch(0.72 0.19 195);
   --chart-1: oklch(0.72 0.19 195);
   --chart-2: oklch(0.75 0.20 155);
@@ -177,12 +177,12 @@
 .glass-card {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  background: oklch(1 0 0 / 80%);
-  border: 1px solid oklch(0.87 0.005 270 / 50%);
+  background: oklch(0.96 0.005 270 / 80%);
+  border: none;
 }
 .dark .glass-card {
-  background: oklch(0.17 0.012 250 / 80%);
-  border: 1px solid oklch(0.24 0.01 250 / 50%);
+  background: oklch(0.19 0.015 250 / 80%);
+  border: none;
 }
 
 /* ── Dark mode background texture — barely perceptible dot-grid ── */

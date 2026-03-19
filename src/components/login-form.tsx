@@ -23,6 +23,7 @@ import { logInSchema } from "@/lib/validations"
 import { signIn } from "next-auth/react"
 import { useSearchParams } from "next/navigation"
 import { ROUTES } from "@/config/constants"
+import { isDemoMode, DEMO_ACCOUNT } from "@/lib/demo"
 
 function LoginFormContent({
   className,
@@ -127,15 +128,31 @@ function LoginFormContent({
                 disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? "Logging in..." : "Login"}
               </Button>
+              {isDemoMode && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full h-11 rounded-xl font-semibold"
+                  disabled={form.formState.isSubmitting}
+                  onClick={() => {
+                    form.setValue("email", DEMO_ACCOUNT.email)
+                    form.setValue("password", DEMO_ACCOUNT.password)
+                    form.handleSubmit(onSubmit)()
+                  }}>
+                  Try Demo Account
+                </Button>
+              )}
             </div>
-            <div className="mt-4 text-center text-xs text-muted-foreground">
-              Don&apos;t have an account?{" "}
-              <Link
-                href={ROUTES.SIGNUP}
-                className="text-accent hover:text-accent/80 transition-colors font-medium">
-                Sign up
-              </Link>
-            </div>
+            {!isDemoMode && (
+              <div className="mt-4 text-center text-xs text-muted-foreground">
+                Don&apos;t have an account?{" "}
+                <Link
+                  href={ROUTES.SIGNUP}
+                  className="text-accent hover:text-accent/80 transition-colors font-medium">
+                  Sign up
+                </Link>
+              </div>
+            )}
           </form>
         </CardContent>
       </Card>

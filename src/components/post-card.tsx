@@ -6,6 +6,7 @@ import { Heart, MessageCircle, Repeat2, Bookmark, ThumbsUp } from "lucide-react"
 import OverflowMenu from "./overflow-menu"
 import { cn, formatDate, formatDateFull } from "@/lib/utils"
 import type { Post } from "@/types"
+import { isDemoMode } from "@/lib/demo"
 
 /** Props for the PostCard component */
 interface PostCardProps {
@@ -30,7 +31,7 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
   const engagement = getEngagement(post.content)
 
   return (
-    <article className="p-4 rounded-xl border border-border bg-card hover:bg-card/90 transition-colors duration-150">
+    <article className="p-4 rounded-xl bg-card hover:bg-card/90 transition-colors duration-150">
       <div className="flex gap-3">
         {/* Avatar */}
         <Avatar className="h-10 w-10 shrink-0">
@@ -58,7 +59,7 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
               </span>
             </div>
 
-            {isOwnPost && onDelete && (
+            {!isDemoMode && isOwnPost && onDelete && (
               <OverflowMenu
                 postId={post.id}
                 isOwnPost={isOwnPost}

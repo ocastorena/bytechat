@@ -42,7 +42,7 @@ function SearchBar() {
         onKeyDown={(e) => {
           if (e.key === "Escape") e.currentTarget.blur()
         }}
-        className="w-full pl-10 pr-4 py-2 rounded-xl border border-border bg-secondary text-sm focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 focus-visible:border-accent/40 focus-visible:bg-background transition-all placeholder:text-muted-foreground"
+        className="w-full pl-10 pr-4 py-2 rounded-xl bg-input text-sm focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 focus-visible:bg-background transition-all placeholder:text-muted-foreground/80"
       />
     </div>
   )

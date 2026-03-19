@@ -8,6 +8,7 @@ import {
   apiValidationError,
   logApiError,
 } from "@/lib/api-response"
+import { isDemoMode, DEMO_DISABLED_MESSAGE } from "@/lib/demo"
 import type { Post } from "@/types"
 
 interface PrismaPostWithAuthor {
@@ -79,6 +80,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  if (isDemoMode) return apiError(DEMO_DISABLED_MESSAGE, 403)
+
   const session = await auth()
   if (!session) {
     return apiError("Unauthorized", 401)

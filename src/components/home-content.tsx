@@ -5,6 +5,7 @@ import { CreatePostForm } from "@/components/create-post-form"
 import { TrendingSidebar } from "@/components/trending-sidebar"
 import { SuggestedUsersSidebar } from "@/components/suggested-users-sidebar"
 import { ComposeButton } from "@/components/compose-button"
+import { isDemoMode } from "@/lib/demo"
 import { ProfileCard } from "@/components/profile-card"
 
 export function HomeContent() {
@@ -18,9 +19,15 @@ export function HomeContent() {
 
       {/* Center feed */}
       <section className="w-full max-w-xl flex flex-col gap-3">
-        {/* Inline compose — hidden on mobile */}
+        {/* Inline compose — hidden on mobile, replaced in demo mode */}
         <div className="hidden sm:block">
-          <CreatePostForm />
+          {isDemoMode ? (
+            <div className="p-4 rounded-xl bg-card text-center text-sm text-muted-foreground">
+              This is a read-only demo
+            </div>
+          ) : (
+            <CreatePostForm />
+          )}
         </div>
         <Feed />
       </section>
@@ -30,8 +37,8 @@ export function HomeContent() {
         <TrendingSidebar />
       </aside>
 
-      {/* FAB — mobile only */}
-      <ComposeButton />
+      {/* FAB — mobile only, hidden in demo mode */}
+      {!isDemoMode && <ComposeButton />}
     </main>
   )
 }
