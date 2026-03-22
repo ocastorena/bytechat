@@ -116,7 +116,7 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
             rows={2}
             className="w-full resize-none bg-input rounded-lg px-3 py-2.5 text-[15px] placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-accent/30 transition-all leading-relaxed"
           />
-          <div className="flex items-center justify-between border-t border-border/60 pt-2">
+          <div className="flex items-center justify-between pt-2">
             {/* Action pills with colored icons */}
             <div className="flex items-center gap-1.5">
               {COMPOSER_ACTIONS.map(({ icon: Icon, label, color, hover }) => (

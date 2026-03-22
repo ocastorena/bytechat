@@ -104,7 +104,7 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           )}
 
           {/* Engagement row — reactions + comments */}
-          <div className="flex items-center justify-between text-xs text-muted-foreground py-2.5 border-b border-border/40 mt-3">
+          <div className="flex items-center justify-between text-xs text-muted-foreground py-2.5 mt-3">
             <div className="flex items-center gap-2">
               <div className="flex -space-x-1">
                 <span className="h-4 w-4 rounded-full bg-[oklch(0.70_0.25_10)] border-2 border-card flex items-center justify-center">
