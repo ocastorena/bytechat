@@ -50,7 +50,7 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           <div className="flex items-start justify-between">
             <div className="min-w-0">
               <div className="flex items-baseline gap-1.5">
-                <span className="font-semibold text-[15px] text-foreground truncate">
+                <span className="font-semibold text-base text-foreground truncate">
                   {post.authorUsername}
                 </span>
                 <span className="text-muted-foreground/60 text-sm font-mono truncate">
