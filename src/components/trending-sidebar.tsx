@@ -44,7 +44,7 @@ export function TrendingSidebar() {
           </li>
         ))}
       </ul>
-      <button className="mt-3 px-2 text-sm text-destructive hover:text-destructive/80 font-semibold hover:underline transition-colors">
+      <button className="mt-3 px-2 text-sm text-accent hover:text-accent/80 font-medium transition-colors">
         Show more
       </button>
     </div>
