@@ -11,7 +11,7 @@
     "test": "jest",
     "db:migrate": "prisma migrate deploy",
     "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx --env-file .env prisma/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

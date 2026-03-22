@@ -40,7 +40,7 @@ export function ProfileCard() {
           </p>
         </div>
 
-        <p className="text-sm text-muted-foreground mt-2 line-clamp-2 leading-relaxed">
+        <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
           Full-stack developer passionate about clean code and innovative solutions.
         </p>
 
