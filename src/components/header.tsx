@@ -150,7 +150,7 @@ export function Header() {
         className="sticky top-0 z-50 flex items-center gap-3 px-4 h-14 bg-background/80 backdrop-blur-xl">
         {/* Left — Logo + Search */}
         <div className="flex items-center gap-3 shrink-0">
-          <BytechatLogo className="h-7 w-auto" />
+          <BytechatLogo className="h-9 w-auto" />
         </div>
 
         <SearchBar />
