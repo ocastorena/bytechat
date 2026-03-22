@@ -20,7 +20,7 @@ export function ProfileCard() {
       </div>
 
       {/* Profile info */}
-      <div className="px-4 pb-4">
+      <div className="px-4 pb-4 flex flex-col items-center text-center">
         <Avatar className="h-14 w-14 -mt-8 border-3 border-background shadow-md">
           <AvatarImage
             src={session?.user?.image || undefined}
