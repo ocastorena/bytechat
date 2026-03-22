@@ -6,7 +6,7 @@ import { Button } from "./ui/button"
 import { useState, useRef, useCallback } from "react"
 import { z } from "zod"
 import { mutate } from "swr"
-import { getInitials } from "@/lib/utils"
+import { getInitials, getAvatarUrl } from "@/lib/utils"
 import { useSession } from "next-auth/react"
 import { postSchema } from "@/lib/validations"
 import { apiClient } from "@/lib/api-client"
@@ -96,7 +96,7 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
       <div className="flex gap-3">
         <Avatar className="h-10 w-10 shrink-0 mt-1">
           <AvatarImage
-            src={session?.user?.image || undefined}
+            src={session?.user?.image || getAvatarUrl(session?.user?.name || "user")}
             alt={session?.user?.name || "User"}
           />
           <AvatarFallback className="text-sm font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">

@@ -1,8 +1,8 @@
 "use client"
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { useState } from "react"
-import { cn } from "@/lib/utils"
+import { cn, getAvatarUrl } from "@/lib/utils"
 
 const SUGGESTED_USERS = [
   {
@@ -67,6 +67,10 @@ export function SuggestedUsersSidebar() {
               key={username}
               className="flex items-start gap-2.5 rounded-xl px-2 py-2 hover:bg-muted/50 transition-colors duration-150 cursor-pointer">
               <Avatar className="h-9 w-9 shrink-0 mt-0.5">
+                <AvatarImage
+                  src={getAvatarUrl(username)}
+                  alt={name}
+                />
                 <AvatarFallback className="text-[10px] font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
                   {initials}
                 </AvatarFallback>

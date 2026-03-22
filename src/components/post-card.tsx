@@ -1,10 +1,10 @@
 "use client"
 
 import Image from "next/image"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Heart, MessageCircle, Repeat2, Bookmark } from "lucide-react"
 import OverflowMenu from "./overflow-menu"
-import { cn, formatDate, formatDateFull } from "@/lib/utils"
+import { cn, formatDate, formatDateFull, getAvatarUrl } from "@/lib/utils"
 import type { Post } from "@/types"
 import { isDemoMode } from "@/lib/demo"
 
@@ -39,6 +39,10 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
       <div className="flex gap-3">
         {/* Avatar */}
         <Avatar className="h-10 w-10 shrink-0">
+          <AvatarImage
+            src={getAvatarUrl(post.authorUsername)}
+            alt={post.authorUsername}
+          />
           <AvatarFallback className="text-sm font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
             {post.authorUsername.charAt(0).toUpperCase()}
           </AvatarFallback>

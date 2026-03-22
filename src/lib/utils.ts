@@ -46,3 +46,8 @@ export function getInitials(name: string) {
     .toUpperCase()
     .slice(0, 2)
 }
+
+/** Generates a deterministic avatar URL from a username using DiceBear */
+export function getAvatarUrl(username: string) {
+  return `https://api.dicebear.com/9.x/thumbs/svg?seed=${encodeURIComponent(username)}`
+}

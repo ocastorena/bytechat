@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { getInitials } from "@/lib/utils"
+import { getInitials, getAvatarUrl } from "@/lib/utils"
 import { ROUTES } from "@/config/constants"
 
 /** Compact profile card for the sidebar */
@@ -23,7 +23,7 @@ export function ProfileCard() {
       <div className="px-4 pb-4 flex flex-col items-center text-center">
         <Avatar className="h-14 w-14 -mt-8 border-3 border-background shadow-md">
           <AvatarImage
-            src={session?.user?.image || undefined}
+            src={session?.user?.image || getAvatarUrl(username)}
             alt={session?.user?.name || "User"}
           />
           <AvatarFallback className="text-lg font-bold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">

@@ -71,11 +71,11 @@ async function main() {
   const devPassword = await bcrypt.hash("password", 10)
   const devUser = await prisma.user.upsert({
     where: { email: "dev@bytechat.io" },
-    update: {},
+    update: { username: "Dev" },
     create: {
       email: "dev@bytechat.io",
       password: devPassword,
-      username: "dev",
+      username: "Dev",
     },
   })
 
