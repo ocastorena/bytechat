@@ -10,9 +10,9 @@ import { ProfileCard } from "@/components/profile-card"
 
 export function HomeContent() {
   return (
-    <main className="flex justify-center gap-6 px-4 mt-4 max-w-7xl mx-auto w-full">
+    <main className="flex justify-center gap-6 px-4 pt-4 max-w-7xl mx-auto w-full">
       {/* Left sidebar — profile + suggestions */}
-      <aside className="hidden xl:flex flex-col gap-4 w-72 shrink-0 sticky top-[3.75rem] self-start max-h-[calc(100dvh-5rem)] overflow-y-auto">
+      <aside className="hidden lg:flex flex-col gap-4 w-64 xl:w-72 shrink-0 sticky top-[4.5rem] self-start max-h-[calc(100dvh-5.5rem)] overflow-y-auto">
         <ProfileCard />
         <SuggestedUsersSidebar />
       </aside>
@@ -33,7 +33,7 @@ export function HomeContent() {
       </section>
 
       {/* Right sidebar — trending */}
-      <aside className="hidden xl:flex flex-col gap-4 w-72 shrink-0 sticky top-[3.75rem] self-start max-h-[calc(100dvh-5rem)] overflow-y-auto">
+      <aside className="hidden lg:flex flex-col gap-4 w-64 xl:w-72 shrink-0 sticky top-[4.5rem] self-start max-h-[calc(100dvh-5.5rem)] overflow-y-auto">
         <TrendingSidebar />
       </aside>
 
