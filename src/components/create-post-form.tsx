@@ -116,34 +116,30 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
             rows={2}
             className="w-full resize-none bg-muted/50 rounded-lg px-3 py-2.5 text-[15px] placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-accent/30 transition-all leading-relaxed"
           />
-          <div className="flex items-center justify-between pt-2">
+          <div className="flex items-center gap-1.5 pt-2">
             {/* Action pills with colored icons */}
-            <div className="flex items-center gap-1.5">
-              {COMPOSER_ACTIONS.map(({ icon: Icon, label, color, hover }) => (
-                <button
-                  key={label}
-                  type="button"
-                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background ${hover} transition-colors`}>
-                  <Icon size={14} className={color} />
-                  <span className="hidden sm:inline">{label}</span>
-                </button>
-              ))}
-            </div>
+            {COMPOSER_ACTIONS.map(({ icon: Icon, label, color, hover }) => (
+              <button
+                key={label}
+                type="button"
+                className={`flex-1 flex items-center justify-center gap-1.5 rounded-full px-2 py-1.5 text-xs text-muted-foreground bg-background ${hover} transition-colors`}>
+                <Icon size={14} className={color} />
+                <span className="hidden sm:inline">{label}</span>
+              </button>
+            ))}
 
             {/* Character count + Post button */}
-            <div className="flex items-center gap-3">
-              {content.length > 0 && (
-                <span className="text-xs text-muted-foreground tabular-nums">
-                  {content.length}/280
-                </span>
-              )}
-              <button
-                type="submit"
-                disabled={loading}
-                className="rounded-full px-5 h-8 text-xs font-semibold bg-accent text-accent-foreground hover:bg-accent/90 shadow-[0_0_10px_-2px_oklch(0.72_0.19_195/30%)] hover:shadow-[0_0_14px_-2px_oklch(0.72_0.19_195/40%)] transition-all">
-                {loading ? "Posting..." : "Post"}
-              </button>
-            </div>
+            {content.length > 0 && (
+              <span className="text-xs text-muted-foreground tabular-nums shrink-0">
+                {content.length}/280
+              </span>
+            )}
+            <button
+              type="submit"
+              disabled={loading}
+              className="shrink-0 rounded-full px-5 h-8 text-xs font-semibold bg-accent text-accent-foreground hover:bg-accent/90 shadow-[0_0_10px_-2px_oklch(0.72_0.19_195/30%)] hover:shadow-[0_0_14px_-2px_oklch(0.72_0.19_195/40%)] transition-all">
+              {loading ? "Posting..." : "Post"}
+            </button>
           </div>
         </form>
       </div>
