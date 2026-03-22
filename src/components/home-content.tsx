@@ -6,7 +6,6 @@ import { TrendingSidebar } from "@/components/trending-sidebar"
 import { SuggestedUsersSidebar } from "@/components/suggested-users-sidebar"
 import { ComposeButton } from "@/components/compose-button"
 import { isDemoMode } from "@/lib/demo"
-import { ProfileCard } from "@/components/profile-card"
 
 export function HomeContent() {
   return (
@@ -14,7 +13,6 @@ export function HomeContent() {
       {/* Left sidebar — fixed position, never scrolls with page */}
       <div className="hidden lg:block w-64 xl:w-72 shrink-0">
         <aside className="fixed w-64 xl:w-72 top-[4.5rem] flex flex-col gap-4 max-h-[calc(100dvh-5.5rem)] overflow-y-auto sidebar-scroll">
-          <ProfileCard />
           <SuggestedUsersSidebar />
         </aside>
       </div>

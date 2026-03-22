@@ -33,6 +33,27 @@ const SUGGESTED_USERS = [
     bio: "UX Designer turning code into art",
     verified: false,
   },
+  {
+    name: "Lena Xu",
+    username: "@lenacrypto",
+    initials: "LX",
+    bio: "Blockchain dev & smart contract auditor",
+    verified: true,
+  },
+  {
+    name: "Omar Hasan",
+    username: "@omarinfra",
+    initials: "OH",
+    bio: "DevOps engineer, Kubernetes evangelist",
+    verified: false,
+  },
+  {
+    name: "Priya Sharma",
+    username: "@priyarust",
+    initials: "PS",
+    bio: "Systems programmer, Rust contributor",
+    verified: true,
+  },
 ]
 
 /** Follow button with Twitter-style inverted colors */
