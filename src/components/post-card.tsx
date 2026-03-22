@@ -15,16 +15,19 @@ interface PostCardProps {
   onDelete?: (postId: string) => void
 }
 
+/** Formats a number for display (e.g. 1500 → "1.5k") */
+function formatCount(n: number) {
+  return n > 999 ? `${(n / 1000).toFixed(1)}k` : String(n)
+}
+
 /** Generates deterministic engagement numbers from post content */
 function getEngagement(content: string) {
   const seed = content.length + content.charCodeAt(0)
-  const reactions = ((seed * 137) % 900) + 100
+  const likes = ((seed * 137) % 900) + 100
+  const reposts = ((seed * 71) % 400) + 20
+  const bookmarks = ((seed * 29) % 200) + 10
   const comments = ((seed * 53) % 80) + 5
-  const total = reactions + comments
-  return {
-    total: total > 1000 ? `${(total / 1000).toFixed(1)}k` : String(total),
-    comments,
-  }
+  return { likes, reposts, bookmarks, comments }
 }
 
 /** Renders a single post in the feed */
@@ -107,38 +110,23 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
             </div>
           )}
 
-          {/* Engagement row */}
-          <div className="flex items-center justify-between text-xs text-muted-foreground py-2.5 mt-3">
-            <div className="flex items-center gap-1.5">
-              <span className="flex items-center gap-1 rounded-full px-2 py-1 bg-background">
-                <Heart size={10} className="text-[oklch(0.70_0.25_10)]" />
-                <Repeat2 size={10} className="text-[oklch(0.72_0.19_250)]" />
-                <Bookmark size={10} className="text-[oklch(0.75_0.18_350)]" />
-              </span>
-              <span>{engagement.total}</span>
-            </div>
-            <span>{engagement.comments} Comments</span>
-          </div>
-
-          {/* Actions — Like, Repost, Comment, Bookmark */}
+          {/* Actions — Like, Repost, Bookmark, Comment */}
           <div className="flex items-center gap-1.5 mt-3">
             <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.70_0.25_10/10%)] transition-colors">
               <Heart size={14} className="text-[oklch(0.70_0.25_10)]" />
-              <span>Like</span>
+              <span>{formatCount(engagement.likes)}</span>
             </button>
             <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_250/10%)] transition-colors">
               <Repeat2 size={14} className="text-[oklch(0.72_0.19_250)]" />
-              <span>Repost</span>
+              <span>{formatCount(engagement.reposts)}</span>
             </button>
-            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_140/10%)] transition-colors">
-              <MessageCircle
-                size={14}
-                className="text-[oklch(0.72_0.19_140)]"
-              />
-              <span>Comment</span>
-            </button>
-            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.75_0.18_350/10%)] transition-colors ml-auto">
+            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.75_0.18_350/10%)] transition-colors">
               <Bookmark size={14} className="text-[oklch(0.75_0.18_350)]" />
+              <span>{formatCount(engagement.bookmarks)}</span>
+            </button>
+            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_140/10%)] transition-colors ml-auto">
+              <MessageCircle size={14} className="text-[oklch(0.72_0.19_140)]" />
+              <span>{formatCount(engagement.comments)}</span>
             </button>
           </div>
         </div>
