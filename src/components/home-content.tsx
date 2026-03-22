@@ -10,15 +10,17 @@ import { ProfileCard } from "@/components/profile-card"
 
 export function HomeContent() {
   return (
-    <main className="flex justify-center gap-6 px-4 pt-4 max-w-7xl mx-auto w-full">
-      {/* Left sidebar — profile + suggestions */}
-      <aside className="hidden lg:flex flex-col gap-4 w-64 xl:w-72 shrink-0 sticky top-[4.5rem] self-start max-h-[calc(100dvh-5.5rem)] overflow-y-auto">
-        <ProfileCard />
-        <SuggestedUsersSidebar />
-      </aside>
+    <main className="flex justify-center gap-6 px-4 max-w-7xl mx-auto w-full">
+      {/* Left sidebar — fixed position, never scrolls with page */}
+      <div className="hidden lg:block w-64 xl:w-72 shrink-0">
+        <aside className="fixed w-64 xl:w-72 top-[4.5rem] flex flex-col gap-4 max-h-[calc(100dvh-5.5rem)] overflow-y-auto sidebar-scroll">
+          <ProfileCard />
+          <SuggestedUsersSidebar />
+        </aside>
+      </div>
 
       {/* Center feed */}
-      <section className="w-full max-w-xl flex flex-col gap-3">
+      <section className="w-full max-w-xl flex flex-col gap-3 pt-4">
         {/* Inline compose — hidden on mobile, replaced in demo mode */}
         <div className="hidden sm:block">
           {isDemoMode ? (
@@ -32,10 +34,12 @@ export function HomeContent() {
         <Feed />
       </section>
 
-      {/* Right sidebar — trending */}
-      <aside className="hidden lg:flex flex-col gap-4 w-64 xl:w-72 shrink-0 sticky top-[4.5rem] self-start max-h-[calc(100dvh-5.5rem)] overflow-y-auto">
-        <TrendingSidebar />
-      </aside>
+      {/* Right sidebar — fixed position, never scrolls with page */}
+      <div className="hidden lg:block w-64 xl:w-72 shrink-0">
+        <aside className="fixed w-64 xl:w-72 top-[4.5rem] flex flex-col gap-4 max-h-[calc(100dvh-5.5rem)] overflow-y-auto sidebar-scroll">
+          <TrendingSidebar />
+        </aside>
+      </div>
 
       {/* FAB — mobile only, hidden in demo mode */}
       {!isDemoMode && <ComposeButton />}

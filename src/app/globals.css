@@ -191,6 +191,19 @@
   background-size: 24px 24px;
 }
 
+/* ── Sidebar scrollbar — thin, visible on hover ──────────────────── */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.2s;
+}
+.sidebar-scroll:hover {
+  scrollbar-color: oklch(0.4 0.01 270) transparent;
+}
+.dark .sidebar-scroll:hover {
+  scrollbar-color: oklch(0.35 0.015 250) transparent;
+}
+
 /* ── Hover lift utility ──────────────────────────────────────────── */
 .hover-lift {
   transition: transform 0.15s ease;
