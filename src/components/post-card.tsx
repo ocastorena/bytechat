@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Heart, MessageCircle, Repeat2, Bookmark, ThumbsUp } from "lucide-react"
+import { Heart, MessageCircle, Repeat2, Bookmark } from "lucide-react"
 import OverflowMenu from "./overflow-menu"
 import { cn, formatDate, formatDateFull } from "@/lib/utils"
 import type { Post } from "@/types"
@@ -20,9 +20,9 @@ function getEngagement(content: string) {
   const seed = content.length + content.charCodeAt(0)
   const reactions = ((seed * 137) % 900) + 100
   const comments = ((seed * 53) % 80) + 5
+  const total = reactions + comments
   return {
-    reactions:
-      reactions > 500 ? `${(reactions / 10).toFixed(1)}k` : String(reactions),
+    total: total > 1000 ? `${(total / 1000).toFixed(1)}k` : String(total),
     comments,
   }
 }
@@ -107,21 +107,15 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
             </div>
           )}
 
-          {/* Engagement row — reactions + comments */}
+          {/* Engagement row */}
           <div className="flex items-center justify-between text-xs text-muted-foreground py-2.5 mt-3">
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-1">
-                <span className="h-4 w-4 rounded-full bg-[oklch(0.70_0.25_10)] border-2 border-card flex items-center justify-center">
-                  <Heart size={8} className="text-white" />
-                </span>
-                <span className="h-4 w-4 rounded-full bg-accent border-2 border-card flex items-center justify-center">
-                  <ThumbsUp size={8} className="text-white" />
-                </span>
-                <span className="h-4 w-4 rounded-full bg-warm border-2 border-card flex items-center justify-center">
-                  <Heart size={8} className="text-white" />
-                </span>
-              </div>
-              <span>{engagement.reactions}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1 rounded-full px-2 py-1 bg-background">
+                <Heart size={10} className="text-[oklch(0.70_0.25_10)]" />
+                <Repeat2 size={10} className="text-[oklch(0.72_0.19_250)]" />
+                <Bookmark size={10} className="text-[oklch(0.75_0.18_350)]" />
+              </span>
+              <span>{engagement.total}</span>
             </div>
             <span>{engagement.comments} Comments</span>
           </div>
