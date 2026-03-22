@@ -21,7 +21,8 @@ function getEngagement(content: string) {
   const reactions = ((seed * 137) % 900) + 100
   const comments = ((seed * 53) % 80) + 5
   return {
-    reactions: reactions > 500 ? `${(reactions / 10).toFixed(1)}k` : String(reactions),
+    reactions:
+      reactions > 500 ? `${(reactions / 10).toFixed(1)}k` : String(reactions),
     comments,
   }
 }
@@ -43,17 +44,18 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
         {/* Content */}
         <div className="flex-1 min-w-0">
           {/* Author line */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-baseline gap-1.5 min-w-0">
-              <span className="font-semibold text-[15px] text-foreground truncate">
-                {post.authorUsername}
-              </span>
-              <span className="text-muted-foreground/60 text-sm font-mono truncate">
-                @{post.authorUsername}
-              </span>
-              <span className="text-muted-foreground/40 text-sm">·</span>
+          <div className="flex items-start justify-between">
+            <div className="min-w-0">
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-semibold text-[15px] text-foreground truncate">
+                  {post.authorUsername}
+                </span>
+                <span className="text-muted-foreground/60 text-sm font-mono truncate">
+                  @{post.authorUsername}
+                </span>
+              </div>
               <span
-                className="text-muted-foreground/60 text-sm shrink-0 cursor-default"
+                className="text-muted-foreground/50 text-xs cursor-default"
                 title={formatDateFull(post.createdAt)}>
                 {formatDate(post.createdAt)}
               </span>
@@ -79,16 +81,18 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
                 post.images.length === 1 && "grid-cols-1",
                 post.images.length === 2 && "grid-cols-2",
                 post.images.length === 3 && "grid-cols-2 grid-rows-2",
-                post.images.length >= 4 && "grid-cols-2 grid-rows-2"
+                post.images.length >= 4 && "grid-cols-2 grid-rows-2",
               )}>
               {post.images.slice(0, 4).map((img, idx) => (
                 <div
                   key={img.id}
                   className={cn(
                     "relative w-full overflow-hidden",
-                    post.images.length === 3 && idx === 0 && "row-span-2"
+                    post.images.length === 3 && idx === 0 && "row-span-2",
                   )}
-                  style={{ aspectRatio: post.images.length === 1 ? "16 / 9" : "3 / 2" }}>
+                  style={{
+                    aspectRatio: post.images.length === 1 ? "16 / 9" : "3 / 2",
+                  }}>
                   <Image
                     src={img.url}
                     alt={img.altText || ""}
@@ -124,19 +128,22 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
 
           {/* Actions — Like, Repost, Comment, Bookmark */}
           <div className="flex items-center gap-1.5 mt-3">
-            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground border border-border/60 hover:bg-[oklch(0.70_0.25_10/10%)] transition-colors">
+            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.70_0.25_10/10%)] transition-colors">
               <Heart size={14} className="text-[oklch(0.70_0.25_10)]" />
               <span>Like</span>
             </button>
-            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground border border-border/60 hover:bg-[oklch(0.72_0.19_250/10%)] transition-colors">
+            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_250/10%)] transition-colors">
               <Repeat2 size={14} className="text-[oklch(0.72_0.19_250)]" />
               <span>Repost</span>
             </button>
-            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground border border-border/60 hover:bg-[oklch(0.72_0.19_140/10%)] transition-colors">
-              <MessageCircle size={14} className="text-[oklch(0.72_0.19_140)]" />
+            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_140/10%)] transition-colors">
+              <MessageCircle
+                size={14}
+                className="text-[oklch(0.72_0.19_140)]"
+              />
               <span>Comment</span>
             </button>
-            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground border border-border/60 hover:bg-[oklch(0.75_0.18_350/10%)] transition-colors ml-auto">
+            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.75_0.18_350/10%)] transition-colors ml-auto">
               <Bookmark size={14} className="text-[oklch(0.75_0.18_350)]" />
             </button>
           </div>

@@ -123,7 +123,7 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
                 <button
                   key={label}
                   type="button"
-                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground border border-border/60 ${hover} transition-colors`}>
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background ${hover} transition-colors`}>
                   <Icon size={14} className={color} />
                   <span className="hidden sm:inline">{label}</span>
                 </button>
