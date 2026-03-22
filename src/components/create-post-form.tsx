@@ -14,10 +14,30 @@ import { ImagePlus, Video, ListTree, Calendar } from "lucide-react"
 
 /** Action pill buttons for the composer toolbar */
 const COMPOSER_ACTIONS = [
-  { icon: ImagePlus, label: "Photo", color: "text-[oklch(0.75_0.20_155)]", hover: "hover:bg-[oklch(0.75_0.20_155/10%)]" },
-  { icon: Video, label: "Video", color: "text-[oklch(0.72_0.19_195)]", hover: "hover:bg-[oklch(0.72_0.19_195/10%)]" },
-  { icon: ListTree, label: "Thread", color: "text-[oklch(0.70_0.25_310)]", hover: "hover:bg-[oklch(0.70_0.25_310/10%)]" },
-  { icon: Calendar, label: "Schedule", color: "text-[oklch(0.80_0.18_65)]", hover: "hover:bg-[oklch(0.80_0.18_65/10%)]" },
+  {
+    icon: ImagePlus,
+    label: "Photo",
+    color: "text-[oklch(0.75_0.20_155)]",
+    hover: "hover:bg-[oklch(0.75_0.20_155/10%)]",
+  },
+  {
+    icon: Video,
+    label: "Video",
+    color: "text-[oklch(0.72_0.19_195)]",
+    hover: "hover:bg-[oklch(0.72_0.19_195/10%)]",
+  },
+  {
+    icon: ListTree,
+    label: "Thread",
+    color: "text-[oklch(0.70_0.25_310)]",
+    hover: "hover:bg-[oklch(0.70_0.25_310/10%)]",
+  },
+  {
+    icon: Calendar,
+    label: "Schedule",
+    color: "text-[oklch(0.80_0.18_65)]",
+    hover: "hover:bg-[oklch(0.80_0.18_65/10%)]",
+  },
 ] as const
 
 /** Props for the CreatePostForm component */
@@ -43,6 +63,7 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!content.trim()) return
     const result = postSchema.safeParse({ content })
     if (!result.success) {
       toast.error(z.flattenError(result.error).fieldErrors.content)
@@ -116,13 +137,12 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
                   {content.length}/280
                 </span>
               )}
-              <Button
+              <button
                 type="submit"
-                disabled={loading || !content.trim()}
-                size="sm"
-                className="rounded-full px-5 h-8 text-xs font-semibold bg-accent text-accent-foreground hover:bg-accent/90 disabled:opacity-40 shadow-[0_0_10px_-2px_oklch(0.72_0.19_195/30%)] hover:shadow-[0_0_14px_-2px_oklch(0.72_0.19_195/40%)]">
+                disabled={loading}
+                className="rounded-full px-5 h-8 text-xs font-semibold bg-accent text-accent-foreground hover:bg-accent/90 shadow-[0_0_10px_-2px_oklch(0.72_0.19_195/30%)] hover:shadow-[0_0_14px_-2px_oklch(0.72_0.19_195/40%)] transition-all">
                 {loading ? "Posting..." : "Post"}
-              </Button>
+              </button>
             </div>
           </div>
         </form>
