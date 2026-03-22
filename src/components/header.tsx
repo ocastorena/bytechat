@@ -3,7 +3,7 @@ import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Home, User, Sun, Moon, LogOut, Search, Mail, Bell, ChevronDown, LayoutGrid, Compass, List } from "lucide-react"
-import { cn, getInitials } from "@/lib/utils"
+import { cn, getInitials, getAvatarUrl } from "@/lib/utils"
 import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import {
@@ -26,6 +26,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { BytechatLogo } from "./bytechat-logo"
 import { ROUTES } from "@/config/constants"
+
+/** Mock counts for demo purposes */
+const MESSAGES_COUNT = 3
+const NOTIFICATIONS_COUNT = 8
+const TOTAL_BADGE = MESSAGES_COUNT + NOTIFICATIONS_COUNT
 
 /** Clean search input */
 function SearchBar() {
@@ -75,73 +80,16 @@ function NavLink({
   )
 }
 
-/** Icon button for nav items without routing */
-function NavIconButton({
-  icon: Icon,
-  className: extraClass,
-  badge,
-  ariaLabel,
-  onClick,
-}: {
-  icon: typeof Home
-  className?: string
-  badge?: string
-  ariaLabel: string
-  onClick?: () => void
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors",
-        extraClass
-      )}
-      aria-label={ariaLabel}>
-      <Icon size={18} strokeWidth={2} />
-      {badge && (
-        <span className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 text-[10px] font-bold bg-destructive text-white rounded-full flex items-center justify-center">
-          {badge}
-        </span>
-      )}
-    </button>
-  )
-}
-
-/** Theme toggle button — defers render until mounted to avoid hydration mismatch */
-function ThemeToggle() {
+export function Header() {
+  const pathname = usePathname()
+  const { data: session } = useSession()
+  const [logoutOpen, setLogoutOpen] = useState(false)
   const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => setMounted(true), [])
 
   const isDark = (resolvedTheme ?? theme) === "dark"
-
-  const toggle = () => {
-    document.documentElement.classList.add("transition-colors", "duration-500")
-    setTheme(isDark ? "light" : "dark")
-    setTimeout(() => {
-      document.documentElement.classList.remove("transition-colors", "duration-500")
-    }, 600)
-  }
-
-  return (
-    <button
-      onClick={toggle}
-      className="relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-      aria-label={mounted ? (isDark ? "Switch to light mode" : "Switch to dark mode") : "Toggle theme"}>
-      {mounted ? (
-        isDark ? <Sun size={18} strokeWidth={2} /> : <Moon size={18} strokeWidth={2} />
-      ) : (
-        <Sun size={18} strokeWidth={2} className="opacity-0" />
-      )}
-    </button>
-  )
-}
-
-export function Header() {
-  const pathname = usePathname()
-  const { data: session } = useSession()
-  const [logoutOpen, setLogoutOpen] = useState(false)
 
   return (
     <>
@@ -186,30 +134,15 @@ export function Header() {
           />
         </nav>
 
-        {/* Utility pill — action buttons, no active state */}
-        <div className="flex items-center gap-0.5 rounded-full bg-card/60 border border-border/40 px-1.5 py-1">
-          <ThemeToggle />
-          <NavIconButton
-            icon={Mail}
-            ariaLabel="Messages"
-            className="hidden lg:flex"
-          />
-          <NavIconButton
-            icon={Bell}
-            ariaLabel="Notifications"
-            badge="8"
-          />
-        </div>
-
-        {/* User pill — dropdown with profile link + logout */}
+        {/* User dropdown — profile, messages, notifications, theme, logout */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
-              className="flex items-center gap-1.5 rounded-full bg-card/60 border border-border/40 pl-1 pr-2.5 py-1 focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 hover:bg-card/80 transition-colors"
+              className="relative flex items-center gap-1.5 rounded-full bg-card/60 border border-border/40 pl-1 pr-2.5 py-1 focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 hover:bg-card/80 transition-colors"
               aria-label="User menu">
               <Avatar className="h-7 w-7 border border-border/50">
                 <AvatarImage
-                  src={session?.user?.image || undefined}
+                  src={session?.user?.image || getAvatarUrl(session?.user?.name || "user")}
                   alt={session?.user?.name || "User"}
                 />
                 <AvatarFallback className="text-[10px] font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
@@ -222,14 +155,60 @@ export function Header() {
                 {session?.user?.name || "User"}
               </span>
               <ChevronDown size={12} className="text-muted-foreground" />
+              {/* Total badge */}
+              {TOTAL_BADGE > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 h-4.5 min-w-4.5 px-1 text-[10px] font-bold bg-destructive text-white rounded-full flex items-center justify-center">
+                  {TOTAL_BADGE}
+                </span>
+              )}
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-44">
+          <DropdownMenuContent align="end" className="w-52">
+            <DropdownMenuItem className="gap-2 justify-between">
+              <span className="flex items-center gap-2">
+                <Mail className="h-3.5 w-3.5" />
+                Messages
+              </span>
+              {MESSAGES_COUNT > 0 && (
+                <span className="h-5 min-w-5 px-1.5 text-[10px] font-bold bg-destructive text-white rounded-full flex items-center justify-center">
+                  {MESSAGES_COUNT}
+                </span>
+              )}
+            </DropdownMenuItem>
+
+            <DropdownMenuItem className="gap-2 justify-between">
+              <span className="flex items-center gap-2">
+                <Bell className="h-3.5 w-3.5" />
+                Notifications
+              </span>
+              {NOTIFICATIONS_COUNT > 0 && (
+                <span className="h-5 min-w-5 px-1.5 text-[10px] font-bold bg-destructive text-white rounded-full flex items-center justify-center">
+                  {NOTIFICATIONS_COUNT}
+                </span>
+              )}
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+
             <DropdownMenuItem asChild>
               <Link href={ROUTES.PROFILE} className="gap-2">
                 <User className="h-3.5 w-3.5" />
                 My Profile
               </Link>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault()
+                setTheme(isDark ? "light" : "dark")
+              }}
+              className="gap-2">
+              {mounted ? (
+                isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />
+              ) : (
+                <Sun className="h-3.5 w-3.5 opacity-0" />
+              )}
+              {mounted ? (isDark ? "Light Mode" : "Dark Mode") : "Toggle Theme"}
             </DropdownMenuItem>
 
             <DropdownMenuSeparator />
@@ -246,13 +225,6 @@ export function Header() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        {/* Grid dots */}
-        <button
-          className="hidden lg:flex p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-          aria-label="More options">
-          <LayoutGrid size={18} strokeWidth={2} />
-        </button>
       </header>
 
       <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}>
