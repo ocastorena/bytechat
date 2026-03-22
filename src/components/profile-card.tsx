@@ -12,7 +12,7 @@ export function ProfileCard() {
   const username = session?.user?.email?.split("@")[0] || "user"
 
   return (
-    <div className="glass-card rounded-xl overflow-hidden shrink-0">
+    <div className="bg-card rounded-xl overflow-hidden shrink-0">
       {/* Banner */}
       <div className="h-20 bg-gradient-to-br from-accent/40 via-[oklch(0.70_0.25_310/20%)] to-warm/25 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,oklch(0.72_0.19_195/25%),transparent_60%)]" />

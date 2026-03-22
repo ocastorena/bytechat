@@ -13,7 +13,7 @@ const TRENDING_TOPICS = [
 
 export function TrendingSidebar() {
   return (
-    <div className="glass-card rounded-xl p-4">
+    <div className="bg-card rounded-xl p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-lg font-bold text-foreground">
           Trends for you

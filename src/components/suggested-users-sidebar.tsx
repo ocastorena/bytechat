@@ -56,7 +56,7 @@ function FollowButton() {
 /** Sidebar showing suggested users to follow */
 export function SuggestedUsersSidebar() {
   return (
-    <div className="glass-card rounded-xl p-4">
+    <div className="bg-card rounded-xl p-4">
       <h3 className="text-lg font-bold text-foreground mb-3">
         Who to follow
       </h3>
