@@ -204,6 +204,15 @@
   scrollbar-color: oklch(0.35 0.015 250) transparent;
 }
 
+/* ── Hidden scrollbar utility — horizontal strips ────────────────── */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* ── Hover lift utility ──────────────────────────────────────────── */
 .hover-lift {
   transition: transform 0.15s ease;

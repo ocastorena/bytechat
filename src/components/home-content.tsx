@@ -4,6 +4,8 @@ import Feed from "@/components/feed"
 import { CreatePostForm } from "@/components/create-post-form"
 import { TrendingSidebar } from "@/components/trending-sidebar"
 import { SuggestedUsersSidebar } from "@/components/suggested-users-sidebar"
+import { TrendingStrip } from "@/components/trending-strip"
+import { SuggestedUsersStrip } from "@/components/suggested-users-strip"
 import { ComposeButton } from "@/components/compose-button"
 import { isDemoMode } from "@/lib/demo"
 
@@ -19,16 +21,18 @@ export function HomeContent() {
 
       {/* Center feed */}
       <section className="w-full max-w-xl flex flex-col gap-3 pt-4">
-        {/* Inline compose — hidden on mobile, replaced in demo mode */}
-        <div className="hidden sm:block">
-          {isDemoMode ? (
-            <div className="p-4 rounded-xl bg-card text-center text-sm text-muted-foreground">
-              This is a read-only demo
-            </div>
-          ) : (
-            <CreatePostForm />
-          )}
-        </div>
+        {/* Discovery strips — visible when sidebars are hidden */}
+        <TrendingStrip />
+        <SuggestedUsersStrip />
+
+        {/* Inline compose */}
+        {isDemoMode ? (
+          <div className="hidden sm:block p-4 rounded-xl bg-card text-center text-sm text-muted-foreground">
+            This is a read-only demo
+          </div>
+        ) : (
+          <CreatePostForm />
+        )}
         <Feed />
       </section>
 
