@@ -112,12 +112,17 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           {post.images && post.images.length > 0 && (
             <div
               className={cn(
-                "mt-3 grid gap-0.5 overflow-hidden rounded-2xl border border-border",
+                "mt-3 grid gap-0.5 overflow-hidden rounded-2xl border border-border bg-border",
                 post.images.length === 1 && "grid-cols-1",
                 post.images.length === 2 && "grid-cols-2",
-                post.images.length === 3 && "grid-cols-2 grid-rows-2",
-                post.images.length >= 4 && "grid-cols-2 grid-rows-2",
-              )}>
+                post.images.length === 3 && "grid-cols-2",
+                post.images.length >= 4 && "grid-cols-2",
+              )}
+              style={{
+                ...(post.images.length === 3 && {
+                  gridTemplateRows: "1fr 1fr",
+                }),
+              }}>
               {post.images.slice(0, 4).map((img, idx) => (
                 <div
                   key={img.id}
@@ -126,7 +131,12 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
                     post.images.length === 3 && idx === 0 && "row-span-2",
                   )}
                   style={{
-                    aspectRatio: post.images.length === 1 ? "16 / 9" : "3 / 2",
+                    aspectRatio:
+                      post.images.length === 1
+                        ? "16 / 9"
+                        : post.images.length === 3 && idx === 0
+                          ? undefined
+                          : "3 / 2",
                   }}>
                   <Image
                     src={img.url}
