@@ -10,7 +10,7 @@ import { ROUTES } from "@/config/constants"
 /** Clean search input */
 function SearchBar() {
   return (
-    <div className="relative hidden sm:block w-64 lg:w-80">
+    <div className="relative hidden sm:block w-40 md:w-56 lg:w-72 xl:w-80">
       <Search
         size={16}
         className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -18,7 +18,7 @@ function SearchBar() {
       <input
         id="search"
         type="text"
-        placeholder="Search ByteChat"
+        placeholder="Search"
         onKeyDown={(e) => {
           if (e.key === "Escape") e.currentTarget.blur()
         }}
@@ -61,41 +61,49 @@ export function Header() {
   return (
     <header
       data-testid="app-header"
-      className="sticky top-0 z-50 flex items-center gap-3 px-4 h-14 bg-background/80 backdrop-blur-xl">
-      {/* Left — Logo + Search */}
-      <div className="flex items-center gap-3 shrink-0">
+      className="sticky top-0 z-50 px-4 h-14 bg-background/80 backdrop-blur-xl">
+      {/* Mobile header — centered logo */}
+      <div className="flex sm:hidden items-center justify-center h-full">
         <BytechatLogo className="h-9 w-auto" />
       </div>
 
-      <SearchBar />
+      {/* Desktop header — logo left, search absolutely centered, nav+user right */}
+      <div className="hidden sm:flex items-center justify-between h-full relative">
+        <div className="flex items-center gap-3 shrink-0">
+          <BytechatLogo className="h-9 w-auto" />
+        </div>
 
-      {/* Spacer */}
-      <div className="flex-1" />
+        {/* Absolutely centered search bar */}
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <SearchBar />
+        </div>
 
-      {/* Page navigation pill — routable links with active state, hidden on mobile */}
-      <nav className="hidden sm:flex items-center gap-0.5 rounded-full bg-card/60 border border-border/40 px-1.5 py-1">
-        <NavLink
-          href={ROUTES.HOME}
-          icon={Home}
-          isActive={pathname === ROUTES.HOME}
-        />
-        <NavLink
-          href={ROUTES.EXPLORE}
-          icon={Compass}
-          isActive={pathname === ROUTES.EXPLORE}
-          className="hidden md:flex"
-        />
-        <NavLink
-          href={ROUTES.LISTS}
-          icon={List}
-          isActive={pathname === ROUTES.LISTS}
-          className="hidden md:flex"
-        />
-      </nav>
+        {/* Right side — nav pill + user menu */}
+        <div className="flex items-center gap-3">
+        {/* Page navigation pill */}
+        <nav className="flex items-center gap-0.5 rounded-full bg-card/60 border border-border/40 px-1.5 py-1 shrink-0">
+          <NavLink
+            href={ROUTES.HOME}
+            icon={Home}
+            isActive={pathname === ROUTES.HOME}
+          />
+          <NavLink
+            href={ROUTES.EXPLORE}
+            icon={Compass}
+            isActive={pathname === ROUTES.EXPLORE}
+          />
+          <NavLink
+            href={ROUTES.LISTS}
+            icon={List}
+            isActive={pathname === ROUTES.LISTS}
+          />
+        </nav>
 
-      {/* User dropdown — hidden on mobile where it lives in the bottom nav */}
-      <div className="hidden sm:block">
-        <UserMenu variant="header" />
+        {/* User dropdown */}
+        <div className="shrink-0">
+          <UserMenu variant="header" />
+        </div>
+        </div>
       </div>
     </header>
   )
