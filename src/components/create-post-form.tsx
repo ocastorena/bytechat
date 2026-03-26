@@ -2,7 +2,6 @@
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { toast } from "sonner"
-import { Button } from "./ui/button"
 import { useState, useRef, useCallback } from "react"
 import { z } from "zod"
 import { mutate } from "swr"

@@ -21,7 +21,7 @@ function NavLink({
     <Link
       href={href}
       className={cn(
-        "relative p-2 rounded-full transition-colors",
+        "relative p-2 rounded-full transition-colors duration-150",
         isActive
           ? "text-accent bg-accent/15"
           : "text-muted-foreground hover:text-foreground hover:bg-muted/50",

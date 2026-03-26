@@ -43,7 +43,7 @@ describe("UI / ProtectedLayout", () => {
     const user = userEvent.setup()
     renderWithChild()
 
-    await user.click(screen.getByRole("button", { name: /open menu/i }))
+    await user.click(screen.getAllByRole("button", { name: /user menu/i })[0])
 
     expect(screen.getByRole("menuitem", { name: /log out/i })).toBeInTheDocument()
   })
@@ -52,7 +52,7 @@ describe("UI / ProtectedLayout", () => {
     const user = userEvent.setup()
     renderWithChild()
 
-    await user.click(screen.getByRole("button", { name: /open menu/i }))
+    await user.click(screen.getAllByRole("button", { name: /user menu/i })[0])
     await user.click(screen.getByRole("menuitem", { name: /log out/i }))
 
     expect(
@@ -64,7 +64,7 @@ describe("UI / ProtectedLayout", () => {
     const user = userEvent.setup()
     renderWithChild()
 
-    await user.click(screen.getByRole("button", { name: /open menu/i }))
+    await user.click(screen.getAllByRole("button", { name: /user menu/i })[0])
     await user.click(screen.getByRole("menuitem", { name: /log out/i }))
 
     const confirmBtn = await screen.findByRole("button", {
@@ -82,7 +82,7 @@ describe("UI / ProtectedLayout", () => {
     const user = userEvent.setup()
     renderWithChild()
 
-    await user.click(screen.getByRole("button", { name: /open menu/i }))
+    await user.click(screen.getAllByRole("button", { name: /user menu/i })[0])
     await user.click(screen.getByRole("menuitem", { name: /log out/i }))
     const dialogTitle = await screen.findByText(
       /are you sure you want to log out/i

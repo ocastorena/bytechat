@@ -60,7 +60,7 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
             </span>
             <span className="text-muted-foreground/40 text-xs mx-0.5">·</span>
             <span
-              className="text-muted-foreground/50 text-xs cursor-default shrink-0"
+              className="text-muted-foreground/60 text-xs cursor-default shrink-0"
               title={formatDateFull(post.createdAt)}>
               {formatDate(post.createdAt)}
             </span>
@@ -90,7 +90,7 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
                 </span>
               </div>
               <span
-                className="text-muted-foreground/50 text-xs cursor-default"
+                className="text-muted-foreground/60 text-xs cursor-default"
                 title={formatDateFull(post.createdAt)}>
                 {formatDate(post.createdAt)}
               </span>
@@ -144,19 +144,19 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
 
           {/* Actions — Like, Repost, Bookmark, Comment */}
           <div className="flex items-center gap-1 sm:gap-1.5 mt-2 sm:mt-3">
-            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.70_0.25_10/10%)] transition-colors">
+            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.70_0.25_10/10%)] transition-colors duration-150">
               <Heart size={13} className="text-[oklch(0.70_0.25_10)] sm:size-[14px]" />
               <span>{formatCount(engagement.likes)}</span>
             </button>
-            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_250/10%)] transition-colors">
+            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_250/10%)] transition-colors duration-150">
               <Repeat2 size={13} className="text-[oklch(0.72_0.19_250)] sm:size-[14px]" />
               <span>{formatCount(engagement.reposts)}</span>
             </button>
-            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.75_0.18_350/10%)] transition-colors">
+            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.75_0.18_350/10%)] transition-colors duration-150">
               <Bookmark size={13} className="text-[oklch(0.75_0.18_350)] sm:size-[14px]" />
               <span>{formatCount(engagement.bookmarks)}</span>
             </button>
-            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_140/10%)] transition-colors ml-auto">
+            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_140/10%)] transition-colors duration-150 ml-auto">
               <MessageCircle size={13} className="text-[oklch(0.72_0.19_140)] sm:size-[14px]" />
               <span>{formatCount(engagement.comments)}</span>
             </button>
