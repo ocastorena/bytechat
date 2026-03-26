@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Compass, List } from "lucide-react"
+import { Home, User, Compass, Search, List } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ROUTES } from "@/config/constants"
 
@@ -56,6 +56,11 @@ export function MobileNav() {
           href={ROUTES.PROFILE}
           icon={User}
           isActive={pathname === ROUTES.PROFILE}
+        />
+        <TabItem
+          href={ROUTES.EXPLORE}
+          icon={Search}
+          isActive={false}
         />
       </div>
     </nav>

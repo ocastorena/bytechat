@@ -103,18 +103,13 @@ export function Header() {
 
         <SearchBar />
 
-        {/* Mobile search icon */}
-        <button
-          className="sm:hidden p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-          aria-label="Search">
-          <Search size={18} />
-        </button>
+        {/* Mobile search icon — moved to mobile bottom nav */}
 
         {/* Spacer */}
         <div className="flex-1" />
 
-        {/* Page navigation pill — routable links with active state */}
-        <nav className="flex items-center gap-0.5 rounded-full bg-card/60 border border-border/40 px-1.5 py-1">
+        {/* Page navigation pill — routable links with active state, hidden on mobile */}
+        <nav className="hidden sm:flex items-center gap-0.5 rounded-full bg-card/60 border border-border/40 px-1.5 py-1">
           <NavLink
             href={ROUTES.HOME}
             icon={Home}
