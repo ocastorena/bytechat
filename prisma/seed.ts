@@ -130,8 +130,8 @@ async function main() {
     const postsForUser = faker.number.int({ min: 5, max: 20 })
 
     for (let p = 0; p < postsForUser; p++) {
-      // Pick 0 to 3 tech-themed images for this post (stable via lock IDs)
-      const count = faker.number.int({ min: 0, max: 3 })
+      // Pick 0 to 4 tech-themed images for this post (stable via lock IDs)
+      const count = faker.number.int({ min: 0, max: 4 })
       const picked = Array.from({ length: count }, () =>
         techImage(imageLockCounter++),
       )
