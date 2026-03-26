@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Compass, Search, List } from "lucide-react"
+import { Home, Compass, Search, List } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { UserMenu } from "./user-menu"
 import { ROUTES } from "@/config/constants"
 
 /** Tab icon for the mobile bottom navigation */
@@ -47,15 +48,12 @@ export function MobileNav() {
           icon={Compass}
           isActive={pathname === ROUTES.EXPLORE}
         />
+        {/* Profile menu — center position */}
+        <UserMenu variant="mobile" />
         <TabItem
           href={ROUTES.LISTS}
           icon={List}
           isActive={pathname === ROUTES.LISTS}
-        />
-        <TabItem
-          href={ROUTES.PROFILE}
-          icon={User}
-          isActive={pathname === ROUTES.PROFILE}
         />
         <TabItem
           href={ROUTES.EXPLORE}
