@@ -35,7 +35,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="dark"
           enableSystem
-          disableTransitionOnChange>
+          enableColorScheme={false}>
           {children}
         </ThemeProvider>
         <Toaster richColors position="top-center" />

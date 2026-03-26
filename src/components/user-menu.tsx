@@ -4,7 +4,7 @@ import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { User, Sun, Moon, LogOut, Mail, Bell, ChevronDown } from "lucide-react"
 import { getInitials, getAvatarUrl } from "@/lib/utils"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useTheme } from "next-themes"
 import {
   AlertDialog,
@@ -41,6 +41,15 @@ export function UserMenu({ variant = "header" }: { variant?: "header" | "mobile"
   useEffect(() => setMounted(true), [])
 
   const isDark = (resolvedTheme ?? theme) === "dark"
+
+  /** Toggle theme with a smooth CSS transition */
+  const toggleTheme = useCallback(() => {
+    document.documentElement.classList.add("theme-transition")
+    setTheme(isDark ? "light" : "dark")
+    setTimeout(() => {
+      document.documentElement.classList.remove("theme-transition")
+    }, 400)
+  }, [isDark, setTheme])
 
   const isMobile = variant === "mobile"
 
@@ -138,7 +147,7 @@ export function UserMenu({ variant = "header" }: { variant?: "header" | "mobile"
           <DropdownMenuItem
             onSelect={(e) => {
               e.preventDefault()
-              setTheme(isDark ? "light" : "dark")
+              toggleTheme()
             }}
             className="gap-2">
             {mounted ? (
