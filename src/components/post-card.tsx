@@ -35,23 +35,51 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
   const engagement = getEngagement(post.content)
 
   return (
-    <article className="p-4 rounded-xl bg-card hover:bg-card/90 transition-colors duration-150">
-      <div className="flex gap-3">
-        {/* Avatar */}
-        <Avatar className="h-10 w-10 shrink-0">
-          <AvatarImage
-            src={getAvatarUrl(post.authorUsername)}
-            alt={post.authorUsername}
-          />
-          <AvatarFallback className="text-sm font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
-            {post.authorUsername.charAt(0).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+    <article className="p-3 sm:p-4 rounded-xl bg-card hover:bg-card/90 transition-colors duration-150">
+      {/* Mobile: stacked layout — author row then full-width content */}
+      {/* Desktop: side-by-side with avatar column */}
+      <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-3">
+        {/* Author row (mobile) / Avatar column (desktop) */}
+        <div className="flex items-center gap-2 sm:block">
+          <Avatar className="h-7 w-7 sm:h-10 sm:w-10 shrink-0">
+            <AvatarImage
+              src={getAvatarUrl(post.authorUsername)}
+              alt={post.authorUsername}
+            />
+            <AvatarFallback className="text-[10px] sm:text-sm font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
+              {post.authorUsername.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          {/* Author info — inline on mobile, below avatar on desktop */}
+          <div className="flex sm:hidden items-baseline gap-1 min-w-0 flex-1">
+            <span className="font-semibold text-sm text-foreground truncate">
+              {post.authorUsername}
+            </span>
+            <span className="text-muted-foreground/60 text-xs font-mono truncate">
+              @{post.authorUsername}
+            </span>
+            <span className="text-muted-foreground/40 text-xs mx-0.5">·</span>
+            <span
+              className="text-muted-foreground/50 text-xs cursor-default shrink-0"
+              title={formatDateFull(post.createdAt)}>
+              {formatDate(post.createdAt)}
+            </span>
+          </div>
+          {!isDemoMode && isOwnPost && onDelete && (
+            <div className="sm:hidden shrink-0">
+              <OverflowMenu
+                postId={post.id}
+                isOwnPost={isOwnPost}
+                onDelete={onDelete}
+              />
+            </div>
+          )}
+        </div>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          {/* Author line */}
-          <div className="flex items-start justify-between">
+          {/* Author line — desktop only */}
+          <div className="hidden sm:flex items-start justify-between">
             <div className="min-w-0">
               <div className="flex items-baseline gap-1.5">
                 <span className="font-semibold text-base text-foreground truncate">
@@ -78,7 +106,7 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           </div>
 
           {/* Post body */}
-          <p className="text-[15px] leading-relaxed mt-1">{post.content}</p>
+          <p className="text-sm sm:text-[15px] leading-relaxed sm:mt-1">{post.content}</p>
 
           {/* Images — adaptive grid: 1=full, 2=side-by-side, 3=1+2, 4=2x2 */}
           {post.images && post.images.length > 0 && (
@@ -115,21 +143,21 @@ export function PostCard({ post, isOwnPost, onDelete }: PostCardProps) {
           )}
 
           {/* Actions — Like, Repost, Bookmark, Comment */}
-          <div className="flex items-center gap-1.5 mt-3">
-            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.70_0.25_10/10%)] transition-colors">
-              <Heart size={14} className="text-[oklch(0.70_0.25_10)]" />
+          <div className="flex items-center gap-1 sm:gap-1.5 mt-2 sm:mt-3">
+            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.70_0.25_10/10%)] transition-colors">
+              <Heart size={13} className="text-[oklch(0.70_0.25_10)] sm:size-[14px]" />
               <span>{formatCount(engagement.likes)}</span>
             </button>
-            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_250/10%)] transition-colors">
-              <Repeat2 size={14} className="text-[oklch(0.72_0.19_250)]" />
+            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_250/10%)] transition-colors">
+              <Repeat2 size={13} className="text-[oklch(0.72_0.19_250)] sm:size-[14px]" />
               <span>{formatCount(engagement.reposts)}</span>
             </button>
-            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.75_0.18_350/10%)] transition-colors">
-              <Bookmark size={14} className="text-[oklch(0.75_0.18_350)]" />
+            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.75_0.18_350/10%)] transition-colors">
+              <Bookmark size={13} className="text-[oklch(0.75_0.18_350)] sm:size-[14px]" />
               <span>{formatCount(engagement.bookmarks)}</span>
             </button>
-            <button className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_140/10%)] transition-colors ml-auto">
-              <MessageCircle size={14} className="text-[oklch(0.72_0.19_140)]" />
+            <button className="flex items-center gap-1 sm:gap-1.5 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 text-xs text-muted-foreground bg-background hover:bg-[oklch(0.72_0.19_140/10%)] transition-colors ml-auto">
+              <MessageCircle size={13} className="text-[oklch(0.72_0.19_140)] sm:size-[14px]" />
               <span>{formatCount(engagement.comments)}</span>
             </button>
           </div>

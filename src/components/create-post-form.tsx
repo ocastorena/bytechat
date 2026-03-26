@@ -92,17 +92,25 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
   }
 
   return (
-    <div className="p-4 rounded-xl bg-card">
-      <div className="flex gap-3">
-        <Avatar className="h-10 w-10 shrink-0 mt-1">
-          <AvatarImage
-            src={session?.user?.image || getAvatarUrl(session?.user?.name || "user")}
-            alt={session?.user?.name || "User"}
-          />
-          <AvatarFallback className="text-sm font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
-            {session?.user?.name ? getInitials(session.user.name) : "U"}
-          </AvatarFallback>
-        </Avatar>
+    <div className="p-3 sm:p-4 rounded-xl bg-card">
+      {/* Mobile: stacked layout — avatar row then full-width textarea */}
+      {/* Desktop: side-by-side layout */}
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+        {/* Avatar — inline with name on mobile, column on desktop */}
+        <div className="flex sm:block items-center gap-2">
+          <Avatar className="h-8 w-8 sm:h-10 sm:w-10 shrink-0 sm:mt-1">
+            <AvatarImage
+              src={session?.user?.image || getAvatarUrl(session?.user?.name || "user")}
+              alt={session?.user?.name || "User"}
+            />
+            <AvatarFallback className="text-xs sm:text-sm font-semibold bg-gradient-to-br from-accent/80 to-accent text-accent-foreground">
+              {session?.user?.name ? getInitials(session.user.name) : "U"}
+            </AvatarFallback>
+          </Avatar>
+          <span className="sm:hidden text-sm font-semibold text-foreground">
+            {session?.user?.name || "User"}
+          </span>
+        </div>
         <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-2">
           <textarea
             ref={textareaRef}
@@ -114,9 +122,9 @@ export function CreatePostForm({ onSuccess }: CreatePostFormProps = {}) {
               autoResize()
             }}
             rows={2}
-            className="w-full resize-none bg-muted/50 rounded-lg px-3 py-2.5 text-[15px] placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-accent/30 transition-all leading-relaxed"
+            className="w-full resize-none bg-muted/50 rounded-lg px-3 py-2 sm:py-2.5 text-sm sm:text-[15px] placeholder:text-muted-foreground/80 focus:outline-none focus:ring-1 focus:ring-accent/30 transition-all leading-relaxed"
           />
-          <div className="flex items-center gap-1.5 pt-2">
+          <div className="flex items-center gap-1 sm:gap-1.5 pt-1 sm:pt-2">
             {/* Action pills with colored icons */}
             {COMPOSER_ACTIONS.map(({ icon: Icon, label, color, hover }) => (
               <button
