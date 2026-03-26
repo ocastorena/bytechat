@@ -2,13 +2,29 @@ import { faker } from "@faker-js/faker"
 import bcrypt from "bcryptjs"
 import prisma from "@/lib/prisma"
 
-/** Mock image provider: Lorem Picsum (no API key, deterministic via seed) */
-function picsum(seed: string, w = 1200, h = 900) {
+/** Tech/cyberpunk image keywords rotated across posts for variety */
+const IMAGE_TOPICS = [
+  "technology",
+  "hacker,terminal",
+  "coding,programming",
+  "server,datacenter",
+  "circuit,electronics",
+  "technology,computer",
+  "keyboard,mechanical",
+  "network,infrastructure",
+]
+
+/** Mock image provider: LoremFlickr with tech-themed keywords and stable lock IDs */
+function techImage(lockId: number, w = 1200, h = 900) {
+  const topic = IMAGE_TOPICS[lockId % IMAGE_TOPICS.length]
   return {
-    url: `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`,
-    alt: `Mock image ${seed}`,
+    url: `https://loremflickr.com/${w}/${h}/${topic}?lock=${lockId}`,
+    alt: `Tech image: ${topic}`,
   }
 }
+
+/** Global counter for unique lock IDs across all posts */
+let imageLockCounter = 0
 
 /** Curated tech/hacker-themed post templates for realistic demo content */
 const TECH_POSTS = [
@@ -90,7 +106,9 @@ async function main() {
     const adjective = faker.hacker.adjective().replace(/\s+/g, "")
     const name = faker.person.firstName()
     const username = `${adjective}${name}`.slice(0, 20)
-    const email = faker.internet.email({ firstName: username, provider: "bytechat.io" }).toLowerCase()
+    const email = faker.internet
+      .email({ firstName: username, provider: "bytechat.io" })
+      .toLowerCase()
 
     const user = await prisma.user.upsert({
       where: { email },
@@ -98,8 +116,8 @@ async function main() {
       create: {
         email,
         password: faker.internet.password(),
-        username
-      }
+        username,
+      },
     })
 
     users.push({ id: user.id, email, username })
@@ -112,10 +130,11 @@ async function main() {
     const postsForUser = faker.number.int({ min: 5, max: 20 })
 
     for (let p = 0; p < postsForUser; p++) {
-      // Pick 0 to 3 images for this post (deterministic seeds for stable URLs)
+      // Pick 0 to 3 tech-themed images for this post (stable via lock IDs)
       const count = faker.number.int({ min: 0, max: 3 })
-      const seeds = Array.from({ length: count }, (_, idx) => `${user.username}-${p}-${idx}`)
-      const picked = seeds.map((seed) => picsum(seed))
+      const picked = Array.from({ length: count }, () =>
+        techImage(imageLockCounter++),
+      )
 
       const createdAt = faker.date.recent({ days: 30 })
 
@@ -135,17 +154,19 @@ async function main() {
                   url: img.url,
                   altText: img.alt,
                   order: idx,
-                }))
+                })),
               }
             : undefined,
-        }
+        },
       })
 
       totalPosts++
     }
   }
 
-  console.log(`Seeded ${users.length} users, ${totalPosts} posts (with images). ✅`)
+  console.log(
+    `Seeded ${users.length} users, ${totalPosts} posts (with images). ✅`,
+  )
 }
 
 main()
