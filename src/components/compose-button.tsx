@@ -27,7 +27,7 @@ export function ComposeButton() {
             onClick={() => setOpen(false)}
           />
           {/* Sheet */}
-          <div className="absolute bottom-0 left-0 right-0 bg-background border-t border-border rounded-t-3xl p-4 pb-8 animate-slide-up-sheet">
+          <div className="absolute bottom-0 left-0 right-0 bg-background border-t border-border rounded-t-3xl p-4 pb-20 animate-slide-up-sheet">
             {/* Drag handle */}
             <div className="flex justify-center mb-3">
               <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />

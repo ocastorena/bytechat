@@ -25,13 +25,15 @@ export function HomeContent() {
         <TrendingStrip />
         <SuggestedUsersStrip />
 
-        {/* Inline compose */}
+        {/* Inline compose — hidden on mobile where FAB handles it */}
         {isDemoMode ? (
           <div className="hidden sm:block p-4 rounded-xl bg-card text-center text-sm text-muted-foreground">
             This is a read-only demo
           </div>
         ) : (
-          <CreatePostForm />
+          <div className="hidden sm:block">
+            <CreatePostForm />
+          </div>
         )}
         <Feed />
       </section>
