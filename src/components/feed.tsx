@@ -56,11 +56,14 @@ function LoadingDots() {
 const { PAGE_SIZE, REFRESH_INTERVAL } = PAGINATION
 
 interface FeedProps extends React.ComponentProps<"section"> {
+  /** Filter posts by author */
   userId?: string
+  /** Search posts by content */
+  query?: string
 }
 
 /** Paginated post feed with infinite scroll */
-export default function Feed({ className, userId }: FeedProps) {
+export default function Feed({ className, userId, query }: FeedProps) {
   const { data: session } = useSession()
   const sentinelRef = useRef<HTMLDivElement>(null)
 
@@ -74,6 +77,9 @@ export default function Feed({ className, userId }: FeedProps) {
     }
     if (userId) {
       params.set("userId", userId)
+    }
+    if (query) {
+      params.set("query", query)
     }
 
     return `/api/posts?${params.toString()}`

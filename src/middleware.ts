@@ -20,5 +20,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/home", "/home/:path*", "/profile", "/profile/:path*", "/explore", "/explore/:path*", "/lists", "/lists/:path*"], // protect these routes
+  matcher: ["/home", "/home/:path*", "/profile", "/profile/:path*", "/explore", "/explore/:path*", "/lists", "/lists/:path*", "/search", "/search/:path*"], // protect these routes
 }

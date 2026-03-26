@@ -1,16 +1,28 @@
 "use client"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { Home, Search, Compass, List } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useState } from "react"
 import { BytechatLogo } from "./bytechat-logo"
 import { UserMenu } from "./user-menu"
 import { ROUTES } from "@/config/constants"
 
-/** Clean search input */
+/** Clean search input — navigates to explore page on submit */
 function SearchBar() {
+  const router = useRouter()
+  const [value, setValue] = useState("")
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const trimmed = value.trim()
+    if (trimmed) {
+      router.push(`${ROUTES.SEARCH}?q=${encodeURIComponent(trimmed)}`)
+    }
+  }
+
   return (
-    <div className="relative hidden sm:block w-40 md:w-56 lg:w-72 xl:w-80">
+    <form onSubmit={handleSubmit} className="relative hidden sm:block w-40 md:w-56 lg:w-72 xl:w-80">
       <Search
         size={16}
         className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -18,13 +30,15 @@ function SearchBar() {
       <input
         id="search"
         type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         placeholder="Search"
         onKeyDown={(e) => {
           if (e.key === "Escape") e.currentTarget.blur()
         }}
         className="w-full pl-10 pr-4 py-2 rounded-xl bg-muted/50 text-sm focus:outline-none focus-visible:ring-1 focus-visible:ring-accent/50 focus-visible:bg-background transition-all placeholder:text-muted-foreground/80"
       />
-    </div>
+    </form>
   )
 }
 

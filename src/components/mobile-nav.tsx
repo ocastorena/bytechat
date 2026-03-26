@@ -56,9 +56,9 @@ export function MobileNav() {
           isActive={pathname === ROUTES.LISTS}
         />
         <TabItem
-          href={ROUTES.EXPLORE}
+          href={ROUTES.SEARCH}
           icon={Search}
-          isActive={false}
+          isActive={pathname === ROUTES.SEARCH}
         />
       </div>
     </nav>

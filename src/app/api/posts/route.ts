@@ -46,9 +46,13 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get("limit") ?? "10", 10)
   const cursor = searchParams.get("cursor")
   const userId = searchParams.get("userId")
+  const query = searchParams.get("query")?.trim()
 
   try {
-    const baseWhere = userId ? { authorId: userId } : {}
+    const baseWhere = {
+      ...(userId ? { authorId: userId } : {}),
+      ...(query ? { content: { contains: query, mode: "insensitive" as const } } : {}),
+    }
 
     const posts = await prisma.post.findMany({
       take: limit + 1,
