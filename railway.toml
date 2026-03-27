@@ -1,5 +1,5 @@
 [build]
-buildCommand = "npm run build && npx tsx prisma/seed.ts"
+buildCommand = "npm run build"
 
 [deploy]
 startCommand = "npx prisma migrate deploy && npm start"
