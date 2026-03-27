@@ -1,9 +1,10 @@
-import { registerSchema } from "./register-schema"
+import { registerSchema } from "@/lib/validations"
 
 describe("registerSchema", () => {
   it("should fail if passwords do not match", () => {
     const result = registerSchema.safeParse({
       email: "test@example.com",
+      username: "testuser",
       password: "password1",
       confirmPassword: "password2",
     })
@@ -14,6 +15,7 @@ describe("registerSchema", () => {
   it("should pass with matching passwords", () => {
     const result = registerSchema.safeParse({
       email: "test@example.com",
+      username: "testuser",
       password: "password1",
       confirmPassword: "password1",
     })

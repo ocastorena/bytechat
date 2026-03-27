@@ -1,51 +1,43 @@
-import { NextRequest, NextResponse } from "next/server"
-import prisma from "@/lib/prisma" // your singleton
-import { auth } from "@/lib/auth" // protect if needed
+import { NextRequest } from "next/server"
+import prisma from "@/lib/prisma"
+import { auth } from "@/lib/auth"
+import { apiSuccess, apiError, logApiError } from "@/lib/api-response"
+import { isDemoMode, DEMO_DISABLED_MESSAGE } from "@/lib/demo"
 
-// DELETE a post (only by the author)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (isDemoMode) return apiError(DEMO_DISABLED_MESSAGE, 403)
+
   const session = await auth()
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return apiError("Unauthorized", 401)
   }
 
   try {
     const { id } = await params
 
-    // Check if post exists and user is the author
     const existingPost = await prisma.post.findUnique({
       where: { id },
       select: { authorId: true },
     })
 
     if (!existingPost) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 })
+      return apiError("Post not found", 404)
     }
 
     if (existingPost.authorId !== session.user.id) {
-      return NextResponse.json(
-        { error: "You can only delete your own posts" },
-        { status: 403 }
-      )
+      return apiError("You can only delete your own posts", 403)
     }
 
-    // Delete the post (this will also delete related images if you have cascade delete)
     await prisma.post.delete({
       where: { id },
     })
 
-    return NextResponse.json(
-      { message: "Post deleted successfully" },
-      { status: 200 }
-    )
+    return apiSuccess({ message: "Post deleted successfully" })
   } catch (error) {
-    console.error("[POST_DELETE]", error)
-    return NextResponse.json(
-      { error: "Unable to delete post" },
-      { status: 500 }
-    )
+    logApiError("POST_DELETE", error)
+    return apiError("Unable to delete post", 500)
   }
 }

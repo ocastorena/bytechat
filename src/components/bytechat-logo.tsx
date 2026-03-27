@@ -1,6 +1,7 @@
 import React from "react"
+import { cn } from "@/lib/utils"
 
-export function BytechatLogo(props: React.SVGProps<SVGSVGElement>) {
+export function BytechatLogo({ className, ...props }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width="180"
@@ -8,7 +9,17 @@ export function BytechatLogo(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 180 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={cn("logo-glow", className)}
       {...props}>
+      <defs>
+        <filter id="accent-glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
       <rect
         x="0"
         y="8"
@@ -17,8 +28,8 @@ export function BytechatLogo(props: React.SVGProps<SVGSVGElement>) {
         rx="10"
         className="fill-foreground"
       />
-      <rect x="33" y="29" width="7" height="7" rx="2" className="fill-accent" />
-      <polygon points="12,36 20,36 16,44" className="fill-zinc-900" />
+      <rect x="33" y="29" width="7" height="7" rx="2" className="fill-accent logo-glow-target" />
+      <polygon points="12,36 20,36 16,44" className="fill-foreground" />
       <text
         x="52"
         y="31"
@@ -27,7 +38,7 @@ export function BytechatLogo(props: React.SVGProps<SVGSVGElement>) {
         fontSize="28"
         className="fill-foreground">
         Byte
-        <tspan className="fill-accent">Chat</tspan>
+        <tspan className="fill-accent logo-glow-target">Chat</tspan>
       </text>
     </svg>
   )

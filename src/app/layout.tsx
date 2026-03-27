@@ -1,17 +1,17 @@
 import type { Metadata } from "next"
-import { JetBrains_Mono } from "next/font/google"
+import { Inter, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 
-const jetbrainsMono = JetBrains_Mono({
+const inter = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
   display: "swap",
 })
 
-const jetbrainsMonoMono = JetBrains_Mono({
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
@@ -30,15 +30,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${jetbrainsMono.variable} ${jetbrainsMonoMono.variable} antialiased font-mono`}>
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased font-sans`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
-          disableTransitionOnChange>
+          enableColorScheme={false}>
           {children}
         </ThemeProvider>
-        <Toaster richColors position="bottom-center" />
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   )

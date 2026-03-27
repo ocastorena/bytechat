@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
+import { ROUTES } from "@/config/constants"
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({
@@ -12,16 +13,12 @@ export async function middleware(req: NextRequest) {
         : "authjs.session-token",
   })
 
-  console.log("Environment:", process.env.NODE_ENV)
-  console.log("Token found:", !!token)
-
   if (!token) {
-    console.log("No Token!")
-    return NextResponse.redirect(new URL("/login", req.url))
+    return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url))
   }
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ["/home", "/home/:path*", "/profile", "/profile/:path*"], // protect these routes
+  matcher: ["/home", "/home/:path*", "/profile", "/profile/:path*", "/explore", "/explore/:path*", "/lists", "/lists/:path*", "/search", "/search/:path*"], // protect these routes
 }

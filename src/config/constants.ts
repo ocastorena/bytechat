@@ -1,0 +1,13 @@
+export const ROUTES = {
+  HOME: "/home",
+  EXPLORE: "/explore",
+  LISTS: "/lists",
+  SEARCH: "/search",
+  PROFILE: "/profile",
+  LOGIN: "/login",
+  SIGNUP: "/signup",
+} as const
+
+export const PAGINATION = {
+  PAGE_SIZE: 10,
+} as const

@@ -1,140 +1,86 @@
 "use client"
-import { signOut } from "next-auth/react"
-import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Sun, Moon } from "lucide-react"
-import { Menu } from "lucide-react"
-import { useState } from "react"
-import { useTheme } from "next-themes"
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-  AlertDialogDescription,
-} from "@/components/ui/alert-dialog"
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu"
+import Link from "next/link"
+import { Home, Search, Compass, List } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { BytechatLogo } from "./bytechat-logo"
+import { UserMenu } from "./user-menu"
+import { ROUTES } from "@/config/constants"
 
-function SearchBar() {
+/** Navigation link — uniform icon button, active gets accent tint */
+function NavLink({
+  href,
+  icon: Icon,
+  isActive,
+}: {
+  href: string
+  icon: typeof Home
+  isActive: boolean
+}) {
   return (
-    <input
-      type="text"
-      placeholder="Search..."
-      className="px-4 py-2 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring w-40 sm:w-52 md:w-72 max-w-full"
-    />
+    <Link
+      href={href}
+      className={cn(
+        "relative p-2 rounded-full transition-colors duration-150",
+        isActive
+          ? "text-accent bg-accent/15"
+          : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+      )}>
+      <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+    </Link>
   )
 }
 
 export function Header() {
   const pathname = usePathname()
-  const [logoutOpen, setLogoutOpen] = useState(false)
-  const { theme, setTheme, resolvedTheme } = useTheme()
+
   return (
     <header
       data-testid="app-header"
-      className="sticky top-0 z-50 grid grid-cols-[1fr_auto_1fr] items-center p-4 bg-card border-b h-20 w-full">
-      <div className="flex items-center gap-2 justify-self-start shrink-0">
-        <BytechatLogo className="px-2" />
-        <SearchBar />
+      className="sticky top-0 z-50 px-4 h-14 bg-background/80 backdrop-blur-xl">
+      {/* Mobile header — centered logo */}
+      <div className="flex sm:hidden items-center justify-center h-full">
+        <BytechatLogo className="h-9 w-auto" />
       </div>
-      <div className="flex gap-4 justify-self-center w-fit">
-        <Link
-          href="/home"
-          className={
-            "p-2 rounded hover:bg-muted" +
-            (pathname === "/home" ? " text-accent" : "")
-          }>
-          <Home size={30} />
-        </Link>
-        <Link
-          href="/profile"
-          className={
-            "p-2 rounded hover:bg-muted " +
-            (pathname === "/profile" ? " text-accent" : "")
-          }>
-          <User size={30} />
-        </Link>
-      </div>
-      <div className="justify-self-end shrink-0">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              className="p-2 rounded hover:bg-muted"
-              aria-label="Open menu">
-              <Menu size={30} />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-            <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault()
-                const currentTheme = resolvedTheme ?? theme
-                document.documentElement.classList.add(
-                  "transition-colors",
-                  "duration-500"
-                )
-                setTheme(currentTheme === "light" ? "dark" : "light")
-                setTimeout(() => {
-                  document.documentElement.classList.remove(
-                    "transition-colors",
-                    "duration-500"
-                  )
-                }, 600)
-              }}
-              className="gap-2">
-              {(resolvedTheme ?? theme) === "light" ? (
-                <>
-                  <Moon className="h-4 w-4" /> Dark Mode
-                </>
-              ) : (
-                <>
-                  <Sun className="h-4 w-4" /> Light Mode
-                </>
-              )}
-            </DropdownMenuItem>
 
-            <DropdownMenuSeparator />
+      {/* Desktop header — logo left, nav+user right */}
+      <div className="hidden sm:flex items-center justify-between h-full">
+        <div className="flex items-center gap-3 shrink-0">
+          <BytechatLogo className="h-9 w-auto" />
+        </div>
 
-            <DropdownMenuItem
-              variant="destructive"
-              onSelect={(e) => {
-                e.preventDefault() // keep the dropdown open so the dialog can open
-                setLogoutOpen(true)
-              }}>
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Right side — nav pill + user menu */}
+        <div className="flex items-center gap-3">
+          {/* Page navigation pill */}
+          <nav className="flex items-center gap-0.5 rounded-full bg-card/60 border border-border/40 px-1.5 py-1 shrink-0">
+            <NavLink
+              href={ROUTES.HOME}
+              icon={Home}
+              isActive={pathname === ROUTES.HOME}
+            />
+            <NavLink
+              href={ROUTES.EXPLORE}
+              icon={Compass}
+              isActive={pathname === ROUTES.EXPLORE}
+            />
+            <NavLink
+              href={ROUTES.LISTS}
+              icon={List}
+              isActive={pathname === ROUTES.LISTS}
+            />
+            <NavLink
+              href={ROUTES.SEARCH}
+              icon={Search}
+              isActive={pathname === ROUTES.SEARCH}
+            />
+          </nav>
+
+          {/* User dropdown */}
+          <div className="shrink-0">
+            <UserMenu variant="header" />
+          </div>
+        </div>
       </div>
-      <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}>
-        <AlertDialogContent>
-          <AlertDialogDescription />
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you sure you want to log out?
-            </AlertDialogTitle>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => signOut({ callbackUrl: "/login" })}>
-              Yes, log out
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </header>
   )
 }
