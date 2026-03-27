@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "docker compose up -d && prisma db push && next dev --turbopack",
     "build": "prisma generate && next build",
-    "start": "next start -H 0.0.0.0",
+    "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "jest",
@@ -40,8 +40,8 @@
     "zod": "^4.0.10"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@faker-js/faker": "^10.4.0",
+    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.4",
