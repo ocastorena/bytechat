@@ -9,6 +9,7 @@ import { useEffect, useRef, useCallback } from "react"
 import type { Post, PostPage } from "@/types"
 import { apiClient, request } from "@/lib/api-client"
 import { PAGINATION } from "@/config/constants"
+import { isDemoMode } from "@/lib/demo"
 import { MessageSquare } from "lucide-react"
 
 /** Skeleton for a single post — matches card style */
@@ -87,7 +88,7 @@ export default function Feed({ className, userId, query }: FeedProps) {
 
   const { data, error, size, setSize, isLoading, isValidating, mutate } =
     useSWRInfinite<PostPage>(getKey, request, {
-      refreshInterval: REFRESH_INTERVAL,
+      refreshInterval: isDemoMode ? 0 : REFRESH_INTERVAL,
       refreshWhenHidden: false,
     })
 
