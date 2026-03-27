@@ -62,4 +62,4 @@ jobs:
           key: node-modules-${{ hashFiles('package-lock.json') }}
       - run: npm run build
       - name: Verify build output
-        run: test -d dist
+        run: test -d .next
