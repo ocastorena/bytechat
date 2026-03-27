@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "docker compose up -d && prisma db push && next dev --turbopack",
-    "build": "prisma generate && next build && tsx prisma/seed.ts",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
@@ -37,10 +37,10 @@
     "sonner": "^2.0.7",
     "swr": "^2.3.4",
     "tailwind-merge": "^3.3.1",
-    "zod": "^4.0.10"
+    "zod": "^4.0.10",
+    "@faker-js/faker": "^10.4.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^10.4.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
