@@ -175,11 +175,13 @@ export function UserMenu({ variant = "header" }: { variant?: "header" | "mobile"
 
       <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}>
         <AlertDialogContent>
-          <AlertDialogDescription />
           <AlertDialogHeader>
             <AlertDialogTitle>
               Are you sure you want to log out?
             </AlertDialogTitle>
+            <AlertDialogDescription>
+              You will be redirected to the login page.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>

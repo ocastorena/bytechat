@@ -26,9 +26,6 @@ export function useKeyboardShortcuts() {
           e.preventDefault()
           document.getElementById("search")?.focus()
           break
-        case "g":
-          if (e.shiftKey) return
-          break
         case "h":
           e.preventDefault()
           router.push(ROUTES.HOME)

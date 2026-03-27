@@ -1,15 +1,5 @@
 import { Settings, MoreHorizontal } from "lucide-react"
-
-/** Sidebar displaying trending topics */
-const TRENDING_TOPICS = [
-  { tag: "#BugBounty", category: "Security", posts: "18.3K posts" },
-  { tag: "#CTF", category: "Security", posts: "14.1K posts" },
-  { tag: "#RustLang", category: "Technology", posts: "11.7K posts" },
-  { tag: "#ZeroDay", category: "Security", posts: "9.4K posts" },
-  { tag: "#HomeServer", category: "Technology", posts: "7.8K posts" },
-  { tag: "#OpenSource", category: "Technology", posts: "22.6K posts" },
-  { tag: "#NixOS", category: "Technology", posts: "5.2K posts" },
-]
+import { TRENDING_TOPICS } from "@/lib/mock-data"
 
 export function TrendingSidebar() {
   return (
@@ -35,7 +25,7 @@ export function TrendingSidebar() {
                 <span className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors">
                   {tag}
                 </span>
-                <p className="text-[11px] text-muted-foreground">{posts}</p>
+                <p className="text-[11px] text-muted-foreground">{posts} posts</p>
               </div>
               <button className="p-1 rounded-lg text-muted-foreground/50 opacity-0 group-hover:opacity-100 hover:text-foreground hover:bg-muted/50 transition-all shrink-0 mt-0.5">
                 <MoreHorizontal size={14} />

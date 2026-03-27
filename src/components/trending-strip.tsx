@@ -1,17 +1,7 @@
 "use client"
 
 import { TrendingUp } from "lucide-react"
-
-/** Compact trending topics for the horizontal discovery strip */
-const TRENDING_TOPICS = [
-  { tag: "#BugBounty", posts: "18.3K" },
-  { tag: "#CTF", posts: "14.1K" },
-  { tag: "#RustLang", posts: "11.7K" },
-  { tag: "#ZeroDay", posts: "9.4K" },
-  { tag: "#HomeServer", posts: "7.8K" },
-  { tag: "#OpenSource", posts: "22.6K" },
-  { tag: "#NixOS", posts: "5.2K" },
-]
+import { TRENDING_TOPICS } from "@/lib/mock-data"
 
 /** Horizontal scrollable trending strip shown above the feed on smaller screens */
 export function TrendingStrip() {

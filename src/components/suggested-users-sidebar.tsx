@@ -1,78 +1,10 @@
 "use client"
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { useState } from "react"
-import { cn, getAvatarUrl } from "@/lib/utils"
-
-const SUGGESTED_USERS = [
-  {
-    name: "Sarah Chen",
-    username: "@sarahbuilds",
-    initials: "SC",
-    bio: "Senior Frontend Engineer at Vercel",
-    verified: true,
-  },
-  {
-    name: "Alex Rivera",
-    username: "@alexcodes",
-    initials: "AR",
-    bio: "Full-stack dev & tech blogger",
-    verified: false,
-  },
-  {
-    name: "Maya Patel",
-    username: "@mayatech",
-    initials: "MP",
-    bio: "AI/ML Engineer, Python enthusiast",
-    verified: true,
-  },
-  {
-    name: "Jordan Kim",
-    username: "@jordanux",
-    initials: "JK",
-    bio: "UX Designer turning code into art",
-    verified: false,
-  },
-  {
-    name: "Lena Xu",
-    username: "@lenacrypto",
-    initials: "LX",
-    bio: "Blockchain dev & smart contract auditor",
-    verified: true,
-  },
-  {
-    name: "Omar Hasan",
-    username: "@omarinfra",
-    initials: "OH",
-    bio: "DevOps engineer, Kubernetes evangelist",
-    verified: false,
-  },
-  {
-    name: "Priya Sharma",
-    username: "@priyarust",
-    initials: "PS",
-    bio: "Systems programmer, Rust contributor",
-    verified: true,
-  },
-]
-
-/** Follow button with Twitter-style inverted colors */
-function FollowButton() {
-  const [following, setFollowing] = useState(false)
-
-  return (
-    <button
-      onClick={() => setFollowing(!following)}
-      className={cn(
-        "rounded-full h-7 text-xs px-4 shrink-0 ml-2 font-bold transition-all",
-        following
-          ? "border border-border text-foreground hover:border-destructive/50 hover:text-destructive hover:bg-destructive/10"
-          : "bg-accent text-accent-foreground hover:bg-accent/90"
-      )}>
-      {following ? "Following" : "Follow"}
-    </button>
-  )
-}
+import { getAvatarUrl } from "@/lib/utils"
+import { SUGGESTED_USERS } from "@/lib/mock-data"
+import { FollowButton } from "@/components/follow-button"
+import { VerifiedBadge } from "@/components/verified-badge"
 
 /** Sidebar showing suggested users to follow */
 export function SuggestedUsersSidebar() {
@@ -102,18 +34,7 @@ export function SuggestedUsersSidebar() {
                     <span className="text-base font-semibold truncate">
                       {name}
                     </span>
-                    {verified && (
-                      <svg
-                        className="h-3.5 w-3.5 text-accent flex-shrink-0"
-                        fill="currentColor"
-                        viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    )}
+                    {verified && <VerifiedBadge className="h-3.5 w-3.5" />}
                   </div>
                   <FollowButton />
                 </div>

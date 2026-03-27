@@ -10,5 +10,4 @@ export const ROUTES = {
 
 export const PAGINATION = {
   PAGE_SIZE: 10,
-  REFRESH_INTERVAL: 10000,
 } as const

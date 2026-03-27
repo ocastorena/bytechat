@@ -9,7 +9,6 @@ import { useEffect, useRef, useCallback } from "react"
 import type { Post, PostPage } from "@/types"
 import { apiClient, request } from "@/lib/api-client"
 import { PAGINATION } from "@/config/constants"
-import { isDemoMode } from "@/lib/demo"
 import { MessageSquare } from "lucide-react"
 
 /** Skeleton for a single post — matches card style */
@@ -54,7 +53,7 @@ function LoadingDots() {
   )
 }
 
-const { PAGE_SIZE, REFRESH_INTERVAL } = PAGINATION
+const { PAGE_SIZE } = PAGINATION
 
 interface FeedProps extends React.ComponentProps<"section"> {
   /** Filter posts by author */
@@ -87,10 +86,7 @@ export default function Feed({ className, userId, query }: FeedProps) {
   }
 
   const { data, error, size, setSize, isLoading, isValidating, mutate } =
-    useSWRInfinite<PostPage>(getKey, request, {
-      refreshInterval: isDemoMode ? 0 : REFRESH_INTERVAL,
-      refreshWhenHidden: false,
-    })
+    useSWRInfinite<PostPage>(getKey, request)
 
   const hasMore = data && data[data.length - 1]?.nextCursor !== null
 
