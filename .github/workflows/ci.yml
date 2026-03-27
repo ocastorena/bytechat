@@ -25,6 +25,7 @@ jobs:
           node-version: 22
           cache: "npm"
       - run: npm ci --prefer-offline
+      - run: npx prisma generate
       - uses: actions/cache/save@v4
         with:
           path: node_modules
