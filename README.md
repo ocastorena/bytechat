@@ -2,6 +2,17 @@
 
 A minimalistic social feed app with a cyberpunk theme. Share posts, browse a real-time feed, and discover other users.
 
+[**Live Demo**](https://bytechat-production-8a7d.up.railway.app)
+
+## Demo Mode
+
+The production deployment runs in **read-only demo mode**. You can browse the feed and explore the UI, but creating posts, deleting posts, and signing up are disabled.
+
+**Demo login credentials:**
+
+- **Email:** `dev@bytechat.io`
+- **Password:** `password`
+
 ## Tech Stack
 
 - **Next.js 15** (App Router, Turbopack) + **React 19** + **TypeScript**
@@ -58,17 +69,17 @@ A minimalistic social feed app with a cyberpunk theme. Share posts, browse a rea
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start Docker DB + push schema + launch dev server |
-| `npm run build` | Generate Prisma client + production build |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run typecheck` | Run TypeScript type checking |
-| `npm test` | Run tests |
-| `npm run db:push` | Push schema changes to database |
-| `npm run db:migrate` | Deploy migrations (CI/production) |
-| `npm run db:seed` | Seed database with sample data |
+| Command              | Description                                       |
+| -------------------- | ------------------------------------------------- |
+| `npm run dev`        | Start Docker DB + push schema + launch dev server |
+| `npm run build`      | Generate Prisma client + production build         |
+| `npm run start`      | Start production server                           |
+| `npm run lint`       | Run ESLint                                        |
+| `npm run typecheck`  | Run TypeScript type checking                      |
+| `npm test`           | Run tests                                         |
+| `npm run db:push`    | Push schema changes to database                   |
+| `npm run db:migrate` | Deploy migrations (CI/production)                 |
+| `npm run db:seed`    | Seed database with sample data                    |
 
 ## Project Structure
 
@@ -101,11 +112,7 @@ prisma/
 
 ## Deployment
 
-The project includes a `Dockerfile` and `docker-compose.yml`. For production, deploy to [Railway](https://railway.app) with a PostgreSQL service. Required env vars:
-
-- `DATABASE_URL` — PostgreSQL connection string
-- `NEXTAUTH_SECRET` — random secret (`openssl rand -base64 32`)
-- `NEXTAUTH_URL` — your production URL
+Deployed on [Railway](https://railway.com) with a PostgreSQL service.
 
 ## License
 
